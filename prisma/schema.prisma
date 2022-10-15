@@ -62,7 +62,7 @@ model Becario {
   updatedAt       DateTime @updatedAt
   persona         Persona  @relation(fields: [personaId], references: [id])
   beca            Beca?    @relation(fields: [becaId], references: [id])
-  cobros          Cobros[]
+  cobros          Cobro[]
 }
 
 model Beca {
@@ -77,7 +77,7 @@ model Beca {
   becarios    Becario[]
 }
 
-model Cobros {
+model Cobro {
   id           Int       @unique
   becarioId    Int
   concepto     String
@@ -98,7 +98,7 @@ model Cafeteria {
   campus    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  cobros    Cobros[]
+  cobros    Cobro[]
 }
 
 model Imagen {
