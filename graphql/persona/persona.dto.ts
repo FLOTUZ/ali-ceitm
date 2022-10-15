@@ -6,6 +6,7 @@ export interface PersonaDTO {
   email_personal: string;
   email_institucional: string;
   campus: string;
+  ImagenesId: number | null;
   a_paterno: string;
   a_materno: string;
   userId: number;
