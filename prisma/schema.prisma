@@ -28,5 +28,104 @@ model User {
   is_deleted Boolean?  @default(false)
   createdAt  DateTime? @default(now())
   updatedAt  DateTime? @updatedAt
-  role       Role?     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  role       Role[]
+  Persona    Persona[]
+}
+
+model Persona {
+  id                  Int       @unique
+  nombres             String
+  a_paterno           String
+  a_materno           String
+  n_control           String    @unique
+  telefono            String
+  whatsapp            String
+  email_personal      String    @unique
+  email_institucional String    @unique
+  campus              String
+  userId              Int       @unique
+  imagenesId          Int       @unique
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+  user                User?     @relation(fields: [userId], references: [id])
+  becarios            Becario[]
+  profile_picture     Imagen    @relation(fields: [imagenesId], references: [id])
+}
+
+model Becario {
+  id              Int      @unique
+  en_lista_espera Boolean? @default(false)
+  puede_cobrar    Boolean? @default(false)
+  personaId       Int
+  becaId          Int?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  persona         Persona  @relation(fields: [personaId], references: [id])
+  beca            Beca?    @relation(fields: [becaId], references: [id])
+  cobros          Cobros[]
+}
+
+model Beca {
+  id          Int       @unique
+  nombre      String
+  inicia      DateTime
+  termina     DateTime?
+  descripcion String
+  is_active   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  becarios    Becario[]
+}
+
+model Cobros {
+  id           Int       @unique
+  becarioId    Int
+  concepto     String
+  codigo_cobro String
+  forma_cobro  String
+  fecha_cobro  DateTime
+  cafeteriaId  Int
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  becario      Becario   @relation(fields: [becarioId], references: [id])
+  cafeteria    Cafeteria @relation(fields: [cafeteriaId], references: [id])
+}
+
+model Cafeteria {
+  id        Int      @unique
+  nombre    String
+  direccion String?
+  campus    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  cobros    Cobros[]
+}
+
+model Imagen {
+  id          Int       @unique
+  titulo      String?
+  descripcion String?
+  url         String
+  problemasId Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  persona     Persona[]
+  problemas   Problema? @relation(fields: [problemasId], references: [id])
+}
+
+model Problema {
+  id          Int      @unique
+  titulo      String
+  descripcion String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  imagenes    Imagen[]
+}
+
+model Settings {
+  id              Int      @unique
+  nombre          String
+  valor           String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
