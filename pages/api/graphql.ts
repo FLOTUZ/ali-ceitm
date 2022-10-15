@@ -7,30 +7,28 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "POST") {
-    //Get the user token from the headers.
-    const token = req.headers.authorization;
-    //Verify token existence
-    if (!token) return res.status(401).redirect("/login");
+  //Get the user token from the headers.
+  const token = req.headers.authorization;
+  //Verify token existence
+  // if (!token) return res.status(401).redirect("/login");
 
-    try {
-      // Get token withoit the bearer
-      const cleanToken = token?.split(" ")[1];
-      //Verify if JWT token is valid
-      jwt.verify(cleanToken, process.env.JWT_SECRET!);
-      //If token is valid, refresh it
-      refreshToken(res, token);
-      //Error of JWT validation
-    } catch (error) {
-      return res.status(401).json({ error });
-    }
+  // try {
+  //   // Get token withoit the bearer
+  //   const cleanToken = token?.split(" ")[1];
+  //   //Verify if JWT token is valid
+  //   jwt.verify(cleanToken, process.env.JWT_SECRET!);
+  //   //If token is valid, refresh it
+  //   refreshToken(res, token);
+  //   //Error of JWT validation
+  // } catch (error) {
+  //   return res.status(401).json({ error });
+  // }
 
-    //GraphQL Init
-    await startServer;
-    await apolloServer.createHandler({
-      path: "/api/graphql",
-    })(req, res);
-  }
+  //GraphQL Init
+  await startServer;
+  await apolloServer.createHandler({
+    path: "/api/graphql",
+  })(req, res);
 }
 
 export const config = {
