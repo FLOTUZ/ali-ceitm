@@ -5,8 +5,8 @@ import { Args, BecaDTO } from "@models";
 
 export const BecaResolver = {
   Query: {
-    allBecas: (_: any, { pagination }: Args) => {
-      return prisma.beca.findMany({
+    allBecas: async (_: any, { pagination }: Args) => {
+      return await prisma.beca.findMany({
         ...pagination,
       });
     },

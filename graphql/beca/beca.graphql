@@ -4,7 +4,7 @@
 input CreateBecaInput {
   nombre: String!
   inicia: DateTime!
-  termina: DateTime!
+  termina: DateTime
   descripcion: String!
   is_active: Boolean
 }
