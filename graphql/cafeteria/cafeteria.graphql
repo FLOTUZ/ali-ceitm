@@ -22,7 +22,7 @@ type Query {
 }
 
 type Mutation {
-    createCafeteria(input: CreateCafeteriaInput!): Cafeteria
-    updateCafeteria(id: Int!, input: CreateCafeteriaInput!): Cafeteria
+    createCafeteria(data: CreateCafeteriaInput!): Cafeteria
+    updateCafeteria(id: Int!, data: CreateCafeteriaInput!): Cafeteria
     deleteCafeteria(id: Int!): Cafeteria
 }

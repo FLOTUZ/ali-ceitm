@@ -17,7 +17,7 @@ type Query {
 }
 
 type Mutation {
-  createRole(input: CreateRoleInput!): Role
-  updateRole(id: Int!, input: CreateRoleInput!): Role
+  createRole(data: CreateRoleInput!): Role
+  updateRole(id: Int!, data: CreateRoleInput!): Role
   deleteRole(id: Int!): Role
 }

@@ -24,7 +24,7 @@ type Query {
 }
 
 type Mutation {
-  createBecario(input: CreateBecatioInput!): Becario
-  updateBecario(id: Int!, input: CreateBecatioInput!): Becario
+  createBecario(data: CreateBecatioInput!): Becario
+  updateBecario(id: Int!, data: CreateBecatioInput!): Becario
   deleteBecario(id: Int!): Becario
 }

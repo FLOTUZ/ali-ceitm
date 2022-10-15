@@ -26,7 +26,7 @@ type Query {
 }
 
 type Mutation {
-  createImagen(input: CreateImagenInput!): Imagen
-  updateImagen(id: Int!, input: CreateImagenInput!): Imagen
+  createImagen(data: CreateImagenInput!): Imagen
+  updateImagen(id: Int!, data: CreateImagenInput!): Imagen
   deleteImagen(id: Int!): Imagen
 }

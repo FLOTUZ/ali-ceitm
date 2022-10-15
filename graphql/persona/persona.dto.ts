@@ -3,7 +3,6 @@ export interface PersonaDTO {
   n_control: string;
   telefono: string;
   whatsapp: string;
-  email_personal: string;
   email_institucional: string;
   campus: string;
   ImagenesId: number | null;

@@ -20,7 +20,7 @@ type Query {
 }
 
 type Mutation {
-  createProblema(input: CreateProblemaInput!): Problema
-  updateProblema(id: Int!, input: CreateProblemaInput!): Problema
+  createProblema(data: CreateProblemaInput!): Problema
+  updateProblema(id: Int!, data: CreateProblemaInput!): Problema
   deleteProblema(id: Int!): Problema
 }

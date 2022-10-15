@@ -28,7 +28,7 @@ type Query {
 }
 
 type Mutation {
-  createCobro(input: CreateCobroInput): Cobro
-  updateCobro(id: Int!, input: CreateCobroInput): Cobro
+  createCobro(data: CreateCobroInput): Cobro
+  updateCobro(id: Int!, data: CreateCobroInput): Cobro
   deleteCobro(id: Int!): Boolean
 }

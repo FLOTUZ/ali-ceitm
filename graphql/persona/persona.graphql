@@ -6,7 +6,6 @@ input CreatePersonaInput {
   n_control: String!
   telefono: String!
   whatsapp: String!
-  email_personal: String!
   email_institucional: String!
   campus: String!
   a_paterno: String!
@@ -22,7 +21,6 @@ type Persona {
   n_control: String
   telefono: String
   whatsapp: String
-  email_personal: String
   email_institucional: String
   campus: String
   userId: Int
@@ -37,7 +35,7 @@ type Query {
 }
 
 type Mutation {
-  createPersona(input: CreatePersonaInput!): Persona
-  updatePersona(id: Int!, input: CreatePersonaInput!): Persona
+  createPersona(data: CreatePersonaInput!): Persona
+  updatePersona(id: Int!, data: CreatePersonaInput!): Persona
   deletePersona(id: Int!): Persona
 }

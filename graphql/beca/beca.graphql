@@ -26,7 +26,7 @@ type Query {
 }
 
 type Mutation {
-  createBeca(input: CreateBecaInput!): Beca
-  updateBeca(id: Int!, input: CreateBecaInput!): Beca
+  createBeca(data: CreateBecaInput!): Beca
+  updateBeca(id: Int!, data: CreateBecaInput!): Beca
   deleteBeca(id: Int!): Beca
 }

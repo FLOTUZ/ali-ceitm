@@ -20,7 +20,7 @@ type Query {
 }
 
 type Mutation {
-  createSetting(input: CreateSettingsInput): Settings
-  updateSetting(id: Int, input: CreateSettingsInput): Settings
+  createSetting(data: CreateSettingsInput): Settings
+  updateSetting(id: Int, data: CreateSettingsInput): Settings
   deleteSetting(id: Int): Settings
 }

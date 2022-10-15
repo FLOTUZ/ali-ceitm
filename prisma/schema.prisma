@@ -40,7 +40,6 @@ model Persona {
   n_control           String    @unique
   telefono            String
   whatsapp            String
-  email_personal      String    @unique
   email_institucional String    @unique
   campus              String
   userId              Int       @unique
