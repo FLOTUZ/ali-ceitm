@@ -10,7 +10,7 @@ datasource db {
 }
 
 model Role {
-  id         Int      @id @default(autoincrement())
+  id         Int      @id @unique @default(autoincrement())
   rol_name   String
   is_deleted Boolean  @default(false)
   createdAt  DateTime @default(now())
@@ -19,7 +19,7 @@ model Role {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
+  id         Int       @id @unique @default(autoincrement())
   username   String    @unique
   password   String
   email      String    @unique
@@ -33,7 +33,7 @@ model User {
 }
 
 model Persona {
-  id                  Int       @unique
+  id                  Int       @id @unique @default(autoincrement())
   nombres             String
   a_paterno           String
   a_materno           String
@@ -53,7 +53,7 @@ model Persona {
 }
 
 model Becario {
-  id              Int      @unique
+  id              Int      @id @unique @default(autoincrement())
   en_lista_espera Boolean? @default(false)
   puede_cobrar    Boolean? @default(false)
   personaId       Int
@@ -66,7 +66,7 @@ model Becario {
 }
 
 model Beca {
-  id          Int       @unique
+  id          Int       @id @unique @default(autoincrement())
   nombre      String
   inicia      DateTime
   termina     DateTime?
@@ -78,7 +78,7 @@ model Beca {
 }
 
 model Cobro {
-  id           Int       @unique
+  id           Int       @id @unique @default(autoincrement())
   becarioId    Int
   concepto     String
   codigo_cobro String
@@ -92,7 +92,7 @@ model Cobro {
 }
 
 model Cafeteria {
-  id        Int      @unique
+  id        Int      @id @unique @default(autoincrement())
   nombre    String
   direccion String?
   campus    String
@@ -102,7 +102,7 @@ model Cafeteria {
 }
 
 model Imagen {
-  id          Int       @unique
+  id          Int       @id @unique @default(autoincrement())
   titulo      String?
   descripcion String?
   url         String
@@ -114,7 +114,7 @@ model Imagen {
 }
 
 model Problema {
-  id          Int      @unique
+  id          Int      @id @unique @default(autoincrement())
   titulo      String
   descripcion String
   createdAt   DateTime @default(now())
@@ -123,9 +123,9 @@ model Problema {
 }
 
 model Settings {
-  id              Int      @unique
-  nombre          String
-  valor           String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id        Int      @id @unique @default(autoincrement())
+  nombre    String
+  valor     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
