@@ -1,0 +1,33 @@
+# import Pagination from '../common/inputs.graphql'
+# import DateTime from '../common/scalars.graphql'
+
+input CreateUserInput {
+  username: String!
+  email: String!
+  password: String!
+  roleId: Int
+}
+
+type User {
+  id: Int!
+  username: String!
+  email: String!
+  password: String!
+  roleId: Int
+  is_active: Boolean!
+  is_deleted: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Query {
+  allUsers(pagination: Pagination): [User]
+  userById(id: Int!): User
+}
+
+type Mutation {
+  createUser(data: CreateUserInput): User
+  updateUser(id: Int!, name: String!): User
+  deleteUser(id: Int!): User
+}
+

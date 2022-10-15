@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  // provider = "postgresql"
+  // url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Role {
+  id         Int      @id @default(autoincrement())
+  rol_name   String
+  is_deleted Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  User       User[]
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  username   String    @unique
+  password   String
+  email      String    @unique
+  roleId     Int?
+  is_active  Boolean?  @default(true)
+  is_deleted Boolean?  @default(false)
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+  role       Role?     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+}

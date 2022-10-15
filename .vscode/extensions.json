@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "dsznajder.es7-react-js-snippets",
+    "dbaeumer.vscode-eslint",
+    "mquandalle.graphql",
+    "pkief.material-icon-theme",
+    "pulkitgangwar.nextjs-snippets",
+    "esbenp.prettier-vscode",
+    "prisma.prisma",
+    "formulahendry.auto-close-tag",
+    "markdown-translate.markdown-translate"
+  ]
+}
