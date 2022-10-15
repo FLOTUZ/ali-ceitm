@@ -1,7 +1,7 @@
 # import Pagination from '../common/inputs.graphql'
 # import DateTime from '../common/scalars.graphql'
 
-type CreatePersonaInput {
+input CreatePersonaInput {
   nombres: String!
   n_control: String!
   telefono: String!

@@ -2,7 +2,7 @@
 # import DateTime from '../common/scalars.graphql'
 
 input CreateBecatioInput {
-  personaId: number!
+  personaId: Int!
   en_lista_espera: Boolean
   puede_cobrar: Boolean
   becaId: Boolean

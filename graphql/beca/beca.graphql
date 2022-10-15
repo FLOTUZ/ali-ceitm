@@ -6,7 +6,7 @@ input CreateBecaInput {
   inicia: DateTime!
   termina: DateTime!
   descripcion: String!
-  is_active: boolean
+  is_active: Boolean
 }
 
 type Beca {
@@ -15,7 +15,7 @@ type Beca {
   inicia: DateTime
   termina: DateTime
   descripcion: String
-  is_active: boolean
+  is_active: Boolean
   createdAt: DateTime
   updatedAt: DateTime
 }
