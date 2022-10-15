@@ -1,0 +1,30 @@
+# import Pagination from '../common/inputs.graphql'
+# import DateTime from '../common/scalars.graphql'
+
+input CreateBecatioInput {
+  personaId: number!
+  en_lista_espera: Boolean
+  puede_cobrar: Boolean
+  becaId: Boolean
+}
+
+type Becario {
+  id: Int
+  en_lista_espera: Boolean
+  puede_cobrar: Boolean
+  personaId: Int
+  becaId: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Query {
+  allBecarios(pagination: Pagination): [Becario]
+  becarioById(id: Int!): Becario
+}
+
+type Mutation {
+  createBecario(input: CreateBecatioInput!): Becario
+  updateBecario(id: Int!, input: CreateBecatioInput!): Becario
+  deleteBecario(id: Int!): Becario
+}

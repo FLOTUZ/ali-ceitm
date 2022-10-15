@@ -1,0 +1,34 @@
+# import Pagination from '../common/inputs.graphql'
+# import DateTime from '../common/scalars.graphql'
+
+input CreateCobroInput {
+  becarioId: Int!
+  concepto: String!
+  codigo_cobro: String!
+  forma_cobro: String!
+  fecha_cobro: DateTime
+  cafeteriaId: Int!
+}
+
+type Cobro {
+  id: Int
+  becarioId: Int
+  concepto: String
+  codigo_cobro: String
+  forma_cobro: String
+  fecha_cobro: DateTime
+  cafeteriaId: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Query {
+  allCobros(pagination: Pagination): [Cobro]
+  cobroById(id: Int!): Cobro
+}
+
+type Mutation {
+  createCobro(input: CreateCobroInput): Cobro
+  updateCobro(id: Int!, input: CreateCobroInput): Cobro
+  deleteCobro(id: Int!): Boolean
+}

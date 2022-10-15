@@ -1,0 +1,32 @@
+# import Pagination from '../common/inputs.graphql'
+# import DateTime from '../common/scalars.graphql'
+
+input CreateBecaInput {
+  nombre: String!
+  inicia: DateTime!
+  termina: DateTime!
+  descripcion: String!
+  is_active: boolean
+}
+
+type Beca {
+  id: Int
+  nombre: String
+  inicia: DateTime
+  termina: DateTime
+  descripcion: String
+  is_active: boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Query {
+  allBecas(pagination: Pagination): [Beca]
+  becaById(id: Int!): Beca
+}
+
+type Mutation {
+  createBeca(input: CreateBecaInput!): Beca
+  updateBeca(id: Int!, input: CreateBecaInput!): Beca
+  deleteBeca(id: Int!): Beca
+}

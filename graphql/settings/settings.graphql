@@ -1,0 +1,26 @@
+# import Pagination from '../common/inputs.graphql'
+# import DateTime from '../common/scalars.graphql'
+
+input CreateSettingsInput {
+  nombre: String
+  valor: String
+}
+
+type Settings {
+  id: Int
+  nombre: String
+  valor: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Query {
+  allSettings: [Settings]
+  settingById(id: Int): Settings
+}
+
+type Mutation {
+  createSetting(input: CreateSettingsInput): Settings
+  updateSetting(id: Int, input: CreateSettingsInput): Settings
+  deleteSetting(id: Int): Settings
+}

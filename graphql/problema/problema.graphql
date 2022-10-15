@@ -1,0 +1,26 @@
+# import Pagination from '../common/inputs.graphql'
+# import DateTime from '../common/scalars.graphql'
+
+input CreateProblemaInput {
+  titulo: String!
+  descripcion: String!
+}
+
+type Problema {
+  id: Int
+  titulo: String
+  descripcion: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Query {
+  allProblemas(pagination: Pagination): [Problema]
+  problemaById(id: Int!): Problema
+}
+
+type Mutation {
+  createProblema(input: CreateProblemaInput!): Problema
+  updateProblema(id: Int!, input: CreateProblemaInput!): Problema
+  deleteProblema(id: Int!): Problema
+}

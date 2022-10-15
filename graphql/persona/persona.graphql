@@ -1,0 +1,43 @@
+# import Pagination from '../common/inputs.graphql'
+# import DateTime from '../common/scalars.graphql'
+
+type CreatePersonaInput {
+  nombres: String!
+  n_control: String!
+  telefono: String!
+  whatsapp: String!
+  email_personal: String!
+  email_institucional: String!
+  campus: String!
+  a_paterno: String!
+  a_materno: String!
+  userId: Int!
+}
+
+type Persona {
+  id: Int
+  nombres: String
+  a_paterno: String
+  a_materno: String
+  n_control: String
+  telefono: String
+  whatsapp: String
+  email_personal: String
+  email_institucional: String
+  campus: String
+  userId: Int
+  imagenesId: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Query {
+  allPersonas(pagination: Pagination): [Persona]
+  personaById(id: Int!): Persona
+}
+
+type Mutation {
+  createPersona(input: CreatePersonaInput!): Persona
+  updatePersona(id: Int!, input: CreatePersonaInput!): Persona
+  deletePersona(id: Int!): Persona
+}
