@@ -9,6 +9,24 @@ async function main() {
     },
   });
 
+  await prisma.role.create({
+    data: {
+      rol_name: "BECARIO",
+    },
+  });
+
+  await prisma.role.create({
+    data: {
+      rol_name: "CONCEJAL",
+    },
+  });
+
+  await prisma.role.create({
+    data: {
+      rol_name: "CAFETERIA",
+    },
+  });
+
   await prisma.user.create({
     data: {
       username: "admin",
@@ -19,6 +37,92 @@ async function main() {
       is_deleted: false,
     },
   });
+
+  await prisma.carrera.create({
+    data: {
+      nombre: "N/A",
+    }
+  });
+
+  // ==================== CARRERAS ====================
+  await prisma.carrera.create({
+    data: {
+      nombre: "INGENIERIA EN TECONOLOGIAS DE LA INFORMACION",
+    }
+  });
+  await prisma.carrera.create({
+    data: {
+      nombre: "INGENIERÍA EN SISTEMAS COMPUTACIONALES",
+    }
+  });
+  await prisma.carrera.create({
+    data: {
+      nombre: "INGENIERÍA EN GESTIÓN EMPRESARIAL",
+    }
+  });
+  await prisma.carrera.create({
+    data: {
+      nombre: "INGENIERÍA EN MECATRONICA",
+    }
+  });
+  await prisma.carrera.create({
+    data: {
+      nombre: "INGENIERÍA MECANICA",
+    }
+  });
+  await prisma.carrera.create({
+    data: {
+      nombre: "INGENIERÍA EN ELECTRÓNICA",
+    }
+  });
+  await prisma.carrera.create({
+    data: {
+      nombre: "INGENIERÍA EN ELECTRICA",
+    }
+  });
+  await prisma.carrera.create({
+    data: {
+      nombre: "INGENIERÍA BIOQUIMICA",
+    }
+  });
+  await prisma.carrera.create({
+    data: {
+      nombre: "INGENIERÍA EN BIOMEDICA",
+    }
+  });
+  await prisma.carrera.create({
+    data: {
+      nombre: "LICENCIATURA EN ADMINISTRACIÓN DE EMPRESAS",
+    }
+  });
+  await prisma.carrera.create({
+    data: {
+      nombre: "CONTADOR PUBLICO",
+    }
+  });
+  await prisma.carrera.create({
+    data: {
+      nombre: "INGENIERIA INDUSTRIAL",
+    }
+  });
+
+  // ==================== PERSONAS ====================
+
+  await prisma.persona.create({
+    data: {
+      nombres: "admin",
+      a_paterno: "admin",
+      a_materno: "admin",
+      n_control: "22120215",
+      telefono: "52 (443) 312-1570",
+      whatsapp: "52 (443) 312-1570",
+      carreraId: 1,
+      email_institucional: "ceitm@morelia.tecnm.mx",
+      campus: "Morelia",
+      userId: 1,
+    },
+  });
+
 }
 
 main()

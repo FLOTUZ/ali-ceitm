@@ -1,0 +1,24 @@
+# import Pagination from '../common/inputs.graphql'
+# import DateTime from '../common/scalars.graphql'
+
+input CreateCarreraInput {
+  nombre: String
+}
+
+type Carrera {
+  id: Number
+  nombre: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Query {
+  allCarreras: [Carrera]
+  carreraById(id: Number): Carrera
+}
+
+type Mutation {
+  createCarrera(data: CreateCarreraInput): Carrera
+  updateCarrera(id: Number, data: UpdateCarreraInput): Carrera
+  deleteCarrera(id: Number): Carrera
+}
