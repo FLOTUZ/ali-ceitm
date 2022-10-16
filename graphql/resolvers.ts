@@ -24,3 +24,6 @@ export * from "./role/role.resolver";
 
 //================ USER ===========================
 export * from "./user/user.resolver";
+
+//================ CARRERA ===========================
+export * from "./carrera/carrera.resolver";

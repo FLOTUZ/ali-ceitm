@@ -15,6 +15,7 @@ import {
   ImagenResolver,
   PersonaResolver,
   ProblemaResolver,
+  CarreraResolver
 } from "./resolvers";
 
 const typeDefs = loadSchemaSync("./**/*.graphql", {
@@ -33,6 +34,7 @@ const schema = makeExecutableSchema({
     ImagenResolver,
     PersonaResolver,
     ProblemaResolver,
+    CarreraResolver
   ],
 });
 

@@ -6,7 +6,7 @@ input CreateCarreraInput {
 }
 
 type Carrera {
-  id: Number
+  id: Int
   nombre: String
   createdAt: DateTime
   updatedAt: DateTime
@@ -14,11 +14,11 @@ type Carrera {
 
 type Query {
   allCarreras: [Carrera]
-  carreraById(id: Number): Carrera
+  carreraById(id: Int): Carrera
 }
 
 type Mutation {
   createCarrera(data: CreateCarreraInput): Carrera
-  updateCarrera(id: Number, data: UpdateCarreraInput): Carrera
-  deleteCarrera(id: Number): Carrera
+  updateCarrera(id: Int, data: CreateCarreraInput): Carrera
+  deleteCarrera(id: Int): Carrera
 }
