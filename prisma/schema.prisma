@@ -41,7 +41,7 @@ model Persona {
   telefono            String
   whatsapp            String
   email_institucional String    @unique
-  campus              String
+  campus              Int
   semestre            Int?
   carreraId           Int
   userId              Int       @unique

@@ -118,7 +118,7 @@ async function main() {
       whatsapp: "52 (443) 312-1570",
       carreraId: 1,
       email_institucional: "ceitm@morelia.tecnm.mx",
-      campus: "Morelia",
+      campus: 1,
       userId: 1,
     },
   });
