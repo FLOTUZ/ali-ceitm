@@ -3,7 +3,7 @@ import { Carrera } from "@prisma/client";
 
 import { Args, CarreraDto } from "@models";
 
-export const carreraResolver = {
+export const CarreraResolver = {
   Query: {
     allCarreras: async (_: any, { pagination }: Args) => {
       return await prisma.carrera.findMany({
