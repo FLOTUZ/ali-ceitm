@@ -5,7 +5,17 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import { loadSchemaSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
-import { UserResolver } from "./user/user.resolver";
+import {
+  UserResolver,
+  RoleResolver,
+  BecaResolver,
+  BecarioResolver,
+  CafeteriaResolver,
+  CobroResolver,
+  ImagenResolver,
+  PersonaResolver,
+  ProblemaResolver,
+} from "./resolvers";
 
 const typeDefs = loadSchemaSync("./**/*.graphql", {
   loaders: [new GraphQLFileLoader()],
@@ -13,7 +23,17 @@ const typeDefs = loadSchemaSync("./**/*.graphql", {
 
 const schema = makeExecutableSchema({
   typeDefs,
-  resolvers: [UserResolver],
+  resolvers: [
+    UserResolver,
+    RoleResolver,
+    BecaResolver,
+    BecarioResolver,
+    CafeteriaResolver,
+    CobroResolver,
+    ImagenResolver,
+    PersonaResolver,
+    ProblemaResolver,
+  ],
 });
 
 export const apolloServer = new ApolloServer({

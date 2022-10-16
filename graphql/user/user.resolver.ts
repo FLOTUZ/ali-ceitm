@@ -5,13 +5,13 @@ import { UserDto } from "./user.dto";
 
 export const UserResolver = {
   Query: {
-    allUsers: (_: any, { pagination }: Args) => {
-      return prisma.user.findMany({
+    allUsers: async (_: any, { pagination }: Args) => {
+      return await prisma.user.findMany({
         ...pagination,
       });
     },
-    userById: (_: any, { id }: User) => {
-      return prisma.user.findUnique({
+    userById:async (_: any, { id }: User) => {
+      return await prisma.user.findUnique({
         where: {
           id,
         },
