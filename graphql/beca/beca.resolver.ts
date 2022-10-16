@@ -10,8 +10,8 @@ export const BecaResolver = {
         ...pagination,
       });
     },
-    becaById: (_: any, { id }: Beca) => {
-      return prisma.beca.findUnique({
+    becaById: async (_: any, { id }: Beca) => {
+      return await prisma.beca.findUnique({
         where: {
           id,
         },

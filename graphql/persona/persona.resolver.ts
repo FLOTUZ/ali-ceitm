@@ -5,13 +5,13 @@ import { Args, PersonaDTO } from "@models";
 
 export const PersonaResolver = {
   Query: {
-    allPersonas: (_: any, { pagination }: Args) => {
-      return prisma.persona.findMany({
+    allPersonas: async (_: any, { pagination }: Args) => {
+      return await prisma.persona.findMany({
         ...pagination,
       });
     },
-    personaById: (_: any, { id }: Persona) => {
-      return prisma.persona.findUnique({
+    personaById: async (_: any, { id }: Persona) => {
+      return await prisma.persona.findUnique({
         where: {
           id,
         },

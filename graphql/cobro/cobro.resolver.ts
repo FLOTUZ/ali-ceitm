@@ -4,13 +4,13 @@ import { Args, CobroDTO } from "@models";
 
 export const CobroResolver = {
   Query: {
-    allCobros: (_: any, { pagination }: Args) => {
-      return prisma.cobro.findMany({
+    allCobros: async (_: any, { pagination }: Args) => {
+      return await prisma.cobro.findMany({
         ...pagination,
       });
     },
-    cobroById: (_: any, { id }: Cobro) => {
-      return prisma.cobro.findUnique({
+    cobroById: async (_: any, { id }: Cobro) => {
+      return await prisma.cobro.findUnique({
         where: {
           id,
         },

@@ -5,13 +5,13 @@ import { Args, RoleDTO } from "@models";
 
 export const RoleResolver = {
   Query: {
-    allRoles: (_: any, { pagination }: Args) => {
-      return prisma.role.findMany({
+    allRoles: async (_: any, { pagination }: Args) => {
+      return await prisma.role.findMany({
         ...pagination,
       });
     },
-    roleById: (_: any, { id }: Persona) => {
-      return prisma.role.findUnique({
+    roleById: async (_: any, { id }: Persona) => {
+      return await prisma.role.findUnique({
         where: {
           id,
         },

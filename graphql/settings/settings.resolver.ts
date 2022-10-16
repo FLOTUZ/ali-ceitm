@@ -5,13 +5,13 @@ import { Args, SettingsDTO } from "@models";
 
 export const SettingsResolver = {
   Query: {
-    allSettings: (_: any, { pagination }: Args) => {
-      return prisma.settings.findMany({
+    allSettings: async (_: any, { pagination }: Args) => {
+      return await prisma.settings.findMany({
         ...pagination,
       });
     },
-    settingsById: (_: any, { id }: Settings) => {
-      return prisma.settings.findUnique({
+    settingsById: async (_: any, { id }: Settings) => {
+      return await prisma.settings.findUnique({
         where: {
           id,
         },

@@ -5,13 +5,13 @@ import { Args, ImagenDTO } from "@models";
 
 export const ImagenResolver = {
   Query: {
-    allImagenes: (_: any, { pagination }: Args) => {
-      return prisma.imagen.findMany({
+    allImagenes: async (_: any, { pagination }: Args) => {
+      return await prisma.imagen.findMany({
         ...pagination,
       });
     },
-    imagenById: (_: any, { id }: Imagen) => {
-      return prisma.imagen.findUnique({
+    imagenById: async (_: any, { id }: Imagen) => {
+      return await prisma.imagen.findUnique({
         where: {
           id,
         },

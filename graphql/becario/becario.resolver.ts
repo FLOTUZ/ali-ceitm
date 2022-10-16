@@ -5,13 +5,13 @@ import { Args, BecarioDTO } from "@models";
 
 export const BecarioResolver = {
   Query: {
-    allBecarios: (_: any, { pagination }: Args) => {
-      return prisma.becario.findMany({
+    allBecarios: async (_: any, { pagination }: Args) => {
+      return await prisma.becario.findMany({
         ...pagination,
       });
     },
-    becarioById: (_: any, { id }: Becario) => {
-      return prisma.becario.findUnique({
+    becarioById: async (_: any, { id }: Becario) => {
+      return await prisma.becario.findUnique({
         where: {
           id,
         },

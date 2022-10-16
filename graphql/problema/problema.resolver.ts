@@ -5,13 +5,13 @@ import { Args, ProblemaDTO } from "@models";
 
 export const ProblemaResolver = {
   Query: {
-    allProblemas: (_: any, { pagination }: Args) => {
-      return prisma.problema.findMany({
+    allProblemas: async (_: any, { pagination }: Args) => {
+      return await prisma.problema.findMany({
         ...pagination,
       });
     },
-    problemaById: (_: any, { id }: Problema) => {
-      return prisma.problema.findUnique({
+    problemaById: async (_: any, { id }: Problema) => {
+      return await prisma.problema.findUnique({
         where: {
           id,
         },

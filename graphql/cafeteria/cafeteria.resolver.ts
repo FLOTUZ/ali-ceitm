@@ -5,13 +5,13 @@ import { Args, CafeteriaDTO } from "@models";
 
 export const CafeteriaResolver = {
   Query: {
-    allCafeterias: (_: any, { pagination }: Args) => {
-      return prisma.cafeteria.findMany({
+    allCafeterias: async (_: any, { pagination }: Args) => {
+      return await prisma.cafeteria.findMany({
         ...pagination,
       });
     },
-    cafeteriaById: (_: any, { id }: Cafeteria) => {
-      return prisma.cafeteria.findUnique({
+    cafeteriaById: async (_: any, { id }: Cafeteria) => {
+      return await prisma.cafeteria.findUnique({
         where: {
           id,
         },
