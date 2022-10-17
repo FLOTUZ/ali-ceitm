@@ -10,7 +10,7 @@ export default async function handler(
   //Get the user token from the headers.
   const token = req.headers.authorization;
   //Verify token existence
-  // if (!token) return res.status(401).redirect("/login");
+  // if (!token) return res.status(401).redirect("/auth/login");
 
   // try {
   //   // Get token withoit the bearer

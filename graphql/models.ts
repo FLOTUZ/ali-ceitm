@@ -22,6 +22,9 @@ export * from "./imagen/imagen.dto";
 //================ PERSONA ====================
 export * from "./persona/persona.dto";
 
+//================ CARRERA ====================
+export * from "./carrera/carrera.dto";
+
 //================ PROBLEMA ====================
 export * from "./problema/problema.dto";
 

@@ -7,10 +7,12 @@ input CreatePersonaInput {
   telefono: String!
   whatsapp: String!
   email_institucional: String!
-  campus: String!
+  campus: Int!
   a_paterno: String!
   a_materno: String!
   userId: Int!
+  carreraId: Int!
+  imagenesId: Int
 }
 
 type Persona {
@@ -22,8 +24,9 @@ type Persona {
   telefono: String
   whatsapp: String
   email_institucional: String
-  campus: String
+  campus: Int
   userId: Int
+  carreraId: Int
   imagenesId: Int
   createdAt: DateTime
   updatedAt: DateTime

@@ -4,7 +4,8 @@ export interface PersonaDTO {
   telefono: string;
   whatsapp: string;
   email_institucional: string;
-  campus: string;
+  campus: number;
+  carreraId: number;
   ImagenesId: number | null;
   a_paterno: string;
   a_materno: string;
