@@ -95,7 +95,7 @@ function SignInForm() {
         position: "top-right",
       });
 
-      router.push("/login");
+      router.push("/auth/login");
     },
   });
 
