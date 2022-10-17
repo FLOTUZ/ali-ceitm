@@ -1,11 +1,9 @@
-import LoginForm from "@/forms/auth/login.form";
-
-function Login() {
-  return (
-    <>
-      <LoginForm />
-    </>
-  );
+function LoginPage() {
+    return (
+        <div>
+            Enter
+        </div>
+    );
 }
 
-export default Login;
+export default LoginPage;

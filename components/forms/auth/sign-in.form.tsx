@@ -4,6 +4,7 @@ import {
   CircularProgress,
   Container,
   Heading,
+  Toast,
   useToast,
 } from "@chakra-ui/react";
 import Head from "next/head";
@@ -33,7 +34,7 @@ function SignInForm() {
 
   const [
     createUser,
-    { data: dataRegistro, loading: loadingRegistro, error: errorRegistro },
+    { data: dataUser, loading: loadingUser, error: errorUser },
   ] = useMutation(REGISTRO_USUARIO_ACTION);
 
   const [
@@ -73,28 +74,28 @@ function SignInForm() {
       const user = values as User;
       const persona = values as Persona;
 
-      console.log({ user, persona });
+      const { data: resultUser } = await createUser({
+        variables: {
+          ...user,
+        },
+      });
 
-      // const { data: resultUser } = await createUser({
-      //   variables: {
-      //     ...user,
-      //   },
-      // });
-
-      // const { data: resultPersona } = await createPersona({
-      //   variables: {
-      //     ...persona,
-      //     userId: resultUser?.createUser?.id,
-      //   },
-      // });
-
+      const { data: resultPersona } = await createPersona({
+        variables: {
+          ...persona,
+          userId: resultUser?.createUser?.id,
+        },
+      });
       toast({
         title: "Usuario creado",
         description: "Se ha creado el usuario correctamente",
         status: "success",
         isClosable: true,
         duration: 7000,
+        position: "top-right",
       });
+
+      router.push("/login");
     },
   });
 
