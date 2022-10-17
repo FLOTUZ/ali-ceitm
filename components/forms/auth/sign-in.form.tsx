@@ -79,7 +79,7 @@ const SignupSchema = Yup.object().shape({
   carrera: Yup.number().required("Selecciona una opcion").nullable(),
 });
 
-export const GET_CARRERAS = gql`
+export const CONSULTA = gql`
   query GetCarreras {
     allCarreras {
       id
@@ -89,7 +89,7 @@ export const GET_CARRERAS = gql`
 `;
 
 function SignInForm() {
-  const { loading, error, data } = useQuery(GET_CARRERAS);
+  const { loading, error, data } = useQuery(CONSULTA);
 
   const [carrerasList, setCarrerasList] = useState<Carrera[]>([]);
 
