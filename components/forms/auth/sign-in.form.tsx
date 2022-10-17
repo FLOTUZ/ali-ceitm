@@ -5,91 +5,39 @@ import {
   Container,
   Heading,
 } from "@chakra-ui/react";
-import { useFormik } from "formik";
 import Head from "next/head";
+import { useFormik } from "formik";
 
-import * as Yup from "yup";
 import SelectComponent from "../select.component";
 import TextField from "../text.field";
+import { SignupSchema } from "./auth.validators";
 
-import { useQuery, gql } from "@apollo/client";
-import { Carrera } from "@prisma/client";
+import { useMutation, useQuery } from "@apollo/client";
+import { Carrera, Persona, User } from "@prisma/client";
 import { useEffect, useState } from "react";
 
-const SignupSchema = Yup.object().shape({
-  username: Yup.string()
-    .min(2, "Muy corto minimo 2 caracteres")
-    .max(20, "Muy Largo maximo 20 caracteres")
-    .required("Es requerido")
-    .nullable(),
-
-  password: Yup.string()
-    .min(8, "Muy corto! minimo 8 caracteres")
-    .max(255, "Muy Largo! maximo 255 caracteres")
-    .required("Es requerido")
-    .nullable(),
-
-  email: Yup.string().email("Correo invalido").required("Required"),
-
-  nombres: Yup.string()
-    .min(2, "Muy corto! minimo 2 caracteres")
-    .max(50, "Muy Largo! maximo 50 caracteres")
-    .required("Es requerido")
-    .nullable(),
-
-  a_paterno: Yup.string()
-    .min(2, "Muy corto! minimo 2 caracteres")
-    .max(50, "Muy Largo! maximo 50 caracteres")
-    .required("Es requerido")
-    .nullable(),
-
-  a_materno: Yup.string()
-    .min(2, "Muy corto! minimo 2 caracteres")
-    .max(50, "Muy Largo! maximo 50 caracteres")
-    .required("Es requerido")
-    .nullable(),
-
-  n_control: Yup.string()
-    .min(8, "Muy corto! minimo 8 caracteres")
-    .max(10, "Muy Largo! maximo 10 caracteres")
-    .required("Es requerido")
-    .nullable(),
-
-  telefono: Yup.string()
-    .min(10, "Muy corto! minimo 10 caracteres")
-    .max(10, "Muy Largo! maximo 10 caracteres")
-    .required("Es requerido")
-    .nullable(),
-
-  whatsapp: Yup.string()
-    .min(10, "Muy corto! minimo 10 caracteres")
-    .max(15, "Muy Largo! maximo 15 caracteres")
-    .required("Es requerido")
-    .nullable(),
-
-  email_institucional: Yup.string()
-    .email("Correo invalido")
-    .min(20, "Muy corto! minimo 20 caracteres")
-    .max(27, "Muy Largo! maximo 27 caracteres")
-    .required("Es requerido")
-    .nullable(),
-
-  campus: Yup.number().required("Selecciona una opcion").nullable(),
-
-  carrera: Yup.number().required("Selecciona una opcion").nullable(),
-});
-
-export const CONSULTA = gql`
-  query GetCarreras {
-    allCarreras {
-      id
-      nombre
-    }
-  }
-`;
+import {
+  GET_CARRERAS_ACTION,
+  REGISTRO_PERSONA_ACTION,
+  REGISTRO_USUARIO_ACTION,
+} from "./auth.actions";
 
 function SignInForm() {
-  const { loading, error, data } = useQuery(CONSULTA);
+  const {
+    loading: loadingCarreras,
+    error: errorCarreras,
+    data: dataCarreras,
+  } = useQuery(GET_CARRERAS_ACTION);
+
+  const [
+    createUser,
+    { data: dataRegistro, loading: loadingRegistro, error: errorRegistro },
+  ] = useMutation(REGISTRO_USUARIO_ACTION);
+
+  const [
+    createPersona,
+    { data: dataPersona, loading: loadingPersona, error: errorPersona },
+  ] = useMutation(REGISTRO_PERSONA_ACTION);
 
   const [carrerasList, setCarrerasList] = useState<Carrera[]>([]);
 
@@ -114,28 +62,46 @@ function SignInForm() {
       whatsapp: null,
       email_institucional: null,
       campus: null,
-      carrera: null,
+      carreraId: null,
     },
     onSubmit: async (values: any) => {
-      console.log(values);
+      const user = values as User;
+      const persona = values as Persona;
+
+      console.log({ user, persona });
+
+      const { data: resultUser } = await createUser({
+        variables: {
+          ...user,
+        },
+      });
+
+      const { data: resultPersona } = await createPersona({
+        variables: {
+          ...persona,
+          userId: resultUser?.createUser?.id,
+        },
+      });
+
+      console.log({ resultPersona });
     },
   });
 
   useEffect(() => {
-    if (data) {
-      setCarrerasList(data.allCarreras);
+    if (dataCarreras) {
+      setCarrerasList(dataCarreras.allCarreras);
     }
-  }, [data]);
+  }, [dataCarreras]);
 
-  if (loading) {
+  if (loadingCarreras) {
     return (
       <Center h={"100vh"}>
         <CircularProgress isIndeterminate />
       </Center>
     );
   }
-  if (error) {
-    return <div>Error: ${error.message}</div>;
+  if (errorCarreras) {
+    return <div>Error: ${errorCarreras.message}</div>;
   }
 
   return (
@@ -257,8 +223,8 @@ function SignInForm() {
           name={"carrera"}
           label={"Carerra (Requerido)"}
           placeholder={"Selecciona carrera"}
-          touched={touched.carrera}
-          errors={errors.carrera}
+          touched={touched.carreraId}
+          errors={errors.carreraId}
           handleChange={(e) =>
             setFieldValue("carrera", parseInt(e.target.value))
           }
