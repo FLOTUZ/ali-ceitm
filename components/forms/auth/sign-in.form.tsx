@@ -1,10 +1,20 @@
-import { Button, Center, Container, Heading } from "@chakra-ui/react";
+import {
+  Button,
+  Center,
+  CircularProgress,
+  Container,
+  Heading,
+} from "@chakra-ui/react";
 import { useFormik } from "formik";
 import Head from "next/head";
 
 import * as Yup from "yup";
 import SelectComponent from "../select.component";
 import TextField from "../text.field";
+
+import { useQuery, gql } from "@apollo/client";
+import { Carrera } from "@prisma/client";
+import { useEffect, useState } from "react";
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -69,7 +79,20 @@ const SignupSchema = Yup.object().shape({
   carrera: Yup.number().required("Selecciona una opcion").nullable(),
 });
 
+export const GET_CARRERAS = gql`
+  query GetCarreras {
+    allCarreras {
+      id
+      nombre
+    }
+  }
+`;
+
 function SignInForm() {
+  const { loading, error, data } = useQuery(GET_CARRERAS);
+
+  const [carrerasList, setCarrerasList] = useState<Carrera[]>([]);
+
   const {
     isSubmitting,
     handleSubmit,
@@ -97,6 +120,23 @@ function SignInForm() {
       console.log(values);
     },
   });
+
+  useEffect(() => {
+    if (data) {
+      setCarrerasList(data.allCarreras);
+    }
+  }, [data]);
+
+  if (loading) {
+    return (
+      <Center h={"100vh"}>
+        <CircularProgress isIndeterminate />
+      </Center>
+    );
+  }
+  if (error) {
+    return <div>Error: ${error.message}</div>;
+  }
 
   return (
     <Container>
@@ -223,8 +263,11 @@ function SignInForm() {
             setFieldValue("carrera", parseInt(e.target.value))
           }
         >
-          <option value={1}>ITICS</option>
-          <option value={2}>ISC</option>
+          {carrerasList.map((carrera) => (
+            <option key={carrera.id} value={carrera.id}>
+              {carrera.nombre}
+            </option>
+          ))}
         </SelectComponent>
 
         <Center mt={8} mb={8}>
