@@ -29,7 +29,7 @@ model User {
   createdAt  DateTime? @default(now())
   updatedAt  DateTime? @updatedAt
   role       Role[]
-  Persona    Persona[]
+  personas   Persona[]
 }
 
 model Persona {
@@ -48,10 +48,10 @@ model Persona {
   imagenesId          Int?      @unique
   createdAt           DateTime  @default(now())
   updatedAt           DateTime  @updatedAt
-  user                User?     @relation(fields: [userId], references: [id])
+  user                User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   becarios            Becario[]
   profile_picture     Imagen?   @relation(fields: [imagenesId], references: [id])
-  carrera             Carrera  @relation(fields: [carreraId], references: [id])
+  carrera             Carrera   @relation(fields: [carreraId], references: [id])
 }
 
 model Carrera {
@@ -59,7 +59,7 @@ model Carrera {
   nombre    String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  Becario   Persona[]
+  becarios  Persona[]
 }
 
 model Becario {
@@ -119,8 +119,8 @@ model Imagen {
   problemasId Int?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  persona     Persona[]
-  problemas   Problema? @relation(fields: [problemasId], references: [id])
+  personas    Persona[]
+  problema    Problema? @relation(fields: [problemasId], references: [id])
 }
 
 model Problema {
