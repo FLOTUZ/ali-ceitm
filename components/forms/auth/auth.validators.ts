@@ -60,5 +60,5 @@ export const SignupSchema = Yup.object().shape({
   
     campus: Yup.number().required("Selecciona una opcion").nullable(),
   
-    carrera: Yup.number().required("Selecciona una opcion").nullable(),
+    carreraId: Yup.number().required("Selecciona una opcion").nullable(),
   });

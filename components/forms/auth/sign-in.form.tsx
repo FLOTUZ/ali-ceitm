@@ -4,6 +4,8 @@ import {
   CircularProgress,
   Container,
   Heading,
+  Toast,
+  useToast,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useFormik } from "formik";
@@ -21,6 +23,7 @@ import {
   REGISTRO_PERSONA_ACTION,
   REGISTRO_USUARIO_ACTION,
 } from "./auth.actions";
+import { useRouter } from "next/router";
 
 function SignInForm() {
   const {
@@ -31,13 +34,16 @@ function SignInForm() {
 
   const [
     createUser,
-    { data: dataRegistro, loading: loadingRegistro, error: errorRegistro },
+    { data: dataUser, loading: loadingUser, error: errorUser },
   ] = useMutation(REGISTRO_USUARIO_ACTION);
 
   const [
     createPersona,
     { data: dataPersona, loading: loadingPersona, error: errorPersona },
   ] = useMutation(REGISTRO_PERSONA_ACTION);
+
+  const toast = useToast();
+  const router = useRouter();
 
   const [carrerasList, setCarrerasList] = useState<Carrera[]>([]);
 
@@ -68,8 +74,6 @@ function SignInForm() {
       const user = values as User;
       const persona = values as Persona;
 
-      console.log({ user, persona });
-
       const { data: resultUser } = await createUser({
         variables: {
           ...user,
@@ -82,8 +86,16 @@ function SignInForm() {
           userId: resultUser?.createUser?.id,
         },
       });
+      toast({
+        title: "Usuario creado",
+        description: "Se ha creado el usuario correctamente",
+        status: "success",
+        isClosable: true,
+        duration: 7000,
+        position: "top-right",
+      });
 
-      console.log({ resultPersona });
+      router.push("/auth/login");
     },
   });
 
@@ -220,13 +232,13 @@ function SignInForm() {
         </SelectComponent>
 
         <SelectComponent
-          name={"carrera"}
+          name={"carreraId"}
           label={"Carerra (Requerido)"}
           placeholder={"Selecciona carrera"}
           touched={touched.carreraId}
           errors={errors.carreraId}
           handleChange={(e) =>
-            setFieldValue("carrera", parseInt(e.target.value))
+            setFieldValue("carreraId", parseInt(e.target.value))
           }
         >
           {carrerasList.map((carrera) => (

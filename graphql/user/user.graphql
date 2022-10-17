@@ -12,7 +12,6 @@ type User {
   id: Int!
   username: String!
   email: String!
-  password: String!
   roleId: Int
   is_active: Boolean!
   is_deleted: Boolean!
