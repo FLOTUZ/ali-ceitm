@@ -1,4 +1,6 @@
 import { gql } from "@apollo/client";
+import { UserDto } from "graphql/user/user.dto";
+import { axiosClient } from "services/axios-client.service";
 
 export const GET_CARRERAS_ACTION = gql`
   query GetCarreras {
@@ -9,27 +11,9 @@ export const GET_CARRERAS_ACTION = gql`
   }
 `;
 
-export const REGISTRO_USUARIO_ACTION = gql`
-  mutation CREATE_USER(
-    # ==== User data ====
-    $username: String!
-    $email: String!
-    $password: String!
-  ) {
-    createUser(
-      data: {
-        username: $username
-        email: $email
-        password: $password
-        roleId: 2
-      }
-    ) {
-      id
-      username
-      email
-    }
-  }
-`;
+export const createUsuario = async (user: UserDto) => {
+  return await axiosClient().post("/auth/signup", user);
+};
 
 export const REGISTRO_PERSONA_ACTION = gql`
   mutation CREATE_PERSONA(
@@ -70,3 +54,14 @@ export const REGISTRO_PERSONA_ACTION = gql`
     }
   }
 `;
+
+export const loginAction = async (email: string, password: string) => {
+  return await axiosClient().post("/auth/login", {
+    email,
+    password,
+  });
+};
+
+export const healthAction = async () => {
+  return await axiosClient().get("/health");
+};

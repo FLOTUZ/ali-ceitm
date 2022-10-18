@@ -1,8 +1,27 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import jwt from "jsonwebtoken";
 
 export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse
-  ) {
-    res.json({status:200, message:"Connected with Server"});
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  //get token from header
+  const token = req.headers.authorization?.split(" ")[1];
+  //verify token
+  if (!token) {
+    return res.status(401).json({ msg: "No token, authorization denied" });
   }
+  try {
+    //verify token
+    const data = jwt.verify(token, process.env.JWT_SECRET!);
+    //add user from payload
+    res
+      .status(200)
+      .json({ message: "Connected with Server with authorization", data });
+    res.end();
+  } catch (e) {
+    res
+      .status(401)
+      .json({ message: "Connected with Server without authorization" });
+  }
+}
