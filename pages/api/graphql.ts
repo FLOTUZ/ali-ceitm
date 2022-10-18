@@ -8,9 +8,10 @@ export default async function handler(
   res: NextApiResponse
 ) {
   //Get the user token from the headers.
-  const token = req.headers.authorization;
+  const token = req.headers;
+  
   //Verify token existence
-  // if (!token) return res.status(401).redirect("/auth/login");
+  if (!token) return res.status(401).redirect("/auth/login");
 
   // try {
   //   // Get token withoit the bearer

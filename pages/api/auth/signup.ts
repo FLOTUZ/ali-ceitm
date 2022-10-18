@@ -9,8 +9,8 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method == "POST") {
-    // const { username, email, password } = req.body;
-    const userToUpload: UserDto = req.body;
+    const { username, email, password } = req.body;
+    const userToUpload: UserDto = { username, email, password };
 
     const validation = await isTest(userToUpload);
 
@@ -19,14 +19,15 @@ export default async function handler(
 
     if (validation != null) {
       res.status(400).json({ errors: validation });
-      return;
+      res.end();
     }
 
     try {
       const user = await prisma.user.create({
-        data: userToUpload,
+        data: { ...userToUpload },
       });
-      res.json(user);
+
+      res.status(200).json(user);
     } catch (error: any) {
       if (error.code === "P2002")
         res.status(409).json({ error: "Email or Username already on use" });

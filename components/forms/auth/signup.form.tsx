@@ -4,7 +4,6 @@ import {
   CircularProgress,
   Container,
   Heading,
-  Toast,
   useToast,
 } from "@chakra-ui/react";
 import Head from "next/head";
@@ -15,27 +14,24 @@ import TextField from "../text.field";
 import { SignupSchema } from "./auth.validators";
 
 import { useMutation, useQuery } from "@apollo/client";
-import { Carrera, Persona, User } from "@prisma/client";
+import { Carrera, User } from "@prisma/client";
 import { useEffect, useState } from "react";
 
 import {
+  createUsuario,
   GET_CARRERAS_ACTION,
   REGISTRO_PERSONA_ACTION,
-  REGISTRO_USUARIO_ACTION,
 } from "./auth.actions";
 import { useRouter } from "next/router";
+import { UserDto } from "graphql/user/user.dto";
+import { PersonaDTO } from "graphql/persona/persona.dto";
 
-function SignInForm() {
+function SingupForm() {
   const {
     loading: loadingCarreras,
     error: errorCarreras,
     data: dataCarreras,
   } = useQuery(GET_CARRERAS_ACTION);
-
-  const [
-    createUser,
-    { data: dataUser, loading: loadingUser, error: errorUser },
-  ] = useMutation(REGISTRO_USUARIO_ACTION);
 
   const [
     createPersona,
@@ -71,31 +67,41 @@ function SignInForm() {
       carreraId: null,
     },
     onSubmit: async (values: any) => {
-      const user = values as User;
-      const persona = values as Persona;
+      const user = values as UserDto;
+      const persona = values as PersonaDTO;
 
-      const { data: resultUser } = await createUser({
-        variables: {
-          ...user,
-        },
-      });
+      try {
+        const response = await createUsuario(user);
 
-      const { data: resultPersona } = await createPersona({
-        variables: {
-          ...persona,
-          userId: resultUser?.createUser?.id,
-        },
-      });
-      toast({
-        title: "Usuario creado",
-        description: "Se ha creado el usuario correctamente",
-        status: "success",
-        isClosable: true,
-        duration: 7000,
-        position: "top-right",
-      });
+        const newUser = response.data as User;
 
-      router.push("/auth/login");
+        if (response.status === 200) {
+          await createPersona({
+            variables: {
+              ...persona,
+              userId: newUser.id,
+            },
+          });
+          toast({
+            title: "Usuario creado",
+            description: "Se ha creado el usuario correctamente",
+            status: "success",
+            isClosable: true,
+            duration: 7000,
+            position: "top-right",
+          });
+          router.push("/auth/login");
+        }
+      } catch (error) {
+        toast({
+          title: "No se ha podido crear el usuario,",
+          description: "Es posible que el usuario o correo ya esten en uso",
+          status: "error",
+          isClosable: true,
+          duration: 7000,
+          position: "top-right",
+        });
+      }
     },
   });
 
@@ -265,4 +271,4 @@ function SignInForm() {
   );
 }
 
-export default SignInForm;
+export default SingupForm;
