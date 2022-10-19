@@ -9,21 +9,23 @@ export default async function handler(
 ) {
   //Get the user token from the headers.
   const token = req.headers;
-  
-  //Verify token existence
-  if (!token) return res.status(401).redirect("/auth/login");
 
-  // try {
-  //   // Get token withoit the bearer
-  //   const cleanToken = token?.split(" ")[1];
-  //   //Verify if JWT token is valid
-  //   jwt.verify(cleanToken, process.env.JWT_SECRET!);
-  //   //If token is valid, refresh it
-  //   refreshToken(res, token);
-  //   //Error of JWT validation
-  // } catch (error) {
-  //   return res.status(401).json({ error });
-  // }
+  //Verify token existence
+  if (!token) {
+    return res.status(401).redirect("/auth/login");
+  } else {
+    try {
+      // Get token withoit the bearer
+      const cleanToken = token.authorization?.split(" ")[1];
+      //Verify if JWT token is valid
+      jwt.verify(cleanToken!, process.env.JWT_SECRET!);
+      //If token is valid, refresh it
+      refreshToken(res, cleanToken!);
+      //Error of JWT validation
+    } catch (error) {
+      return res.status(401).json({ error });
+    }
+  }
 
   //GraphQL Init
   await startServer;
@@ -40,10 +42,7 @@ export const config = {
 
 //refresh token
 function refreshToken(res: NextApiResponse, token: string) {
-  const decoded: any = jwt.verify(
-    token?.split(" ")[1],
-    process.env.JWT_SECRET!
-  );
+  const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
 
   const newToken = jwt.sign(
     {

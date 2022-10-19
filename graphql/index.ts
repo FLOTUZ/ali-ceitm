@@ -4,6 +4,8 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-co
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { loadSchemaSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
+import { prisma } from "services/prisma.service";
+
 
 import {
   UserResolver,
@@ -41,6 +43,9 @@ const schema = makeExecutableSchema({
 export const apolloServer = new ApolloServer({
   schema,
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+  context : () => ({
+    prisma
+  })
 });
 
 export const startServer = apolloServer.start();

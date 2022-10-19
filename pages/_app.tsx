@@ -4,18 +4,33 @@ import { initInterceptors } from "services/axios-client.service";
 
 import type { AppProps } from "next/app";
 
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider, createHttpLink } from "@apollo/client";
+import { setContext } from '@apollo/client/link/context';
 
 initInterceptors();
 
-const local = new ApolloClient({
+const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_API + "/graphql",
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('access-token');  
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+});
+
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={local}>
+    <ApolloProvider client={client}>
       <ChakraProvider>
         <Component {...pageProps} />
       </ChakraProvider>
