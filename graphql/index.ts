@@ -1,4 +1,4 @@
-import { ApolloServer } from "apollo-server-micro";
+import { ApolloServer, AuthenticationError } from "apollo-server-micro";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 
 import { makeExecutableSchema } from "@graphql-tools/schema";
@@ -47,14 +47,16 @@ const context = ({
   req: NextApiRequest;
   res: NextApiResponse;
 }) => {
-  const { id: idUser, role } = valiteAndRefreshToken(req, res) as IPayload;
+  const payload = valiteAndRefreshToken(req, res) as IPayload;
 
-  return {
-    prisma,
-    idUser,
-    role,
-    res,
-  };
+  if (payload != null) {
+    return {
+      prisma,
+      idUser: payload.id,
+      role: payload.role,
+    };
+  }
+  return null;
 };
 
 const schema = makeExecutableSchema({
@@ -89,14 +91,14 @@ function valiteAndRefreshToken(req: NextApiRequest, res: NextApiResponse) {
   const cleanToken = token.authorization?.split(" ")[1];
 
   if (!token) {
-    return res.status(401).redirect("/auth/login");
+    throw new AuthenticationError("No token provided");
   } else {
     try {
       //Verify if JWT token is valid
       jwt.verify(cleanToken!, process.env.JWT_SECRET!);
       //Error of JWT validation
     } catch (error) {
-      return res.status(401).json({ error });
+      throw new AuthenticationError("Token expired");
     }
   }
 
@@ -110,7 +112,7 @@ function valiteAndRefreshToken(req: NextApiRequest, res: NextApiResponse) {
     },
     process.env.JWT_SECRET!
   );
-  res.setHeader("authorization", newToken);
+  res.setHeader("authorization", `Bearer ${newToken}`);
 
   return payload;
 }
