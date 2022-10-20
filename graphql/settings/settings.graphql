@@ -17,6 +17,7 @@ type Settings {
 type Query {
   allSettings: [Settings]
   settingById(id: Int): Settings
+  settingByNombre(nombre: String!): Settings
 }
 
 type Mutation {

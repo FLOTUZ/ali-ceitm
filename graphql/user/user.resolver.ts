@@ -1,16 +1,20 @@
-import { Context } from "@apollo/client";
 import { User } from "@prisma/client";
+import { IGraphqlContext } from "graphql";
 import { Args } from "graphql/models";
 import { UserDto } from "./user.dto";
 
 export const UserResolver = {
   Query: {
-    allUsers: async (_: any, { pagination }: Args, { prisma }: Context) => {
+    allUsers: async (
+      _: any,
+      { pagination }: Args,
+      { prisma }: IGraphqlContext
+    ) => {
       return await prisma.user.findMany({
         ...pagination,
       });
     },
-    userById: async (_: any, { id }: User, { prisma }: Context) => {
+    userById: async (_: any, { id }: User, { prisma }: IGraphqlContext) => {
       return await prisma.user.findUnique({
         where: {
           id,
@@ -23,14 +27,19 @@ export const UserResolver = {
     createUser: async (
       _: any,
       { data }: { data: UserDto },
-      { prisma }: Context
+
+      { prisma }: IGraphqlContext
     ) => {
       return await prisma.user.create({
         data,
       });
     },
 
-    updateUser: async (_: any, { id, ...data }: User, { prisma }: Context) => {
+    updateUser: async (
+      _: any,
+      { id, ...data }: User,
+      { prisma }: IGraphqlContext
+    ) => {
       const response = await prisma.user.update({
         where: { id },
         data,
@@ -39,7 +48,7 @@ export const UserResolver = {
       return response;
     },
 
-    deleteUser: async (_: any, { id }: User, { prisma }: Context) => {
+    deleteUser: async (_: any, { id }: User, { prisma }: IGraphqlContext) => {
       const response = await prisma.user.delete({
         where: { id },
       });

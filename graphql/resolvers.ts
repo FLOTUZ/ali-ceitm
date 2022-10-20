@@ -27,3 +27,6 @@ export * from "./user/user.resolver";
 
 //================ CARRERA ===========================
 export * from "./carrera/carrera.resolver";
+
+//================ SETTINGS ===========================
+export * from "./settings/settings.resolver";

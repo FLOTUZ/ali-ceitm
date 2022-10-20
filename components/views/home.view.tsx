@@ -12,12 +12,26 @@ import moment from "moment";
 import { Center, Container, SimpleGrid, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { gql, useQuery } from "@apollo/client";
+
+const GET_SETTINGS = gql`
+  query GetSettings {
+    allSettings {
+      id
+      nombre
+      valor
+    }
+  }
+`;
 
 function Home() {
   const [time, setTime] = useState<string>("");
   const [currentDate, setCurrentDate] = useState("");
   const [isBreakfastHour, setIsBreakfastHour] = useState<boolean>(false);
   const [isPairWeek, setisPairWeek] = useState(false);
+
+  //get settings
+  const { data, loading, error } = useQuery(GET_SETTINGS);
 
   const isMoreThan12PM = () => {
     const isTimeOfBreakfast = moment().isAfter(
@@ -55,6 +69,8 @@ function Home() {
     calculatePairOrInpairWeek();
     calculateCurrentDate();
   }, []);
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <SimpleGrid columns={[2, 3, 3]} bgColor="black">

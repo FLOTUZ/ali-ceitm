@@ -1,37 +1,68 @@
-import { prisma } from "@services";
 import { Settings } from "@prisma/client";
 
 import { Args, SettingsDTO } from "@models";
+import { IGraphqlContext } from "graphql";
 
 export const SettingsResolver = {
   Query: {
-    allSettings: async (_: any, { pagination }: Args) => {
+    allSettings: async (
+      _: any,
+      { pagination }: Args,
+      { prisma }: IGraphqlContext
+    ) => {
       return await prisma.settings.findMany({
         ...pagination,
       });
     },
-    settingsById: async (_: any, { id }: Settings) => {
+    settingById: async (
+      _: any,
+      { id }: Settings,
+      { prisma }: IGraphqlContext
+    ) => {
       return await prisma.settings.findUnique({
         where: {
           id,
         },
       });
     },
+    settingByNombre: async (
+      _: any,
+      { nombre }: Settings,
+      { prisma }: IGraphqlContext
+    ) => {
+      return await prisma.settings.findUnique({
+        where: {
+          nombre,
+        },
+      });
+    },
   },
   Mutation: {
-    createSettings: async (_: any, { data }: { data: SettingsDTO }) => {
+    createSetting: async (
+      _: any,
+      { data }: { data: SettingsDTO },
+      { prisma }: IGraphqlContext
+    ) => {
       return await prisma.settings.create({
         data,
       });
     },
-    updateSettings: async (_: any, { id, ...data }: Settings) => {
+    updateSetting: async (
+      _: any,
+      { id, ...data }: Settings,
+      { prisma }: IGraphqlContext
+    ) => {
       const response = await prisma.settings.update({
         where: { id },
         data,
       });
       return response;
     },
-    deleteSettings: async (_: any, { id }: Settings) => {
+    deleteSetting: async (
+      _: any,
+      { id }: Settings,
+      { prisma }: IGraphqlContext
+    ) => {
       const response = await prisma.settings.delete({
         where: { id },
       });

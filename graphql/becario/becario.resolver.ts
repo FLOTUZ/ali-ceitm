@@ -1,16 +1,24 @@
-import { prisma } from "@services";
 import { Becario } from "@prisma/client";
 
 import { Args, BecarioDTO } from "@models";
+import { IGraphqlContext } from "graphql";
 
 export const BecarioResolver = {
   Query: {
-    allBecarios: async (_: any, { pagination }: Args) => {
+    allBecarios: async (
+      _: any,
+      { pagination }: Args,
+      { prisma }: IGraphqlContext
+    ) => {
       return await prisma.becario.findMany({
         ...pagination,
       });
     },
-    becarioById: async (_: any, { id }: Becario) => {
+    becarioById: async (
+      _: any,
+      { id }: Becario,
+      { prisma }: IGraphqlContext
+    ) => {
       return await prisma.becario.findUnique({
         where: {
           id,
@@ -19,19 +27,31 @@ export const BecarioResolver = {
     },
   },
   Mutation: {
-    createBecario: async (_: any, { data }: { data: BecarioDTO }) => {
+    createBecario: async (
+      _: any,
+      { data }: { data: BecarioDTO },
+      { prisma }: IGraphqlContext
+    ) => {
       return await prisma.becario.create({
         data,
       });
     },
-    updateBecario: async (_: any, { id, ...data }: Becario) => {
+    updateBecario: async (
+      _: any,
+      { id, ...data }: Becario,
+      { prisma }: IGraphqlContext
+    ) => {
       const response = await prisma.becario.update({
         where: { id },
         data,
       });
       return response;
     },
-    deleteBecario: async (_: any, { id }: Becario) => {
+    deleteBecario: async (
+      _: any,
+      { id }: Becario,
+      { prisma }: IGraphqlContext
+    ) => {
       const response = await prisma.becario.delete({
         where: { id },
       });
