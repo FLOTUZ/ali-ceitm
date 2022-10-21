@@ -5,6 +5,7 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import { loadSchemaSync } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { prisma } from "services/prisma.service";
+import { PrismaClient } from "@prisma/client";
 
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
@@ -24,8 +25,8 @@ import {
 } from "./resolvers";
 
 export interface IGraphqlContext {
-  prisma: any;
-  idUser: string;
+  prisma: PrismaClient;
+  idUser: number;
   role: string;
   res: NextApiResponse;
 }

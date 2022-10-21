@@ -10,4 +10,5 @@ export interface PersonaDTO {
   a_paterno: string;
   a_materno: string;
   userId: number;
+  cafeteriaId: number | null;
 }

@@ -22,14 +22,33 @@ export const CobroResolver = {
     },
   },
   Mutation: {
-    createCobro: async (
-      _: any,
-      { data }: { data: CobroDTO },
-      { prisma }: IGraphqlContext
-    ) => {
-      return await prisma.cobro.create({
-        data,
+    createCobro: async (_: any, { prisma, idUser }: IGraphqlContext) => {
+      const persona = await prisma.persona.findUnique({
+        where: {
+          userId: idUser,
+        },
       });
+
+      if (persona) {
+        const becario = await prisma.becario.findUnique({
+          where: {
+            personaId: persona.id,
+          },
+        });
+
+        const generatedCobro = await prisma.cobro.create({
+          data: {
+            becarioId: becario!.id,
+            concepto: "Beca alimenticia",
+            codigo_cobro: "123456789",
+            forma_cobro: "CAJA",
+            fecha_cobro: new Date().toISOString(),
+          },
+        });
+
+        return generatedCobro;
+      }
+      return null;
     },
     updateCobro: async (
       _: any,
@@ -47,6 +66,45 @@ export const CobroResolver = {
         where: { id },
       });
       return response;
+    },
+
+    realizeCobro: async (
+      _: any,
+      { id }: Cobro,
+      { prisma, role, idUser }: IGraphqlContext
+    ) => {
+
+      if (role === "CAFETERIA") {
+
+        const persona = await prisma.persona.findUnique({
+          where: {
+            userId: idUser,
+          },
+        });
+
+        const cobro = await prisma.cobro.update({
+          where: { id },
+          data: {
+            codigo_usado: true,
+            cafeteriaId: persona!.cafeteriaId,
+          },
+        });
+
+        return cobro;
+      }
+
+      //if role is admin, concejal or cashier
+      if (role === "ADMIN" || role === "CONCEJAL") {
+        const cobro = await prisma.cobro.update({
+          where: { id },
+          data: {
+            codigo_usado: true,
+          },
+        });
+        return cobro;
+      } else {
+        throw new Error("No tienes permisos para realizar esta acción");
+      }
     },
   },
 };

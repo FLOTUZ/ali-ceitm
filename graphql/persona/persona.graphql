@@ -13,6 +13,7 @@ input CreatePersonaInput {
   userId: Int!
   carreraId: Int!
   imagenesId: Int
+  cafeteriaId: Int
 }
 
 type Persona {
@@ -28,6 +29,7 @@ type Persona {
   userId: Int
   carreraId: Int
   imagenesId: Int
+  cafeteriaId: Int
   createdAt: DateTime
   updatedAt: DateTime
 }
