@@ -178,9 +178,10 @@ export const CobroResolver = {
         const cobro = await prisma.cobro.update({
           where: { id },
           data: {
-            codigo_usado: false,
+            codigo_usado: true,
             forma_cobro: `FORZADO POR ${role} ${persona?.nombres}`,
             was_forced: true,
+            cafeteriaId: null
           },
         });
         return cobro;
