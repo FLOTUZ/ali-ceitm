@@ -1,5 +1,5 @@
+import { Args } from "@models";
 import { Cobro } from "@prisma/client";
-import { Args, CobroDTO } from "@models";
 import { IGraphqlContext } from "graphql";
 
 export const CobroResolver = {
@@ -22,26 +22,37 @@ export const CobroResolver = {
     },
   },
   Mutation: {
-    createCobro: async (_: any, { prisma, idUser }: IGraphqlContext) => {
+    createCobro: async (_: any, __:any ,{ prisma, idUser, role }: IGraphqlContext) => {
+
+      // IF ROLE OF USER IS CASHIER
+      if (role === "CAJERO") {
+        throw new Error("No tienes permisos para generar codigos de cobro", {
+          cause: "UNAUTHORIZED",
+        });
+      }
+
+      // IF ROLE IS BECARIO OR ADMIN OR CONCEJAL SEARCH USER BY ID
       const persona = await prisma.persona.findUnique({
         where: {
           userId: idUser,
         },
       });
 
+      // IF PERSONA IS FOUND
       if (persona) {
+        // GET BECARIO BY PERSONA ID
         const becario = await prisma.becario.findUnique({
           where: {
             personaId: persona.id,
           },
         });
 
+        // IF BECARIO IS FOUND GENERATE COBRO CODE
         const generatedCobro = await prisma.cobro.create({
           data: {
             becarioId: becario!.id,
             concepto: "Beca alimenticia",
             codigo_cobro: "123456789",
-            forma_cobro: "CAJA",
             fecha_cobro: new Date().toISOString(),
           },
         });
@@ -70,18 +81,19 @@ export const CobroResolver = {
 
     realizeCobro: async (
       _: any,
-      { id }: Cobro,
+      id: number,
       { prisma, role, idUser }: IGraphqlContext
     ) => {
-
-      if (role === "CAFETERIA") {
-
+      //If the user is cashier
+      if (role === "CAJERO") {
+        //Find the the person for get the cafeteriaId of the cashier
         const persona = await prisma.persona.findUnique({
           where: {
             userId: idUser,
           },
         });
 
+        //For use the cafeteriaId in the cobro
         const cobro = await prisma.cobro.update({
           where: { id },
           data: {
@@ -92,18 +104,36 @@ export const CobroResolver = {
 
         return cobro;
       }
+      return null;
+    },
 
-      //if role is admin, concejal or cashier
+    forceCobro: async (
+      _: any,
+      id: number,
+      { prisma, role, idUser }: IGraphqlContext
+    ) => {
+      //if the user is admin, concejal
       if (role === "ADMIN" || role === "CONCEJAL") {
+        // Search the person by userId
+        const persona = await prisma.persona.findUnique({
+          where: {
+            userId: idUser,
+          },
+        });
+
+        // Generate forced cobro for the becario
         const cobro = await prisma.cobro.update({
           where: { id },
           data: {
-            codigo_usado: true,
+            forma_cobro: `FORZADO POR ${role} ${persona?.nombres}`,
+            was_forced: true,
           },
         });
         return cobro;
       } else {
-        throw new Error("No tienes permisos para realizar esta acción");
+        throw new Error("No tienes permisos para forzar cobros", {
+          cause: "UNAUTHORIZED",
+        });
       }
     },
   },

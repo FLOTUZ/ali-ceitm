@@ -24,7 +24,7 @@ async function main() {
 
   await prisma.role.create({
     data: {
-      rol_name: "CAFETERIA",
+      rol_name: "CAJERO",
     },
   });
 

@@ -95,7 +95,8 @@ model Cobro {
   concepto     String
   codigo_cobro String
   codigo_usado Boolean?   @default(false)
-  forma_cobro  String
+  was_forced   Boolean?   @default(false)
+  forma_cobro  String?
   fecha_cobro  DateTime
   cafeteriaId  Int?
   createdAt    DateTime   @default(now())

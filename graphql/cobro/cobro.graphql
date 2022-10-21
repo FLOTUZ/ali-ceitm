@@ -5,7 +5,8 @@ input CreateCobroInput {
   becarioId: Int!
   concepto: String!
   codigo_cobro: String!
-  forma_cobro: String!
+  was_forced: Boolean!
+  forma_cobro: String
   fecha_cobro: DateTime
   cafeteriaId: Int!
 }
@@ -15,6 +16,7 @@ type Cobro {
   becarioId: Int
   concepto: String
   codigo_cobro: String
+  was_forced: Boolean
   forma_cobro: String
   fecha_cobro: DateTime
   cafeteriaId: Int
@@ -33,4 +35,5 @@ type Mutation {
   deleteCobro(id: Int!): Boolean
   
   realizeCobro(id: Int!): Cobro
+  forceCobro(id: Int!): Cobro
 }
