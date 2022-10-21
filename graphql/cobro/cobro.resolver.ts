@@ -1,6 +1,7 @@
 import { Args } from "@models";
 import { Cobro } from "@prisma/client";
 import { IGraphqlContext } from "graphql";
+import { sha256 } from "crypto-hash";
 
 export const CobroResolver = {
   Query: {
@@ -22,8 +23,11 @@ export const CobroResolver = {
     },
   },
   Mutation: {
-    createCobro: async (_: any, __:any ,{ prisma, idUser, role }: IGraphqlContext) => {
-
+    createCobro: async (
+      _: any,
+      __: any,
+      { prisma, idUser, role }: IGraphqlContext
+    ) => {
       // IF ROLE OF USER IS CASHIER
       if (role === "CAJERO") {
         throw new Error("No tienes permisos para generar codigos de cobro", {
@@ -47,17 +51,26 @@ export const CobroResolver = {
           },
         });
 
-        // IF BECARIO IS FOUND GENERATE COBRO CODE
-        const generatedCobro = await prisma.cobro.create({
-          data: {
-            becarioId: becario!.id,
-            concepto: "Beca alimenticia",
-            codigo_cobro: "123456789",
-            fecha_cobro: new Date().toISOString(),
-          },
-        });
+        if (becario?.puede_cobrar) {
+          //Generate short hash
+          const hash = await sha256(`${persona.n_control} ${Date.now()}`);
+          const shortHash = hash.slice(0, 5);
+          // IF BECARIO IS FOUND GENERATE COBRO CODE
+          const generatedCobro = await prisma.cobro.create({
+            data: {
+              becarioId: becario!.id,
+              concepto: "Beca alimenticia",
+              codigo_cobro: shortHash,
+              fecha_cobro: new Date().toISOString(),
+            },
+          });
 
-        return generatedCobro;
+          return generatedCobro;
+        } else {
+          throw new Error("UNAUTHORIZED", {
+            cause: "Haz alcanzado el limite de cobros no usados",
+          });
+        }
       }
       return null;
     },
