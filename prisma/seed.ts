@@ -150,6 +150,13 @@ async function main() {
       valor: isPair ? "PAR" : "NON",
     },
   });
+
+  await prisma.settings.create({
+    data: {
+      nombre: "strikes",
+      valor: "3",
+    },
+  });
 }
 
 main()
