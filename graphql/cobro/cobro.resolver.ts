@@ -30,86 +30,88 @@ export const CobroResolver = {
       { prisma, idUser, role }: IGraphqlContext
     ) => {
       // IF ROLE OF USER IS CASHIER
-      if (role === "CAJERO") {
+      if (role === "CAJERO" || role === null) {
         throw new ForbiddenError(
           "No tienes permisos para generar codigos de cobro"
         );
       }
 
-      // IF ROLE IS BECARIO OR ADMIN OR CONCEJAL SEARCH USER BY ID
-      const persona = await prisma.persona.findUnique({
-        where: {
-          userId: idUser,
-        },
-      });
-
-      // IF PERSONA IS FOUND
-      if (persona) {
-        // GET BECARIO BY PERSONA ID
-        const becario = await prisma.becario.findUnique({
+      if (role === "ADMIN" || role === "BECARIO") {
+        // IF ROLE IS BECARIO OR ADMIN OR CONCEJAL SEARCH USER BY ID
+        const persona = await prisma.persona.findUnique({
           where: {
-            personaId: persona.id,
+            userId: idUser,
           },
         });
 
-        // -----------------  CHECK IF BECARIO IS BLOQUED -----------------
-        if (becario?.puede_cobrar) {
-          //------------------ CALCULATE BECARIO STATUS  ------------------//
-          // GET FORCED COBROS OF BECARIO
-          const forcedCobros = await prisma.cobro.findMany({
+        // IF PERSONA IS FOUND
+        if (persona) {
+          // GET BECARIO BY PERSONA ID
+          const becario = await prisma.becario.findUnique({
             where: {
-              becarioId: becario!.id,
-              was_forced: true,
+              personaId: persona.id,
             },
           });
 
-          // COUNT OF FORCED COBROS
-          const forcedCobrosCount = forcedCobros.length;
-
-          // IF BECARIO HAS DETERMINATE STRIKES
-          const strikes = await prisma.settings.findUnique({
-            where: {
-              nombre: "strikes",
-            },
-          });
-
-          const strikesCount = parseInt(strikes!.valor);
-
-          if (forcedCobrosCount >= strikesCount) {
-            // ------------------ BLOCK BECARIO ------------------ //
-            await prisma.becario.update({
+          // -----------------  CHECK IF BECARIO IS BLOQUED -----------------
+          if (becario?.puede_cobrar) {
+            //------------------ CALCULATE BECARIO STATUS  ------------------//
+            // GET FORCED COBROS OF BECARIO
+            const forcedCobros = await prisma.cobro.findMany({
               where: {
-                id: becario!.id,
-              },
-              data: {
-                puede_cobrar: false,
+                becarioId: becario!.id,
+                was_forced: true,
               },
             });
 
-            throw new ForbiddenError("FORCED_LIMIT_COBROS_EXCEEDED");
+            // COUNT OF FORCED COBROS
+            const forcedCobrosCount = forcedCobros.length;
+
+            // IF BECARIO HAS DETERMINATE STRIKES
+            const strikes = await prisma.settings.findUnique({
+              where: {
+                nombre: "strikes",
+              },
+            });
+
+            const strikesCount = parseInt(strikes!.valor);
+
+            if (forcedCobrosCount >= strikesCount) {
+              // ------------------ BLOCK BECARIO ------------------ //
+              await prisma.becario.update({
+                where: {
+                  id: becario!.id,
+                },
+                data: {
+                  puede_cobrar: false,
+                },
+              });
+
+              throw new ForbiddenError("FORCED_LIMIT_COBROS_EXCEEDED");
+            }
+          } else {
+            throw new ForbiddenError(
+              "BLOQUED_BY_SYSTEM Haz alcanzado el limite de cobros no usados"
+            );
           }
-        } else {
-          throw new ForbiddenError(
-            "BLOQUED_BY_SYSTEM Haz alcanzado el limite de cobros no usados"
-          );
-        }
 
-        // ------------------ GENERATE COBRO CODE ------------------ //
-        if (becario?.puede_cobrar) {
-          //Generate short hash
-          const hash = await sha256(`${persona.n_control} ${Date.now()}`);
-          const shortHash = hash.slice(0, 5);
-          // IF BECARIO IS FOUND GENERATE COBRO CODE
-          const generatedCobro = await prisma.cobro.create({
-            data: {
-              becarioId: becario!.id,
-              concepto: "Beca alimenticia",
-              codigo_cobro: shortHash,
-              fecha_cobro: new Date().toISOString(),
-            },
-          });
+          // ------------------ GENERATE COBRO CODE ------------------ //
+          if (becario?.puede_cobrar) {
+            //Generate short hash
+            const hash = await sha256(`${persona.n_control} ${Date.now()}`);
+            const shortHash = hash.slice(0, 5);
+            // IF BECARIO IS FOUND GENERATE COBRO CODE
+            const generatedCobro = await prisma.cobro.create({
+              data: {
+                becarioId: becario!.id,
+                concepto: "Beca alimenticia",
+                codigo_cobro: shortHash,
+                fecha_cobro: new Date().toISOString(),
+              },
+            });
 
-          return generatedCobro;
+            return generatedCobro;
+          }
         }
       }
       return null;
@@ -181,7 +183,7 @@ export const CobroResolver = {
             codigo_usado: true,
             forma_cobro: `FORZADO POR ${role} ${persona?.nombres}`,
             was_forced: true,
-            cafeteriaId: null
+            cafeteriaId: null,
           },
         });
         return cobro;
