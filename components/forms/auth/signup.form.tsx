@@ -74,7 +74,7 @@ function SingupForm() {
             duration: 7000,
             position: "top-right",
           });
-          // router.push("/auth/login");
+          router.push("/auth/login");
         }
         //catch with error code from axios
       } catch (error: any) {
