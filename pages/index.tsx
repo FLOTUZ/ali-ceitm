@@ -6,26 +6,26 @@ import CalendarioDiario from "../assets/calendario-diario.svg";
 import Reloj from "../assets/reloj.svg";
 import QrSCanner from "../assets/qr-scanner.png";
 import Qr from "../assets/qrcode.svg";
+import Logout from "../assets/logout.png";
 
 import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
 
 import {
+  Button,
   Center,
-  CircularProgress,
   Container,
   SimpleGrid,
   Text,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
-import { Settings, User } from "@prisma/client";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { Settings } from "@prisma/client";
 import { gql, useQuery } from "@apollo/client";
-import { useRouter } from "next/router";
 import ErrorComponent from "@/common/error.component";
 import LoaderComponent from "@/common/loader.component";
+import { AuthContext } from "providers/auth.provider";
 
 const GET_SETTINGS = gql`
   query GetSettings {
@@ -33,17 +33,6 @@ const GET_SETTINGS = gql`
       id
       nombre
       valor
-    }
-  }
-`;
-
-const GET_CURRENT_USER = gql`
-  query GetCurrentUser {
-    currentUser {
-      id
-      email
-      roleId
-      is_active
     }
   }
 `;
@@ -57,9 +46,6 @@ function Index() {
 
   const [isCobrador, setIsCobrador] = useState<boolean>(false);
 
-  const router = useRouter();
-  const toast = useToast();
-
   const {
     data: settingsData,
     loading: loadingSettings,
@@ -67,13 +53,17 @@ function Index() {
     refetch: refetchSettings,
   } = useQuery(GET_SETTINGS);
 
-  const {
-    data: currentUserData,
-    loading: loadingCurrentUser,
-    error: currentUserError,
-  } = useQuery(GET_CURRENT_USER);
+  const { user, logout, refetchUser } = useContext(AuthContext);
 
   //======================== STATE ========================
+
+  useEffect(() => {
+    if (user?.roleId == 4) {
+      setIsCobrador(true);
+    } else {
+      setIsCobrador(false);
+    }
+  }, [user?.roleId]);
 
   const settingsState = useCallback(() => {
     if (errorSettings) {
@@ -93,29 +83,12 @@ function Index() {
     }
   }, [settingsData, errorSettings]);
 
-  const currentUserState = useCallback(() => {
-    if (currentUserError) {
-      return;
-    }
-
-    const userData = currentUserData.currentUser as User;
-
-    if (userData.roleId === 4) {
-      setIsCobrador(true);
-    }
-  }, [currentUserData, currentUserError]);
-
   const calculateCurrentDate = () => {
     const date = moment().format("DD/MM/YYYY");
     setCurrentDate(date);
   };
 
   //================= FETCH =================
-  useEffect(() => {
-    if (currentUserData) {
-      currentUserState();
-    }
-  }, [currentUserState, currentUserData]);
 
   useEffect(() => {
     if (settingsData) {
@@ -129,9 +102,10 @@ function Index() {
     const interval = setInterval(() => {
       refetchSettings();
       settingsState();
+      refetchUser();
     }, 5000);
     return () => clearInterval(interval);
-  }, [settingsState, refetchSettings]);
+  }, [settingsState, refetchSettings, refetchUser]);
 
   useEffect(() => {
     calculateCurrentDate();
@@ -145,7 +119,7 @@ function Index() {
 
   //================= LOADERS =================
 
-  if (loadingSettings || loadingCurrentUser) {
+  if (loadingSettings) {
     return <LoaderComponent />;
   }
 
@@ -153,10 +127,6 @@ function Index() {
 
   if (errorSettings) {
     return <ErrorComponent message={errorSettings.networkError?.message!} />;
-  }
-
-  if (currentUserError) {
-    return <ErrorComponent message={currentUserError.message} />;
   }
 
   return (
@@ -244,6 +214,28 @@ function Index() {
           </a>
         </Link>
       )}
+
+      <Center h={"100%"}>
+        <Button
+          h={150}
+          w={150}
+          bgColor="transparent"
+          onClick={logout}
+          _hover={{ bgColor: "black" }}
+        >
+          <Container
+            p={19}
+            bgColor={"black"}
+            color="white" 
+            _hover={{ bgColor: "grey" }}
+          >
+            <VStack>
+              <Image src={Logout} alt="Salir" />
+              <Text>{"Salir"}</Text>
+            </VStack>
+          </Container>
+        </Button>
+      </Center>
     </SimpleGrid>
   );
 }

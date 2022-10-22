@@ -1,11 +1,13 @@
+import LoaderComponent from "@/common/loader.component";
 import { gql, useQuery } from "@apollo/client";
 import { User } from "@prisma/client";
 import { useRouter } from "next/router";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 
 interface IAuthContext {
-  user: any;
+  user: User | null;
   logout: () => void;
+  refetchUser: () => void;
 }
 
 interface IAuthProvider {
@@ -15,6 +17,7 @@ interface IAuthProvider {
 export const AuthContext = createContext<IAuthContext>({
   user: null,
   logout: () => {},
+  refetchUser: () => {},
 });
 
 const GET_CURRENT_USER = gql`
@@ -32,27 +35,24 @@ const AuthProvider = ({ children }: IAuthProvider) => {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
-  const { data, loading } = useQuery(GET_CURRENT_USER);
+  const { data, loading, refetch: refetchUser } = useQuery(GET_CURRENT_USER);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem("access-token");
     router.push("/auth/login");
-  };
+  }, [router]);
 
   useEffect(() => {
     const token = localStorage.getItem("access-token");
+    console.log(token);
 
-    if (!token) {
-      router.push("/auth/login");
-    }
-
-    if (data) {
+    if (token != null && data?.currentUser) {
       setUser(data.currentUser);
     }
-  }, [data, router]);
+  }, [data, loading]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoaderComponent />;
   }
 
   return (
@@ -60,6 +60,7 @@ const AuthProvider = ({ children }: IAuthProvider) => {
       value={{
         user: user,
         logout,
+        refetchUser,
       }}
     >
       {children}
