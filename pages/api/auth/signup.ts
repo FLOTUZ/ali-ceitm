@@ -43,7 +43,7 @@ export default async function handler(
     }
 
     //Destrcture user data
-    const { username, email, password } = userData;
+    const { email, password } = userData;
 
     //Destructure person data
     const {
