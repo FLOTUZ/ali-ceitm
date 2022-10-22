@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Box, Center, Heading, VStack } from "@chakra-ui/react";
 import Image from "next/image";
 import { gql, useQuery } from "@apollo/client";
+import ErrorComponent from "@/common/error.component";
+import LoaderComponent from "@/common/loader.component";
 
 const GENERATE_CODE = gql`
   query CREATE_COBRO_CODE {
@@ -27,18 +29,15 @@ function CobroQr() {
   }, [data]);
 
   if (loading) {
-    return (
-      <div>
-        <p>Loading...</p>
-      </div>
-    );
+    return <LoaderComponent />;
   }
 
   if (error) {
     return (
-      <div>
-        <p>Error: {error.message}</p>
-      </div>
+      <ErrorComponent
+        errorCode={error["graphQLErrors"][0]["extensions"]["code"]}
+        message={error.message}
+      />
     );
   }
 

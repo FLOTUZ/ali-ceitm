@@ -38,7 +38,7 @@ export const CobroResolver = {
       // IF ROLE OF USER IS CASHIER
       if (role === "CAJERO") {
         throw new ForbiddenError(
-          "UNAUTORIZED No tienes permisos para generar codigos de cobro"
+          "UNAUTHORIZED No tienes permisos para generar codigos de cobro"
         );
       }
 
@@ -179,7 +179,9 @@ export const CobroResolver = {
             },
           });
 
-          throw new ForbiddenError("STRIKES_LIMIT_COBROS_EXCEEDED");
+          throw new ForbiddenError(
+            "STRIKES_LIMIT_COBROS_EXCEEDED - Limite de strikes alcanzado"
+          );
         }
 
         // ------------------ GENERATE COBRO CODE ------------------ //
@@ -199,7 +201,9 @@ export const CobroResolver = {
             });
             return generatedCobro;
           } catch (error) {
-            throw new ForbiddenError("ERROR_GENERATING_COBRO_CODE");
+            throw new ForbiddenError(
+              "ERROR_GENERATING_COBRO_CODE - Error al generar codigo de cobro"
+            );
           }
         }
       }
@@ -291,7 +295,9 @@ export const CobroResolver = {
 
         return cobro;
       } else {
-        throw new ForbiddenError("No tienes permisos para forzar cobros");
+        throw new ForbiddenError(
+          "UNAUTHORIZED - No tienes permisos para forzar cobros"
+        );
       }
     },
   },
