@@ -2,7 +2,7 @@ import { Args } from "@models";
 import { Cobro } from "@prisma/client";
 import { IGraphqlContext } from "graphql";
 import { sha256 } from "crypto-hash";
-import { ForbiddenError } from "apollo-server-micro";
+import { AuthenticationError, ForbiddenError } from "apollo-server-micro";
 
 export const CobroResolver = {
   Query: {
@@ -36,95 +36,110 @@ export const CobroResolver = {
         );
       }
 
-      if (role === "ADMIN" || role === "BECARIO") {
+      if (role === "ADMIN" || role === "BECARIO" || role === "CONCEJAL") {
         // IF ROLE IS BECARIO OR ADMIN OR CONCEJAL SEARCH USER BY ID
         const persona = await prisma.persona.findUnique({
           where: {
-            userId: idUser,
+            userId: idUser!,
           },
         });
 
-        // IF PERSONA IS FOUND
-        if (persona) {
-          // GET BECARIO BY PERSONA ID
-          const becario = await prisma.becario.findUnique({
+        // Si la persona no tiene un becario
+        if (persona == null) {
+          throw new AuthenticationError("NOT_FOUND Persona no encontrada");
+        }
+        // GET BECARIO BY PERSONA ID
+        const becario = await prisma.becario.findUnique({
+          where: {
+            personaId: persona!.id,
+          },
+        });
+
+        // -----------------  CHECK IF BECARIO IS BLOQUED -----------------
+        if (becario?.puede_cobrar == false) {
+          throw new ForbiddenError(
+            "BLOQUED_BY_SYSTEM - No podras cobrar hasta que un administrador te desbloquee"
+          );
+        }
+        /* 
+            Cuando el becario puede cobrar, el sistema debe verificar que no tenga
+            mas de X cobros pendientes, o forzados.
+
+            X: es el numero de stikes en las configuraciones del sistema
+
+            Si tiene mas de 3 cobros pendientes, el sistema 
+            debe bloquear al becario y no permitir que pueda cobrar hasta que el administrador
+            lo desbloquee y tenga menos de X cobros pendientes.
+             
+            */
+        const cobrosNoCobradosCount = await prisma.cobro.count({
+          where: {
+            becarioId: becario?.id,
+            codigo_usado: false,
+          },
+        });
+
+        // GET FORCED COBROS OF BECARIO
+        const forcedCobrosCount = await prisma.cobro.count({
+          where: {
+            becarioId: becario!.id,
+            was_forced: true,
+          },
+        });
+
+        // IF BECARIO HAS DETERMINATE STRIKES
+        const strikes = await prisma.settings.findUnique({
+          where: {
+            nombre: "strikes",
+          },
+        });
+
+        /* 
+          Calcula el numero de strikes de acuerdo a
+          la cantidad de cobros no usados y cobros forzados
+          */
+
+        const strikesCount = parseInt(strikes!.valor);
+
+        if (
+          forcedCobrosCount >= strikesCount ||
+          cobrosNoCobradosCount >= strikesCount
+        ) {
+          // ------------------ BLOCK BECARIO ------------------ //
+          await prisma.becario.update({
             where: {
-              personaId: persona.id,
+              id: becario!.id,
+            },
+            data: {
+              puede_cobrar: false,
             },
           });
 
-          // -----------------  CHECK IF BECARIO IS BLOQUED -----------------
-          if (becario?.puede_cobrar) {
-            // GET COBRO NO COBRADO BY BECARIO ID
-            const cobrosNoCobradosCount = await prisma.cobro.count({
-              where: {
-                becarioId: becario.id,
-                codigo_usado: false,
-              },
-            });
+          throw new ForbiddenError("STRIKES_LIMIT_COBROS_EXCEEDED");
+        }
 
-            //------------------ CALCULATE BECARIO STATUS  ------------------//
-            // GET FORCED COBROS OF BECARIO
-            const forcedCobrosCount = await prisma.cobro.count({
-              where: {
+        // ------------------ GENERATE COBRO CODE ------------------ //
+        if (becario?.puede_cobrar) {
+          //Generate short hash
+          try {
+            const hash = await sha256(`${persona.n_control} ${Date.now()}`);
+            const shortHash = hash.slice(0, 6);
+            // IF BECARIO IS FOUND GENERATE COBRO CODE2
+            const generatedCobro = await prisma.cobro.create({
+              data: {
                 becarioId: becario!.id,
-                was_forced: true,
+                concepto: "Beca alimenticia",
+                codigo_cobro: shortHash,
+                fecha_cobro: new Date().toISOString(),
               },
             });
-
-            // IF BECARIO HAS DETERMINATE STRIKES
-            const strikes = await prisma.settings.findUnique({
-              where: {
-                nombre: "strikes",
-              },
-            });
-
-            const strikesCount = parseInt(strikes!.valor);
-
-            if (
-              forcedCobrosCount >= strikesCount ||
-              cobrosNoCobradosCount >= strikesCount
-            ) {
-              // ------------------ BLOCK BECARIO ------------------ //
-              await prisma.becario.update({
-                where: {
-                  id: becario!.id,
-                },
-                data: {
-                  puede_cobrar: false,
-                },
-              });
-
-              throw new ForbiddenError("STRIKES_LIMIT_COBROS_EXCEEDED");
-            }
-          } else {
-            throw new ForbiddenError(
-              "BLOQUED_BY_SYSTEM - No podras cobrar hasta que un administrador te desbloquee"
-            );
-          }
-
-          // ------------------ GENERATE COBRO CODE ------------------ //
-          if (becario?.puede_cobrar) {
-            //Generate short hash
-            try {
-              const hash = await sha256(`${persona.n_control} ${Date.now()}`);
-              const shortHash = hash.slice(0, 6);
-              // IF BECARIO IS FOUND GENERATE COBRO CODE
-              const generatedCobro = await prisma.cobro.create({
-                data: {
-                  becarioId: becario!.id,
-                  concepto: "Beca alimenticia",
-                  codigo_cobro: shortHash,
-                  fecha_cobro: new Date().toISOString(),
-                },
-              });
-              return generatedCobro;
-            } catch (error) {
-              throw new ForbiddenError("ERROR_GENERATING_COBRO_CODE");
-            }
+            return generatedCobro;
+          } catch (error) {
+            throw new ForbiddenError("ERROR_GENERATING_COBRO_CODE");
           }
         }
       }
+
       return null;
     },
     updateCobro: async (
@@ -147,7 +162,7 @@ export const CobroResolver = {
 
     realizeCobro: async (
       _: any,
-      { id }: { id: number },
+      { codigo }: { codigo: string },
       { prisma, role, idUser }: IGraphqlContext
     ) => {
       //If the user is cashier
@@ -155,13 +170,13 @@ export const CobroResolver = {
         //Find the the person for get the cafeteriaId of the cashier
         const persona = await prisma.persona.findUnique({
           where: {
-            userId: idUser,
+            userId: idUser!,
           },
         });
 
         //For use the cafeteriaId in the cobro
         const cobro = await prisma.cobro.update({
-          where: { id },
+          where: { codigo_cobro: codigo },
           data: {
             codigo_usado: true,
             cafeteriaId: persona!.cafeteriaId,
@@ -183,7 +198,7 @@ export const CobroResolver = {
         // Search the person by userId
         const persona = await prisma.persona.findUnique({
           where: {
-            userId: idUser,
+            userId: idUser!,
           },
         });
 

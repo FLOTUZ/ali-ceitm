@@ -26,9 +26,9 @@ import {
 
 export interface IGraphqlContext {
   prisma: PrismaClient;
-  idUser: number;
-  role: string;
-  res: NextApiResponse;
+  idUser: number | null;
+  role: string | null;
+  res: NextApiResponse | null;
 }
 
 export interface IPayload {
@@ -56,8 +56,9 @@ const context = ({
       idUser: payload.id,
       role: payload.role,
     };
+  } else {
+    return { prisma };
   }
-  return null;
 };
 
 const schema = makeExecutableSchema({
@@ -91,29 +92,24 @@ function valiteAndRefreshToken(req: NextApiRequest, res: NextApiResponse) {
   // Get token withoit the bearer
   const cleanToken = token.authorization?.split(" ")[1];
 
-  if (!token) {
-    throw new AuthenticationError("No token provided");
-  } else {
-    try {
-      //Verify if JWT token is valid
-      jwt.verify(cleanToken!, process.env.JWT_SECRET!);
-      //Error of JWT validation
-    } catch (error) {
-      throw new AuthenticationError("Token expired");
-    }
+  try {
+    const payload = jwt.verify(
+      cleanToken!,
+      process.env.JWT_SECRET!
+    ) as IPayload;
+
+    const newToken = jwt.sign(
+      {
+        id: payload.id,
+        role: payload.role,
+        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
+      },
+      process.env.JWT_SECRET!
+    );
+    res.setHeader("authorization", `Bearer ${newToken}`);
+
+    return payload;
+  } catch (error) {
+    return null;
   }
-
-  const payload = jwt.verify(cleanToken!, process.env.JWT_SECRET!) as IPayload;
-
-  const newToken = jwt.sign(
-    {
-      id: payload.id,
-      role: payload.role,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
-    },
-    process.env.JWT_SECRET!
-  );
-  res.setHeader("authorization", `Bearer ${newToken}`);
-
-  return payload;
 }
