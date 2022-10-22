@@ -74,10 +74,11 @@ function SingupForm() {
           });
           // router.push("/auth/login");
         }
-      } catch (error) {
+        //catch with error code from axios
+      } catch (error: any) {
         toast({
           title: "No se ha podido crear el usuario,",
-          description: "Es posible que el usuario o correo ya esten en uso",
+          description: error.response.data.error,
           status: "error",
           isClosable: true,
           duration: 7000,

@@ -3,9 +3,9 @@ import { prisma } from "services";
 import { PersonaDTO, UserDto } from "@models";
 import * as yup from "yup";
 import bcrypt from "bcrypt";
+import { Persona, User } from "@prisma/client";
 
 const userValidationSchema = yup.object().shape({
-  username: yup.string().required().strict(),
   email: yup.string().email().required(),
   password: yup.string().required().min(8),
 });
@@ -64,14 +64,21 @@ export default async function handler(
     }
 
     const salt = await bcrypt.genSalt();
-    userData.password = await bcrypt.hash(userData.password, salt);
+    const encryptedPassword = await bcrypt.hash(password, salt);
+
+    let savedUser = {} as User | null;
+    let savedPerson = {} as Persona | null;
+    try {
+      savedUser = await prisma.user.create({
+        data: { email, password: encryptedPassword },
+      });
+    } catch (e: any) {
+      res.status(400).json({ errors: "El email de usuario ya esta en uso" });
+      return;
+    }
 
     try {
-      const user = await prisma.user.create({
-        data: { email, password },
-      });
-
-      const person = await prisma.persona.create({
+      savedPerson = await prisma.persona.create({
         data: {
           nombres,
           a_paterno,
@@ -82,18 +89,23 @@ export default async function handler(
           email_institucional,
           campus,
           carreraId,
-          userId: user.id,
+          userId: savedUser!.id,
         },
       });
 
-      res.status(200).json({ user, person });
+      res.status(201).json({ message: "Usuario registrado correctamente" });
+      return;
     } catch (error: any) {
-      console.log(error);
-
-      if (error.code === "P2002")
-        res.status(409).json({ error: "Email or Username already on use" });
+      await prisma.user.delete({ where: { id: savedUser!.id } });
+      if (error.code === "P2002") {
+        res.status(400).json({
+          error: "Email institucional or Numero de control ya esta en uso",
+        });
+        return;
+      }
 
       res.status(500).json({ error: "Internal server error", message: error });
+      return;
     }
   }
 }
