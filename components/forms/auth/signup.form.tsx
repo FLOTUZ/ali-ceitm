@@ -13,15 +13,11 @@ import SelectComponent from "../select.component";
 import TextField from "../text.field";
 import { SignupSchema } from "./auth.validators";
 
-import { useMutation, useQuery } from "@apollo/client";
-import { Carrera, User } from "@prisma/client";
+import { useQuery } from "@apollo/client";
+import { Carrera } from "@prisma/client";
 import { useEffect, useState } from "react";
 
-import {
-  createUsuario,
-  GET_CARRERAS_ACTION,
-  REGISTRO_PERSONA_ACTION,
-} from "./auth.actions";
+import { createUsuario, GET_CARRERAS } from "./auth.actions";
 import { useRouter } from "next/router";
 import { UserDto } from "graphql/user/user.dto";
 import { PersonaDTO } from "graphql/persona/persona.dto";
@@ -31,12 +27,7 @@ function SingupForm() {
     loading: loadingCarreras,
     error: errorCarreras,
     data: dataCarreras,
-  } = useQuery(GET_CARRERAS_ACTION);
-
-  const [
-    createPersona,
-    { data: dataPersona, loading: loadingPersona, error: errorPersona },
-  ] = useMutation(REGISTRO_PERSONA_ACTION);
+  } = useQuery(GET_CARRERAS);
 
   const toast = useToast();
   const router = useRouter();
@@ -53,7 +44,6 @@ function SingupForm() {
   } = useFormik({
     validationSchema: SignupSchema,
     initialValues: {
-      username: null,
       password: null,
       email: null,
       nombres: null,
@@ -71,17 +61,9 @@ function SingupForm() {
       const persona = values as PersonaDTO;
 
       try {
-        const response = await createUsuario(user);
-
-        const newUser = response.data as User;
+        const response = await createUsuario(user, persona);
 
         if (response.status === 200) {
-          await createPersona({
-            variables: {
-              ...persona,
-              userId: newUser.id,
-            },
-          });
           toast({
             title: "Usuario creado",
             description: "Se ha creado el usuario correctamente",
@@ -90,7 +72,7 @@ function SingupForm() {
             duration: 7000,
             position: "top-right",
           });
-          router.push("/auth/login");
+          // router.push("/auth/login");
         }
       } catch (error) {
         toast({
@@ -133,15 +115,6 @@ function SingupForm() {
       </Heading>
 
       <form onSubmit={handleSubmit} autoSave={"on"}>
-        <TextField
-          name={"username"}
-          type="text"
-          label="Usuario (Requerido)"
-          handleChange={handleChange}
-          errors={errors.username}
-          touched={touched.username}
-        />
-
         <TextField
           name={"email"}
           type="text"
