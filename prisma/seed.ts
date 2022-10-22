@@ -246,7 +246,7 @@ async function main() {
       username: "caja1",
       email: "caja1@morelia.tecnm.mx",
       password: "$2b$10$wNUByTCfVbYS4oWx0eiE.Ol4cEBEX0c6kuKFU9zPsIocvuhQdvi8G",
-      roleId: 1,
+      roleId: 4,
       is_active: true,
       is_deleted: false,
     },
