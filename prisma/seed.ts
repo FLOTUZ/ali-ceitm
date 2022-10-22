@@ -151,7 +151,6 @@ async function main() {
   // ============= USUARIO ADMIN ======================= //
   const admin = await prisma.user.create({
     data: {
-      username: "admin",
       email: "admin@localhost",
       password: "$2b$10$wNUByTCfVbYS4oWx0eiE.Ol4cEBEX0c6kuKFU9zPsIocvuhQdvi8G",
       roleId: 1,
@@ -178,7 +177,6 @@ async function main() {
   // ============= USUARIO CONCEJAL ======================= //
   const concejal = await prisma.user.create({
     data: {
-      username: "emmanuel",
       email: "emmanuel@ceitm.com",
       password: "$2b$10$wNUByTCfVbYS4oWx0eiE.Ol4cEBEX0c6kuKFU9zPsIocvuhQdvi8G",
       roleId: 3,
@@ -205,7 +203,6 @@ async function main() {
   // ============= USUARIO BECARIO ======================= //
   const becario = await prisma.user.create({
     data: {
-      username: "sara",
       email: "sarahi@morelia.tecnm.mx",
       password: "$2b$10$wNUByTCfVbYS4oWx0eiE.Ol4cEBEX0c6kuKFU9zPsIocvuhQdvi8G",
       roleId: 2,
@@ -243,7 +240,6 @@ async function main() {
   // ============= USUARIO CAJERO ======================= //
   const caja = await prisma.user.create({
     data: {
-      username: "caja1",
       email: "caja1@morelia.tecnm.mx",
       password: "$2b$10$wNUByTCfVbYS4oWx0eiE.Ol4cEBEX0c6kuKFU9zPsIocvuhQdvi8G",
       roleId: 4,
