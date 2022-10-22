@@ -55,17 +55,22 @@ export const CobroResolver = {
 
           // -----------------  CHECK IF BECARIO IS BLOQUED -----------------
           if (becario?.puede_cobrar) {
+            // GET COBRO NO COBRADO BY BECARIO ID
+            const cobrosNoCobradosCount = await prisma.cobro.count({
+              where: {
+                becarioId: becario.id,
+                codigo_usado: false,
+              },
+            });
+
             //------------------ CALCULATE BECARIO STATUS  ------------------//
             // GET FORCED COBROS OF BECARIO
-            const forcedCobros = await prisma.cobro.findMany({
+            const forcedCobrosCount = await prisma.cobro.count({
               where: {
                 becarioId: becario!.id,
                 was_forced: true,
               },
             });
-
-            // COUNT OF FORCED COBROS
-            const forcedCobrosCount = forcedCobros.length;
 
             // IF BECARIO HAS DETERMINATE STRIKES
             const strikes = await prisma.settings.findUnique({
@@ -76,7 +81,10 @@ export const CobroResolver = {
 
             const strikesCount = parseInt(strikes!.valor);
 
-            if (forcedCobrosCount >= strikesCount) {
+            if (
+              forcedCobrosCount >= strikesCount ||
+              cobrosNoCobradosCount >= strikesCount
+            ) {
               // ------------------ BLOCK BECARIO ------------------ //
               await prisma.becario.update({
                 where: {
@@ -87,30 +95,33 @@ export const CobroResolver = {
                 },
               });
 
-              throw new ForbiddenError("FORCED_LIMIT_COBROS_EXCEEDED");
+              throw new ForbiddenError("STRIKES_LIMIT_COBROS_EXCEEDED");
             }
           } else {
             throw new ForbiddenError(
-              "BLOQUED_BY_SYSTEM Haz alcanzado el limite de cobros no usados"
+              "BLOQUED_BY_SYSTEM - No podras cobrar hasta que un administrador te desbloquee"
             );
           }
 
           // ------------------ GENERATE COBRO CODE ------------------ //
           if (becario?.puede_cobrar) {
             //Generate short hash
-            const hash = await sha256(`${persona.n_control} ${Date.now()}`);
-            const shortHash = hash.slice(0, 5);
-            // IF BECARIO IS FOUND GENERATE COBRO CODE
-            const generatedCobro = await prisma.cobro.create({
-              data: {
-                becarioId: becario!.id,
-                concepto: "Beca alimenticia",
-                codigo_cobro: shortHash,
-                fecha_cobro: new Date().toISOString(),
-              },
-            });
-
-            return generatedCobro;
+            try {
+              const hash = await sha256(`${persona.n_control} ${Date.now()}`);
+              const shortHash = hash.slice(0, 6);
+              // IF BECARIO IS FOUND GENERATE COBRO CODE
+              const generatedCobro = await prisma.cobro.create({
+                data: {
+                  becarioId: becario!.id,
+                  concepto: "Beca alimenticia",
+                  codigo_cobro: shortHash,
+                  fecha_cobro: new Date().toISOString(),
+                },
+              });
+              return generatedCobro;
+            } catch (error) {
+              throw new ForbiddenError("ERROR_GENERATING_COBRO_CODE");
+            }
           }
         }
       }
@@ -136,7 +147,7 @@ export const CobroResolver = {
 
     realizeCobro: async (
       _: any,
-      id: number,
+      { id }: { id: number },
       { prisma, role, idUser }: IGraphqlContext
     ) => {
       //If the user is cashier
@@ -164,7 +175,7 @@ export const CobroResolver = {
 
     forceCobro: async (
       _: any,
-      id: number,
+      { id }: { id: number },
       { prisma, role, idUser }: IGraphqlContext
     ) => {
       //if the user is admin, concejal
@@ -186,6 +197,17 @@ export const CobroResolver = {
             cafeteriaId: null,
           },
         });
+
+        // UNBLOCK BECARIO
+        await prisma.becario.update({
+          where: {
+            id: cobro.becarioId,
+          },
+          data: {
+            puede_cobrar: true,
+          },
+        });
+
         return cobro;
       } else {
         throw new ForbiddenError("No tienes permisos para forzar cobros");

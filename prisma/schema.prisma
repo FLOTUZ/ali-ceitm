@@ -15,7 +15,7 @@ model Role {
   is_deleted Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  users       User[]
+  users      User[]
 }
 
 model User {
@@ -93,7 +93,7 @@ model Cobro {
   id           Int        @id @unique @default(autoincrement())
   becarioId    Int
   concepto     String
-  codigo_cobro String
+  codigo_cobro String     @unique
   codigo_usado Boolean?   @default(false)
   was_forced   Boolean?   @default(false)
   forma_cobro  String?
