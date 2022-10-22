@@ -4,6 +4,7 @@ import Cafeteria from "../assets/cafeteria.svg";
 import CalendarioSemanal from "../assets/calendario-semanal.svg";
 import CalendarioDiario from "../assets/calendario-diario.svg";
 import Reloj from "../assets/reloj.svg";
+import QrSCanner from "../assets/qr-scanner.png";
 import Qr from "../assets/qrcode.svg";
 
 import Image from "next/image";
@@ -20,9 +21,11 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
-import { Settings } from "@prisma/client";
+import { Settings, User } from "@prisma/client";
 import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import ErrorComponent from "@/common/error.component";
+import LoaderComponent from "@/common/loader.component";
 
 const GET_SETTINGS = gql`
   query GetSettings {
@@ -34,24 +37,50 @@ const GET_SETTINGS = gql`
   }
 `;
 
+const GET_CURRENT_USER = gql`
+  query GetCurrentUser {
+    currentUser {
+      id
+      email
+      roleId
+      is_active
+    }
+  }
+`;
+
 function Index() {
   const [time, setTime] = useState<string>("--:--:--");
-  const [currentDate, setCurrentDate] = useState("");
+  const [currentDate, setCurrentDate] = useState<string>("");
   const [isBreakfastHour, setIsBreakfastHour] = useState<boolean>(false);
-  const [isPairWeek, setisPairWeek] = useState(false);
+  const [isPairWeek, setisPairWeek] = useState<boolean>(false);
   const [place, setPlace] = useState<string>("");
+
+  const [isCobrador, setIsCobrador] = useState<boolean>(false);
 
   const router = useRouter();
   const toast = useToast();
 
-  const { data, loading, error, refetch } = useQuery(GET_SETTINGS);
+  const {
+    data: settingsData,
+    loading: loadingSettings,
+    error: errorSettings,
+    refetch: refetchSettings,
+  } = useQuery(GET_SETTINGS);
 
-  const getSettings = useCallback(() => {
-    if (error) {
+  const {
+    data: currentUserData,
+    loading: loadingCurrentUser,
+    error: currentUserError,
+  } = useQuery(GET_CURRENT_USER);
+
+  //======================== STATE ========================
+
+  const settingsState = useCallback(() => {
+    if (errorSettings) {
       return;
     }
-    const settings = data.allSettings as Settings[];
-    
+    const settings = settingsData.allSettings as Settings[];
+
     //Get setting item by name
     const alimento = settings.find((setting) => setting.nombre === "alimento");
     const semana = settings.find((setting) => setting.nombre === "semana");
@@ -62,27 +91,47 @@ function Index() {
       setisPairWeek(semana!.valor === "PAR");
       setPlace(lugar!.valor);
     }
-  }, [data, error]);
+  }, [settingsData, errorSettings]);
+
+  const currentUserState = useCallback(() => {
+    if (currentUserError) {
+      return;
+    }
+
+    const userData = currentUserData.currentUser as User;
+
+    if (userData.roleId === 4) {
+      setIsCobrador(true);
+    }
+  }, [currentUserData, currentUserError]);
 
   const calculateCurrentDate = () => {
     const date = moment().format("DD/MM/YYYY");
     setCurrentDate(date);
   };
 
-  //Show data of graphql settings
+  //================= FETCH =================
   useEffect(() => {
-    if (data) {
-      getSettings();
+    if (currentUserData) {
+      currentUserState();
     }
-  }, [data, getSettings]);
+  }, [currentUserState, currentUserData]);
+
+  useEffect(() => {
+    if (settingsData) {
+      settingsState();
+    }
+  }, [settingsData, settingsState]);
+
+  //================= INTERVALS =================
 
   useEffect(() => {
     const interval = setInterval(() => {
-      refetch();
-      getSettings();
+      refetchSettings();
+      settingsState();
     }, 5000);
     return () => clearInterval(interval);
-  }, [getSettings, refetch]);
+  }, [settingsState, refetchSettings]);
 
   useEffect(() => {
     calculateCurrentDate();
@@ -94,31 +143,20 @@ function Index() {
     return () => clearInterval(interval);
   }, []);
 
-  if (loading) {
-    return (
-      <Center h={"100vh"} bgColor={"black"}>
-        <CircularProgress color={"blue"} />
-      </Center>
-    );
+  //================= LOADERS =================
+
+  if (loadingSettings || loadingCurrentUser) {
+    return <LoaderComponent />;
   }
-  if (error) {
-    if (error.message.includes("status code 400")) {
-      toast({
-        title: "Sesion expirada",
-        description: "Inicia sesion nuevamente",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-      });
-      router.push("/auth/login");
-      return;
-    }
-    return (
-      <Center h={"100%"}>
-        <Text>Error:</Text>
-        <Text>{error.networkError?.message}</Text>
-      </Center>
-    );
+
+  //================= ERROR HANDLING =================
+
+  if (errorSettings) {
+    return <ErrorComponent message={errorSettings.networkError?.message!} />;
+  }
+
+  if (currentUserError) {
+    return <ErrorComponent message={currentUserError.message} />;
   }
 
   return (
@@ -179,18 +217,33 @@ function Index() {
         </Center>
       </Container>
 
-      <Link href={"/cobros/qr"}>
-        <a>
-          <Container h={150} w={150} p={19} bgColor={"black"} color="white">
-            <Center h={"100%"}>
-              <VStack>
-                <Image src={Qr} alt="Cafeteria" />
-                <Text>{"Generar QR"}</Text>
-              </VStack>
-            </Center>
-          </Container>
-        </a>
-      </Link>
+      {isCobrador ? (
+        <Link href={"/cobros/scanner"}>
+          <a>
+            <Container h={150} w={150} p={19} bgColor={"black"} color="white">
+              <Center h={"100%"}>
+                <VStack>
+                  <Image src={QrSCanner} alt="Escanner QR" />
+                  <Text>{"Cobrar beca"}</Text>
+                </VStack>
+              </Center>
+            </Container>
+          </a>
+        </Link>
+      ) : (
+        <Link href={"/cobros/qr"}>
+          <a>
+            <Container h={150} w={150} p={19} bgColor={"black"} color="white">
+              <Center h={"100%"}>
+                <VStack>
+                  <Image src={Qr} alt="Generar QR" />
+                  <Text>{"Generar QR"}</Text>
+                </VStack>
+              </Center>
+            </Container>
+          </a>
+        </Link>
+      )}
     </SimpleGrid>
   );
 }
