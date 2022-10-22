@@ -86,8 +86,7 @@ export const CobroResolver = {
           const lastCobroDate = moment(lastCobro.createdAt);
           const now = moment(new Date());
 
-          const diff = now.diff(lastCobroDate, "hours");
-          console.log({ lastCobroDate, now, diff });
+          const diff = now.diff(lastCobroDate, "hours");          
 
           if (diff < 24) {
             return lastCobro;
