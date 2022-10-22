@@ -63,7 +63,9 @@ function SingupForm() {
       try {
         const response = await createUsuario(user, persona);
 
-        if (response.status === 200) {
+        console.log(response);
+        if (response.status === 201) {
+          
           toast({
             title: "Usuario creado",
             description: "Se ha creado el usuario correctamente",
@@ -77,7 +79,7 @@ function SingupForm() {
         //catch with error code from axios
       } catch (error: any) {
         toast({
-          title: "No se ha podido crear el usuario,",
+          title: "No se ha podido crear el usuario",
           description: error.response.data.error,
           status: "error",
           isClosable: true,

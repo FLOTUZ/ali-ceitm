@@ -13,8 +13,7 @@ export const GET_CARRERAS = gql`
 `;
 
 export const createUsuario = async (user: UserDto, persona: PersonaDTO) => {
-  const { data } = await axiosClient().post("/auth/signup", { user, persona });
-  return data;
+  return await axiosClient().post("/auth/signup", { user, persona });
 };
 
 export const loginAction = async (email: string, password: string) => {

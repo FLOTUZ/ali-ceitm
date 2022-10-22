@@ -73,7 +73,7 @@ export default async function handler(
         data: { email, password: encryptedPassword },
       });
     } catch (e: any) {
-      res.status(400).json({ errors: "El email de usuario ya esta en uso" });
+      res.status(400).json({ error: "El email de usuario ya esta en uso" });
       return;
     }
 
