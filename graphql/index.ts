@@ -50,15 +50,18 @@ const context = ({
 }) => {
   const payload = valiteAndRefreshToken(req, res) as IPayload;
 
-  if (payload != null) {
-    return {
-      prisma,
-      idUser: payload.id,
-      role: payload.role,
-    };
-  } else {
-    return { prisma };
+  if (payload == null) {
+    return { prisma, idUser: null, role: null };
   }
+
+  if (payload.role == undefined) {
+    return { prisma, idUser: payload.id, role: null };
+  }
+  return {
+    prisma,
+    idUser: payload.id,
+    role: payload.role,
+  };
 };
 
 const schema = makeExecutableSchema({
