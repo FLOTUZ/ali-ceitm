@@ -23,9 +23,8 @@ export const CobroResolver = {
         },
       });
     },
-  },
-  Mutation: {
-    createCobro: async (
+
+    generateCobroCode: async (
       _: any,
       __: any,
       { prisma, idUser, role }: IGraphqlContext
@@ -63,6 +62,12 @@ export const CobroResolver = {
         });
 
         // -----------------  CHECK IF BECARIO IS BLOQUED -----------------
+        if (becario?.en_lista_espera) {
+          throw new ForbiddenError(
+            "BLOQUED_BY_SYSTEM - Estas en lista de espera, no podras cobrar hasta que un administrador te desbloquee"
+          );
+        }
+
         if (becario?.puede_cobrar == false) {
           throw new ForbiddenError(
             "BLOQUED_BY_SYSTEM - No podras cobrar hasta que un administrador te desbloquee"
@@ -201,6 +206,8 @@ export const CobroResolver = {
 
       return null;
     },
+  },
+  Mutation: {
     updateCobro: async (
       _: any,
       { id, ...data }: Cobro,
