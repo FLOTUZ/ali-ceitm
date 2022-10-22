@@ -30,13 +30,15 @@ export const CobroResolver = {
       __: any,
       { prisma, idUser, role }: IGraphqlContext
     ) => {
-      if (role == null) {
+            
+      if (role == null && idUser != null) {
         throw new AuthenticationError(
           "UNAUTORIZED el usuario no cuenta con un rol"
         );
       }
+
       // IF ROLE OF USER IS CASHIER
-      if (role === "CAJERO" || role === null) {
+      if (role === "CAJERO") {
         throw new ForbiddenError(
           "UNAUTORIZED No tienes permisos para generar codigos de cobro"
         );

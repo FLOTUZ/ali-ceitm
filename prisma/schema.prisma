@@ -23,7 +23,7 @@ model User {
   username   String    @unique
   password   String
   email      String    @unique
-  roleId     Int?
+  roleId     Int?      @default(2)
   is_active  Boolean?  @default(true)
   is_deleted Boolean?  @default(false)
   createdAt  DateTime? @default(now())
@@ -66,14 +66,16 @@ model Carrera {
 
 model Becario {
   id              Int      @id @unique @default(autoincrement())
+  turno            String
+  has_media_beca  Boolean
   en_lista_espera Boolean? @default(false)
   puede_cobrar    Boolean? @default(false)
   personaId       Int      @unique
   becaId          Int?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  persona         Persona  @relation(fields: [personaId], references: [id])
-  beca            Beca?    @relation(fields: [becaId], references: [id])
+  persona         Persona  @relation(fields: [personaId], references: [id], onDelete: Cascade)
+  beca            Beca?    @relation(fields: [becaId], references: [id], onDelete: SetNull)
   cobros          Cobro[]
 }
 

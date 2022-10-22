@@ -28,17 +28,6 @@ async function main() {
     },
   });
 
-  await prisma.user.create({
-    data: {
-      username: "admin",
-      email: "admin@localhost",
-      password: "admin",
-      roleId: 1,
-      is_active: false,
-      is_deleted: false,
-    },
-  });
-
   await prisma.carrera.create({
     data: {
       nombre: "N/A",
@@ -107,23 +96,6 @@ async function main() {
     },
   });
 
-  // ==================== PERSONAS ====================
-
-  await prisma.persona.create({
-    data: {
-      nombres: "admin",
-      a_paterno: "admin",
-      a_materno: "admin",
-      n_control: "22120215",
-      telefono: "52 (443) 312-1570",
-      whatsapp: "52 (443) 312-1570",
-      carreraId: 1,
-      email_institucional: "ceitm@morelia.tecnm.mx",
-      campus: 1,
-      userId: 1,
-    },
-  });
-
   const isTimeOfBreakfast = moment().isAfter(
     moment().hour(12).minute(0).second(0)
   );
@@ -155,6 +127,143 @@ async function main() {
     data: {
       nombre: "strikes",
       valor: "3",
+    },
+  });
+
+  await prisma.settings.create({
+    data: {
+      nombre: "hora_cambio",
+      valor: "12:00:00",
+    },
+  });
+
+  // ============== BECA ACTIVA ==================== //
+
+  await prisma.beca.create({
+    data: {
+      nombre: "ALI 2022",
+      descripcion: "Becas alimenticias",
+      inicia: "2022-10-22T05:46:33.322Z",
+      is_active: true,
+    },
+  });
+
+  // ============= USUARIO ADMIN ======================= //
+  const admin = await prisma.user.create({
+    data: {
+      username: "admin",
+      email: "admin@localhost",
+      password: "$2b$10$wNUByTCfVbYS4oWx0eiE.Ol4cEBEX0c6kuKFU9zPsIocvuhQdvi8G",
+      roleId: 1,
+      is_active: true,
+      is_deleted: false,
+    },
+  });
+
+  await prisma.persona.create({
+    data: {
+      nombres: "admin",
+      a_paterno: "admin",
+      a_materno: "admin",
+      n_control: "22120214",
+      telefono: "52 (443) 312-1570",
+      whatsapp: "52 (443) 312-1570",
+      carreraId: 1,
+      email_institucional: "ceitm@morelia.tecnm.mx",
+      campus: 1,
+      userId: admin.id,
+    },
+  });
+
+  // ============= USUARIO CONCEJAL ======================= //
+  const concejal = await prisma.user.create({
+    data: {
+      username: "emmanuel",
+      email: "emmanuel@ceitm.com",
+      password: "$2b$10$wNUByTCfVbYS4oWx0eiE.Ol4cEBEX0c6kuKFU9zPsIocvuhQdvi8G",
+      roleId: 3,
+      is_active: true,
+      is_deleted: false,
+    },
+  });
+
+  await prisma.persona.create({
+    data: {
+      nombres: "EMMANUEL",
+      a_paterno: "ESQUIVEL",
+      a_materno: "PARDO",
+      n_control: "22120215",
+      telefono: "4433110399",
+      whatsapp: "4433110399",
+      carreraId: 1,
+      email_institucional: "18120215@morelia.tecnm.mx",
+      campus: 1,
+      userId: concejal.id,
+    },
+  });
+
+  // ============= USUARIO BECARIO ======================= //
+  const becario = await prisma.user.create({
+    data: {
+      username: "sara",
+      email: "sarahi@morelia.tecnm.mx",
+      password: "$2b$10$wNUByTCfVbYS4oWx0eiE.Ol4cEBEX0c6kuKFU9zPsIocvuhQdvi8G",
+      roleId: 2,
+      is_active: true,
+      is_deleted: false,
+    },
+  });
+
+  const persona = await prisma.persona.create({
+    data: {
+      nombres: "SARAHI",
+      a_paterno: "ESQUIVEL",
+      a_materno: "PARDO",
+      n_control: "22120216",
+      telefono: "4433110400",
+      whatsapp: "4433110400",
+      carreraId: 3,
+      email_institucional: "18120216@morelia.tecnm.mx",
+      campus: 1,
+      userId: becario.id,
+    },
+  });
+
+  await prisma.becario.create({
+    data: {
+      turno: "MATUTINO",
+      has_media_beca: false,
+      puede_cobrar: true,
+      en_lista_espera: false,
+      personaId: persona.id,
+      becaId: 1,
+    },
+  });
+
+  // ============= USUARIO CAJERO ======================= //
+  const caja = await prisma.user.create({
+    data: {
+      username: "caja1",
+      email: "caja1@morelia.tecnm.mx",
+      password: "$2b$10$wNUByTCfVbYS4oWx0eiE.Ol4cEBEX0c6kuKFU9zPsIocvuhQdvi8G",
+      roleId: 1,
+      is_active: true,
+      is_deleted: false,
+    },
+  });
+
+  await prisma.persona.create({
+    data: {
+      nombres: "MARIA",
+      a_paterno: "RAMIREZ",
+      a_materno: "SAENZ",
+      n_control: "22120217",
+      telefono: "4433110399",
+      whatsapp: "4433110399",
+      carreraId: 1,
+      email_institucional: "18120217@morelia.tecnm.mx",
+      campus: 1,
+      userId: caja.id,
     },
   });
 }
