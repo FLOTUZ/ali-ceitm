@@ -20,6 +20,7 @@ type User {
 type Query {
   allUsers(pagination: Pagination): [User]
   userById(id: Int!): User
+  currentUser: User
 }
 
 type Mutation {
@@ -27,4 +28,3 @@ type Mutation {
   updateUser(id: Int!, name: String!): User
   deleteUser(id: Int!): User
 }
-
