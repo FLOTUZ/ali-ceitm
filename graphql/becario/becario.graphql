@@ -3,6 +3,8 @@
 
 input CreateBecatioInput {
   personaId: Int!
+  turno: String
+  semana_cobro: String
   en_lista_espera: Boolean
   puede_cobrar: Boolean
   becaId: Boolean
@@ -13,6 +15,8 @@ type Becario {
   en_lista_espera: Boolean
   puede_cobrar: Boolean
   personaId: Int
+  turno: String
+  semana_cobro: String
   becaId: Int
   createdAt: DateTime
   updatedAt: DateTime

@@ -66,8 +66,8 @@ model Carrera {
 
 model Becario {
   id              Int      @id @unique @default(autoincrement())
-  turno            String
-  has_media_beca  Boolean
+  turno           String
+  semana_cobro    String
   en_lista_espera Boolean? @default(false)
   puede_cobrar    Boolean? @default(false)
   personaId       Int      @unique
