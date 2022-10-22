@@ -20,6 +20,12 @@ function CobroQr() {
 
   const { data, loading, error } = useQuery(GENERATE_CODE);
 
+  useEffect(() => {
+    if (data) {
+      setQrValue(data.generateCobroCode.codigo_cobro);
+    }
+  }, [data]);
+
   if (loading) {
     return (
       <div>
