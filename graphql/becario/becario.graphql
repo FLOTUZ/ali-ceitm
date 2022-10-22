@@ -3,11 +3,11 @@
 
 input CreateBecatioInput {
   personaId: Int!
-  turno: String
-  semana_cobro: String
-  en_lista_espera: Boolean
-  puede_cobrar: Boolean
-  becaId: Boolean
+  turno: String!
+  semana_cobro: String!
+  en_lista_espera: Boolean!
+  puede_cobrar: Boolean!
+  becaId: Boolean!
 }
 
 type Becario {

@@ -231,7 +231,7 @@ async function main() {
 
   await prisma.becario.create({
     data: {
-      turno: "MATUTINO",
+      turno: "DESAYUNO",
       semana_cobro: "PAR",
       puede_cobrar: true,
       en_lista_espera: false,

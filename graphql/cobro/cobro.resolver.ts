@@ -30,7 +30,6 @@ export const CobroResolver = {
       __: any,
       { prisma, idUser, role }: IGraphqlContext
     ) => {
-            
       if (role == null && idUser != null) {
         throw new AuthenticationError(
           "UNAUTORIZED el usuario no cuenta con un rol"
@@ -70,6 +69,32 @@ export const CobroResolver = {
           );
         }
 
+        /**
+         * Cuando el becario quiere cobrar en un turno que no le corresponde
+         * el sistema retorna un error y no genera el codigo de cobro ademas
+         * de no devolver el ultimo codigo de cobro generado
+         */
+        const turno = await prisma.settings.findUnique({
+          where: {
+            nombre: "alimento",
+          },
+        });
+
+        const semanaCobro = await prisma.settings.findUnique({
+          where: {
+            nombre: "semana",
+          },
+        });
+
+        if (
+          becario?.turno != turno?.valor ||
+          becario?.semana_cobro != semanaCobro?.valor
+        ) {
+          throw new ForbiddenError(
+            "NOT_YOUR_TURN - No es tu turno para cobrar"
+          );
+        }
+
         /* 
         Si el becario tiene un cobro pendiente, y lo consulta el mismo dia
         que lo genero, se le devuelve el mismo codigo de cobro
@@ -88,7 +113,7 @@ export const CobroResolver = {
           const lastCobroDate = moment(lastCobro.createdAt);
           const now = moment(new Date());
 
-          const diff = now.diff(lastCobroDate, "hours");          
+          const diff = now.diff(lastCobroDate, "hours");
 
           if (diff < 24) {
             return lastCobro;
