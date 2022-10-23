@@ -19,8 +19,8 @@ export default async function handler(
       },
       include: {
         role: true,
-      }
-    });   
+      },
+    });
 
     // If user does not exist, return not found error
     if (!user) {
@@ -29,7 +29,7 @@ export default async function handler(
 
     // Verify if user is active
     if (user.is_active === false) {
-      return res.status(401).json({ message: "User is not active" });  
+      return res.status(401).json({ message: "User is not active" });
     }
 
     //Verify if password is correct comparing the hash of encrypted password

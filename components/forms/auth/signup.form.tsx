@@ -63,7 +63,6 @@ function SingupForm() {
       try {
         const response = await createUsuario(user, persona);
 
-        console.log(response);
         if (response.status === 201) {
           
           toast({

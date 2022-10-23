@@ -31,7 +31,6 @@ export const validatePrismaErrors = (error: any) => {
         meta,
       };
 
-      console.log(result);
       
       return result;
     }

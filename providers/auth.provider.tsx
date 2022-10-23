@@ -44,7 +44,6 @@ const AuthProvider = ({ children }: IAuthProvider) => {
 
   useEffect(() => {
     const token = localStorage.getItem("access-token");
-    console.log(token);
 
     if (token != null && data?.currentUser) {
       setUser(data.currentUser);
