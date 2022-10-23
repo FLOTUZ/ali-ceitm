@@ -7,6 +7,7 @@ import Reloj from "../assets/reloj.svg";
 import QrSCanner from "../assets/qr-scanner.png";
 import Qr from "../assets/qrcode.svg";
 import Logout from "../assets/logout.png";
+import Usuario from "../assets/usuario.svg";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -187,6 +188,19 @@ function Index() {
         </Center>
       </Container>
 
+      <Link href={"/perfil"}>
+        <a>
+          <Container h={150} w={150} p={19} bgColor={"black"} color="white">
+            <Center h={"100%"}>
+              <VStack>
+                <Image src={Usuario} alt="Perfil" />
+                <Text>{"Ver perfil"}</Text>
+              </VStack>
+            </Center>
+          </Container>
+        </a>
+      </Link>
+
       {isCobrador ? (
         <Link href={"/cobros/scanner"}>
           <a>
@@ -226,7 +240,7 @@ function Index() {
           <Container
             p={19}
             bgColor={"black"}
-            color="white" 
+            color="white"
             _hover={{ bgColor: "grey" }}
           >
             <VStack>
