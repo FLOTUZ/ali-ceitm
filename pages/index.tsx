@@ -202,7 +202,7 @@ function Index() {
       </Link>
 
       {isCobrador ? (
-        <Link href={"/cobros/scanner"}>
+        <Link href={"/cobros/cobrador"}>
           <a>
             <Container h={150} w={150} p={19} bgColor={"black"} color="white">
               <Center h={"100%"}>
