@@ -31,7 +31,7 @@ function Cobrador() {
   }, []);
 
   return (
-    <Center h="100%" mt={"2rem"} color={"white"} bgColor={"black"}>
+    <Center h="100%" mt={"2rem"} p="1rem" color={"white"} bgColor={"black"}>
       <VStack h={500} width={500}>
         <Heading>Cobrador</Heading>
         {showScanner ? (

@@ -1,7 +1,7 @@
 import Persona from "../../assets/usuario.svg";
 import QRCode from "react-qr-code";
 import { useEffect, useState } from "react";
-import { Box, Center, Heading, VStack } from "@chakra-ui/react";
+import { Box, Center, Heading, Text, VStack } from "@chakra-ui/react";
 import Image from "next/image";
 import { gql, useQuery } from "@apollo/client";
 import ErrorComponent from "@/common/error.component";
@@ -45,6 +45,9 @@ function CobroQr() {
     <>
       <Center h={"100vh"} bgColor="black">
         <VStack>
+          <Heading as="h4" color={"white"}>
+            {qrValue}
+          </Heading>
           <div style={{ background: "white", padding: "16px" }}>
             <QRCode
               size={256}
@@ -55,12 +58,12 @@ function CobroQr() {
             />
           </div>
           <Box h={10} />
-          <Image
+          {/* <Image
             src={Persona}
             alt="Imagen de usuario"
             height={100}
             width={100}
-          />
+          /> */}
           <Heading as="h3" color={"white"} textAlign="center">
             Emmanuel Esquivel Pardo
           </Heading>
