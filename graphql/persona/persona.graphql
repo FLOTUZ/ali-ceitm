@@ -37,6 +37,7 @@ type Persona {
 type Query {
   allPersonas(pagination: Pagination): [Persona]
   personaById(id: Int!): Persona
+  currentPersona: Persona
 }
 
 type Mutation {

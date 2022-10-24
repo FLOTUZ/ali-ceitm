@@ -5,14 +5,20 @@ import { IGraphqlContext } from "graphql";
 
 export const CarreraResolver = {
   Query: {
-    allCarreras: async (_: any, { pagination }: Args,
-      { prisma }: IGraphqlContext) => {
+    allCarreras: async (
+      _: any,
+      { pagination }: Args,
+      { prisma }: IGraphqlContext
+    ) => {
       return await prisma.carrera.findMany({
         ...pagination,
       });
     },
-    carreraById: async (_: any, { id }: Carrera,
-      { prisma }: IGraphqlContext) => {
+    carreraById: async (
+      _: any,
+      { id }: Carrera,
+      { prisma }: IGraphqlContext
+    ) => {
       return await prisma.carrera.findUnique({
         where: {
           id,
@@ -21,22 +27,31 @@ export const CarreraResolver = {
     },
   },
   Mutation: {
-    createCarrera: async (_: any, { data }: { data: CarreraDto },
-      { prisma }: IGraphqlContext) => {
+    createCarrera: async (
+      _: any,
+      { data }: { data: CarreraDto },
+      { prisma }: IGraphqlContext
+    ) => {
       return await prisma.carrera.create({
         data,
       });
     },
-    updateCarrera: async (_: any, { id, ...data }: Carrera,
-      { prisma }: IGraphqlContext) => {
+    updateCarrera: async (
+      _: any,
+      { id, ...data }: Carrera,
+      { prisma }: IGraphqlContext
+    ) => {
       const response = await prisma.carrera.update({
         where: { id },
         data,
       });
       return response;
     },
-    deleteCarrera: async (_: any, { id }: Carrera,
-      { prisma }: IGraphqlContext) => {
+    deleteCarrera: async (
+      _: any,
+      { id }: Carrera,
+      { prisma }: IGraphqlContext
+    ) => {
       const response = await prisma.carrera.delete({
         where: { id },
       });

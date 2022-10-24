@@ -25,6 +25,18 @@ export const PersonaResolver = {
         },
       });
     },
+
+    currentPersona: async (
+      _: any,
+      __: any,
+      { prisma, idUser }: IGraphqlContext
+    ) => {
+      return await prisma.persona.findUnique({
+        where: {
+          userId: idUser!,
+        },
+      });
+    },
   },
   Mutation: {
     createPersona: async (
