@@ -3,6 +3,7 @@ import { Cobro } from "@prisma/client";
 import { IGraphqlContext } from "graphql";
 import { sha256 } from "crypto-hash";
 import { AuthenticationError, ForbiddenError } from "apollo-server-micro";
+import moment from "moment";
 
 export const CobroResolver = {
   Query: {
@@ -30,7 +31,9 @@ export const CobroResolver = {
       { prisma, idUser, role }: IGraphqlContext
     ) => {
       if (role == null) {
-        throw new AuthenticationError("UNAUTORIZED el usuario no cuenta con un rol")
+        throw new AuthenticationError(
+          "UNAUTORIZED el usuario no cuenta con un rol"
+        );
       }
       // IF ROLE OF USER IS CASHIER
       if (role === "CAJERO" || role === null) {
@@ -64,6 +67,33 @@ export const CobroResolver = {
             "BLOQUED_BY_SYSTEM - No podras cobrar hasta que un administrador te desbloquee"
           );
         }
+
+        /* 
+        Si el becario tiene un cobro pendiente, y lo consulta el mismo dia
+        que lo genero, se le devuelve el mismo codigo de cobro
+        */
+        const lastCobro = await prisma.cobro.findFirst({
+          where: {
+            becarioId: becario!.id,
+          },
+          orderBy: {
+            id: "desc",
+          },
+        });
+
+        // Si ha pasado menos de un dia desde el ultimo cobro
+        if (lastCobro != null) {
+          const lastCobroDate = moment(lastCobro.createdAt);
+          const now = moment(new Date());
+
+          const diff = now.diff(lastCobroDate, "hours");
+          console.log({ lastCobroDate, now, diff });
+
+          if (diff < 24) {
+            return lastCobro;
+          }
+        }
+
         /* 
             Cuando el becario puede cobrar, el sistema debe verificar que no tenga
             mas de X cobros pendientes, o forzados.
