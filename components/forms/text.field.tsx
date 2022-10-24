@@ -11,7 +11,7 @@ interface ITextFieldProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const TextField = (props: ITextFieldProps) => {
+const TextFieldComponent = (props: ITextFieldProps) => {
   return (
     <>
       <FormControl>
@@ -36,4 +36,4 @@ const TextField = (props: ITextFieldProps) => {
   );
 };
 
-export default TextField;
+export default TextFieldComponent;

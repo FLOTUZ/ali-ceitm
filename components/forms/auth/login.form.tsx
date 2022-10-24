@@ -1,4 +1,4 @@
-import TextField from "../text.field";
+import TextFieldComponent from "../text.field";
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -56,7 +56,7 @@ function LoginForm() {
         <Container>
           <Heading>Inicio de sesión</Heading>
           <form onSubmit={handleSubmit} autoSave={"on"}>
-            <TextField
+            <TextFieldComponent
               name={"email"}
               type="email"
               label="Email"
@@ -65,7 +65,7 @@ function LoginForm() {
               touched={touched.email}
             />
 
-            <TextField
+            <TextFieldComponent
               name={"password"}
               type="password"
               label="Password"

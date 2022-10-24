@@ -10,7 +10,7 @@ import Head from "next/head";
 import { useFormik } from "formik";
 
 import SelectComponent from "../select.component";
-import TextField from "../text.field";
+import TextFieldComponent from "../text.field";
 import { SignupSchema } from "./auth.validators";
 
 import { useQuery } from "@apollo/client";
@@ -117,7 +117,7 @@ function SingupForm() {
       </Heading>
 
       <form onSubmit={handleSubmit} autoSave={"on"}>
-        <TextField
+        <TextFieldComponent
           name={"email"}
           type="text"
           label="Email Personal (Requerido)"
@@ -126,7 +126,7 @@ function SingupForm() {
           touched={touched.email}
         />
 
-        <TextField
+        <TextFieldComponent
           name={"password"}
           type="password"
           label="Contraseña (Requerido)"
@@ -135,7 +135,7 @@ function SingupForm() {
           touched={touched.password}
         />
 
-        <TextField
+        <TextFieldComponent
           name={"nombres"}
           type="text"
           label="Nombre (s) (Requerido)"
@@ -144,7 +144,7 @@ function SingupForm() {
           touched={touched.nombres}
         />
 
-        <TextField
+        <TextFieldComponent
           name={"a_paterno"}
           type="text"
           label="Apellido Paterno (Requerido)"
@@ -153,7 +153,7 @@ function SingupForm() {
           touched={touched.a_paterno}
         />
 
-        <TextField
+        <TextFieldComponent
           name={"a_materno"}
           type="text"
           label="Apellido Materno (Requerido)"
@@ -162,7 +162,7 @@ function SingupForm() {
           touched={touched.a_materno}
         />
 
-        <TextField
+        <TextFieldComponent
           name={"n_control"}
           type="text"
           label="Numero de control (Requerido)"
@@ -171,7 +171,7 @@ function SingupForm() {
           touched={touched.n_control}
         />
 
-        <TextField
+        <TextFieldComponent
           name={"telefono"}
           type="tel"
           label="Telefono (Requerido)"
@@ -180,7 +180,7 @@ function SingupForm() {
           touched={touched.telefono}
         />
 
-        <TextField
+        <TextFieldComponent
           name={"whatsapp"}
           type="tel"
           label="Whatsapp (Requerido)"
@@ -189,7 +189,7 @@ function SingupForm() {
           touched={touched.whatsapp}
         />
 
-        <TextField
+        <TextFieldComponent
           name={"email_institucional"}
           type="email"
           label="Email Institucional (Requerido)"

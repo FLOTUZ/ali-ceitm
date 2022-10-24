@@ -58,13 +58,13 @@ function CobroQr() {
           <Image
             src={Persona}
             alt="Imagen de usuario"
-            height={250}
-            width={250}
+            height={100}
+            width={100}
           />
-          <Heading as="h3" color={"white"}>
+          <Heading as="h3" color={"white"} textAlign="center">
             Emmanuel Esquivel Pardo
           </Heading>
-          <Heading as="h3" color={"white"}>
+          <Heading as="h3" color={"white"} textAlign="center">
             ITICS
           </Heading>
         </VStack>
