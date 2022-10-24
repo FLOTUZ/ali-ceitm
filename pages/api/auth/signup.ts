@@ -4,6 +4,7 @@ import { PersonaDTO, UserDto } from "@models";
 import * as yup from "yup";
 import bcrypt from "bcrypt";
 import { Persona, User } from "@prisma/client";
+import NextCors from "nextjs-cors";
 
 const userValidationSchema = yup.object().shape({
   email: yup.string().email().required(),
@@ -30,6 +31,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  await NextCors(req, res, {
+    methods: ["POST"],
+    origin: "*",
+  });
   if (req.method == "POST") {
     const userData = req.body.user as UserDto;
     const personData = req.body.persona as PersonaDTO;
