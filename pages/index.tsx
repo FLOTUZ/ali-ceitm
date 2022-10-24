@@ -78,8 +78,8 @@ function Index() {
     const lugar = settings.find((setting) => setting.nombre === "lugar");
 
     if (settings) {
-      setIsBreakfastHour(alimento!.valor === "DESAYUNO");
-      setisPairWeek(semana!.valor === "PAR");
+      setIsBreakfastHour(alimento!.valor == "DESAYUNO");
+      setisPairWeek(semana!.valor == "PAR");
       setPlace(lugar!.valor);
     }
   }, [settingsData, errorSettings]);
@@ -174,7 +174,7 @@ function Index() {
         <Center h={"100%"}>
           <VStack>
             <Image src={CalendarioSemanal} alt="Es semana par o non" />
-            {isPairWeek ? <Text>NON</Text> : <Text>PAR</Text>}
+            {isPairWeek ? <Text>PAR</Text> : <Text>NON</Text>}
           </VStack>
         </Center>
       </Container>
