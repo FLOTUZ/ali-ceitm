@@ -11,6 +11,7 @@ import Usuario from "../assets/usuario.svg";
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import moment from "moment";
 
 import {
@@ -46,6 +47,8 @@ function Index() {
   const [place, setPlace] = useState<string>("");
 
   const [isCobrador, setIsCobrador] = useState<boolean>(false);
+  const { user, logout, refetchUser } = useContext(AuthContext);
+
 
   const {
     data: settingsData,
@@ -54,7 +57,6 @@ function Index() {
     refetch: refetchSettings,
   } = useQuery(GET_SETTINGS);
 
-  const { user, logout, refetchUser } = useContext(AuthContext);
 
   //======================== STATE ========================
 

@@ -1,21 +1,41 @@
+import ErrorComponent from "@/common/error.component";
+import LoaderComponent from "@/common/loader.component";
+import { useMutation } from "@apollo/client";
 import {
   Button,
   Center,
   Heading,
   HStack,
   Input,
-  PinInput,
-  PinInputField,
+  Switch,
   Text,
+  useToast,
   VStack,
 } from "@chakra-ui/react";
+import { Cobro } from "@prisma/client";
 import { QrScanner } from "@yudiel/react-qr-scanner";
+import { gql } from "apollo-server-core";
 import { useEffect, useState } from "react";
 
+const REALIZAR_COBRO = gql`
+  mutation realizarCobro($codigo: String!) {
+    realizeCobro(codigo: $codigo) {
+      concepto
+      codigo_cobro
+      fecha_cobro
+    }
+  }
+`;
+
 function Cobrador() {
+  const toast = useToast();
   const [qrData, setQrData] = useState("");
-  const [qrerror, setQrerror] = useState("");
   const [showScanner, setShowScanner] = useState(false);
+
+  const [realizarCobro, { data, loading, error }] = useMutation(
+    REALIZAR_COBRO,
+    { errorPolicy: "all" }
+  );
 
   //get operating system and browser
   const getOS = () => {
@@ -26,23 +46,60 @@ function Cobrador() {
     }
   };
 
+  const cobrar = () => {
+    realizarCobro({ variables: { codigo: qrData } });
+  };
+
   useEffect(() => {
     getOS();
   }, []);
 
+  useEffect(() => {
+    if (data) {
+      const cobro = data.realizeCobro as Cobro;
+      toast({
+        title: "Cobro realizado",
+        description: `Cobro realizado con éxito. Código: ${cobro.codigo_cobro}`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  }, [data, toast]);
+
+  if (loading) {
+    return <LoaderComponent />;
+  }
+  if (error) {
+    return <ErrorComponent message={error.message} />;
+  }
   return (
     <Center h="100%" mt={"2rem"} p="1rem" color={"white"} bgColor={"black"}>
       <VStack h={500} width={500}>
+        <HStack>
+          <Text> QR </Text>
+          <Switch
+            size="lg"
+            onChange={() => {
+              setShowScanner(showScanner ? false : true);
+            }}
+          />
+          <Text> Texto </Text>
+        </HStack>
         <Heading>Cobrador</Heading>
-        {showScanner ? (
+        {false ? (
           <QrScanner
             hideCount={true}
             scanDelay={2000}
             onDecode={(result) => {
+              if (result.length > 6) {
+                setQrData("Este QR no es válido");
+              }
               setQrData(result);
+              realizarCobro();
             }}
             onError={(error) => {
-              setQrerror(error?.message);
+              console.log(error?.message);
             }}
           />
         ) : (
@@ -59,19 +116,25 @@ function Cobrador() {
                 type="text"
                 name="qr"
                 textAlign={"center"}
+                autoComplete="off"
                 maxLength={6}
                 minLength={6}
                 value={qrData}
                 onChange={(e) => setQrData(e.target.value)}
               />
-              <Button h={"3rem"} w="100%" mt={"1rem"} colorScheme={"blue"}>
+              <Button
+                h={"3rem"}
+                w="100%"
+                mt={"1rem"}
+                colorScheme={"blue"}
+                onClick={cobrar}
+              >
                 REGISTRAR
               </Button>
             </form>
           </>
         )}
         <Text color={"white"}>{qrData}</Text>
-        <Text color={"white"}>{qrerror}</Text>
       </VStack>
     </Center>
   );

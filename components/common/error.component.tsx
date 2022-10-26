@@ -1,5 +1,4 @@
 import {
-  Button,
   Center,
   Container,
   Heading,
@@ -8,6 +7,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 interface IErrorProps {
   errorCode?: string;
@@ -24,11 +24,6 @@ const ErrorComponent = ({ errorCode, message }: IErrorProps) => {
             <Text>{message}</Text>
           </SimpleGrid>
           <Spacer h={"2rem"} />
-          <Button colorScheme={"whiteAlpha"}>
-            <Link href={"/"}>
-              <a>REGRESAR</a>
-            </Link>
-          </Button>
         </Container>
       </Center>
     </>

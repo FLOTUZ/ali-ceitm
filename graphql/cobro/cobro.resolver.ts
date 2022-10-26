@@ -244,11 +244,24 @@ export const CobroResolver = {
           },
         });
 
+        const isUsed = await prisma.cobro.findFirst({
+          where: {
+            codigo_cobro: codigo,
+          },
+        });
+
+        if (isUsed?.codigo_usado) {
+          throw new ForbiddenError(
+            "COBRO_ALREADY_USED - El codigo de cobro ya fue utilizado"
+          );
+        }
+
         //For use the cafeteriaId in the cobro
         const cobro = await prisma.cobro.update({
           where: { codigo_cobro: codigo },
           data: {
             codigo_usado: true,
+            forma_cobro: "NORMAL",
             cafeteriaId: persona!.cafeteriaId,
           },
         });
