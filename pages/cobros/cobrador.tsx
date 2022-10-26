@@ -103,7 +103,7 @@ function Cobrador() {
           <Text> Texto </Text>
         </HStack>
         <Heading>Cobrador</Heading>
-        {false ? (
+        {showScanner ? (
           <QrScanner
             hideCount={true}
             scanDelay={2000}
