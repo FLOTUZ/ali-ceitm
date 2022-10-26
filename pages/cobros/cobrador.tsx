@@ -15,7 +15,8 @@ import {
 import { Cobro } from "@prisma/client";
 import { QrScanner } from "@yudiel/react-qr-scanner";
 import { gql } from "apollo-server-core";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
 
 const REALIZAR_COBRO = gql`
   mutation realizarCobro($codigo: String!) {
@@ -37,6 +38,8 @@ function Cobrador() {
     { errorPolicy: "all" }
   );
 
+  const router = useRouter();
+
   //get operating system and browser
   const getOS = () => {
     const platform = window.navigator.platform;
@@ -50,13 +53,10 @@ function Cobrador() {
     realizarCobro({ variables: { codigo: qrData } });
   };
 
-  useEffect(() => {
-    getOS();
-  }, []);
-
-  useEffect(() => {
-    if (data) {
+  const cobro = useCallback(() => {
+    if (data && error == undefined) {
       const cobro = data.realizeCobro as Cobro;
+
       toast({
         title: "Cobro realizado",
         description: `Cobro realizado con éxito. Código: ${cobro.codigo_cobro}`,
@@ -64,14 +64,30 @@ function Cobrador() {
         duration: 5000,
         isClosable: true,
       });
+
+      setQrData("");
     }
-  }, [data, toast]);
+  }, [data, error, toast]);
+
+  useEffect(() => {
+    getOS();
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      cobro();
+    }
+  }, [cobro, data]);
 
   if (loading) {
     return <LoaderComponent />;
   }
   if (error) {
-    return <ErrorComponent message={error.message} />;
+    return (
+      <ErrorComponent message={error.message}>
+        <Button onClick={router.reload}>Regresar</Button>
+      </ErrorComponent>
+    );
   }
   return (
     <Center h="100%" mt={"2rem"} p="1rem" color={"white"} bgColor={"black"}>

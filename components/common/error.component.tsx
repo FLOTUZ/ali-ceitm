@@ -6,15 +6,14 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
 
 interface IErrorProps {
   errorCode?: string;
   message: string;
+  children?: React.ReactNode;
 }
 
-const ErrorComponent = ({ errorCode, message }: IErrorProps) => {
+const ErrorComponent = ({ errorCode, message, children }: IErrorProps) => {
   return (
     <>
       <Center bgColor={"black"} h="100vh">
@@ -22,6 +21,7 @@ const ErrorComponent = ({ errorCode, message }: IErrorProps) => {
           <SimpleGrid columns={[1, 2]}>
             <Heading as={"h3"}>{errorCode ? errorCode : "ERROR"}</Heading>
             <Text>{message}</Text>
+            {children}
           </SimpleGrid>
           <Spacer h={"2rem"} />
         </Container>
