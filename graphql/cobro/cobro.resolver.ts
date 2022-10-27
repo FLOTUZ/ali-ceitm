@@ -53,6 +53,36 @@ export const CobroResolver = {
       });
     },
 
+    cobrosNoRealizados: async (
+      _: any,
+      __: any,
+      { prisma, idUser }: IGraphqlContext
+    ) => {
+      const persona = await prisma.persona.findUnique({
+        where: {
+          userId: idUser!,
+        },
+      });
+
+      const becario = await prisma.becario.findUnique({
+        where: {
+          personaId: persona?.id,
+        },
+      });
+
+      if (becario == null) {
+        throw new ForbiddenError("NOT_FOUND - El becario no esta dado de alta");
+      }
+
+      return await prisma.cobro.findMany({
+        where: {
+          becarioId: becario?.id,
+          codigo_usado: false,
+          was_forced: false,
+        },
+      });
+    },
+
     generateCobroCode: async (
       _: any,
       __: any,

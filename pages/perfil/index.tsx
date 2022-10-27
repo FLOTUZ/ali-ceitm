@@ -29,8 +29,8 @@ import { useEffect, useState } from "react";
 import { Cobro, Persona } from "@prisma/client";
 import moment from "moment";
 
-const GET_CURRENT_PERSONA = gql`
-  query GET_CURRENT_PERSONA {
+const GET_COBROS_BECARIO = gql`
+  query GET_COBROS {
     currentPersona {
       id
       nombres
@@ -38,11 +38,7 @@ const GET_CURRENT_PERSONA = gql`
       a_materno
       carreraId
     }
-  }
-`;
 
-const GET_COBROS_BECARIO = gql`
-  query GET_COBROS {
     cobrosRealizados {
       id
       codigo_cobro
@@ -50,44 +46,48 @@ const GET_COBROS_BECARIO = gql`
       was_forced
       fecha_cobro
       cafeteriaId
+      createdAt
+    }
+
+    cobrosNoRealizados {
+      id
+      codigo_cobro
+      forma_cobro
+      was_forced
+      fecha_cobro
+      cafeteriaId
+      createdAt
     }
   }
 `;
 
 function Perfil() {
   const [currentPersona, setCurrentPersona] = useState<Persona>();
-  const [cobrosBecarioList, setCobrosBecarioList] = useState<Cobro[]>();
+  const [cobrosRealizadosList, setCobrosRealizadosList] = useState<Cobro[]>();
+  const [cobrosNORealizadosList, setCobrosNORealizadosList] =
+    useState<Cobro[]>();
 
   const {
-    data: dataPersona,
-    loading: loadingPersona,
-    error: personaError,
-  } = useQuery(GET_CURRENT_PERSONA);
-
-  const {
-    data: dataCobrosBecario,
-    loading: loadingCobrosBecario,
-    error: cobrosBecarioError,
+    data: data,
+    loading: loading,
+    error: error,
   } = useQuery(GET_COBROS_BECARIO);
 
-  useEffect(() => {
-    if (dataPersona) {
-      setCurrentPersona(dataPersona.currentPersona);
-    }
-  }, [dataPersona]);
 
   useEffect(() => {
-    if (dataCobrosBecario) {
-      setCobrosBecarioList(dataCobrosBecario.cobrosRealizados);
+    if (data) {
+      setCobrosRealizadosList(data.cobrosRealizados);
+      setCobrosNORealizadosList(data.cobrosNoRealizados);
+      setCurrentPersona(data.currentPersona);
     }
-  }, [dataCobrosBecario]);
+  }, [cobrosRealizadosList, data]);
 
-  if (loadingPersona) {
+  if (loading) {
     <LoaderComponent />;
   }
 
-  if (personaError) {
-    <ErrorComponent message={personaError?.message!} />;
+  if (error) {
+    <ErrorComponent message={error?.message!} />;
   }
 
   return (
@@ -103,7 +103,7 @@ function Perfil() {
         </Text>
 
         <Heading as={"h3"}>Cobros efectuados</Heading>
-        {loadingCobrosBecario ? (
+        {loading ? (
           <CircularProgress />
         ) : (
           <>
@@ -119,13 +119,55 @@ function Perfil() {
                   </Tr>
                 </Thead>
                 <Tbody textAlign={"center"}>
-                  {cobrosBecarioList?.map((value, index) => (
+                  {cobrosRealizadosList?.map((value, index) => (
                     <Tr key={index}>
                       <Td>{value.id}</Td>
                       <Td>{value.codigo_cobro}</Td>
                       <Td>{value.forma_cobro}</Td>
                       <Td>{value.was_forced ? "SI" : "NO"}</Td>
-                      <Td>{moment(value.fecha_cobro).format("LLL")}</Td>
+                      <Td>
+                        {moment(value.fecha_cobro).startOf("hour").fromNow()}
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </>
+        )}
+
+        {/* COBROS NO RELIZADOS POR BECARIO */}
+
+        <Heading as={"h3"}>Cobros NO efectuados</Heading>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <>
+            <TableContainer>
+              <Table variant="unstyled">
+                <Thead>
+                  <Tr>
+                    <Th>ID</Th>
+                    <Th>CODIGO</Th>
+                    <Th>FORMA COBRO</Th>
+                    <Th>FORZADO</Th>
+                    <Th>GENERADO</Th>
+                  </Tr>
+                </Thead>
+                <Tbody textAlign={"center"}>
+                  {cobrosNORealizadosList?.map((value, index) => (
+                    <Tr key={index}>
+                      <Td>{value.id}</Td>
+                      <Td>{value.codigo_cobro}</Td>
+                      <Td>
+                        {value.forma_cobro == null
+                          ? "AUN NO COBRADO"
+                          : value.forma_cobro}
+                      </Td>
+                      <Td>{value.was_forced ? "SI" : "NO"}</Td>
+                      <Td>
+                        {moment(value.createdAt).startOf("hour").fromNow()}
+                      </Td>
                     </Tr>
                   ))}
                 </Tbody>

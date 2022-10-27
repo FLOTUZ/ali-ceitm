@@ -28,6 +28,7 @@ type Query {
   allCobros(pagination: Pagination): [Cobro]
   cobroById(id: Int!): Cobro
   cobrosRealizados: [Cobro]
+  cobrosNoRealizados: [Cobro]
   generateCobroCode: Cobro
 }
 
