@@ -9,11 +9,11 @@ function Perfil() {
   const { role, logout } = useContext(AuthContext);
 
   if (role?.rol_name == "CAJERO") {
-    return <CobrosCajeroComponent/>;
+    return <CobrosCajeroComponent />;
   }
 
   if (role?.rol_name == "BECARIO") {
-    return <CobrosBecarioComponent/>;
+    return <CobrosBecarioComponent />;
   }
 
   if (role?.rol_name == "ADMIN") {

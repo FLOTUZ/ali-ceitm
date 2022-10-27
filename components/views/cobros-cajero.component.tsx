@@ -4,29 +4,22 @@ import LoaderComponent from "@/common/loader.component";
 import ErrorComponent from "@/common/error.component";
 
 import { VStack, Heading, Text } from "@chakra-ui/react";
-import { gql, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";
 import { Persona } from "@prisma/client";
-
-const GET_PERSONA = gql`
-  query GET_PERSONA {
-    currentPersona {
-      id
-      nombres
-      a_paterno
-      a_materno
-      carreraId
-    }
-  }
-`;
+import { usePersonaSessionQuery } from "gql/generated/graphql";
 
 const CobrosCajeroComponent = () => {
-  const [currentPersona, setCurrentPersona] = useState<Persona>();
-  const { data: data, loading: loading, error: error } = useQuery(GET_PERSONA);
+  const [currentPersona, setCurrentPersona] = useState<Persona | null>();
+  const {
+    data: data,
+    loading: loading,
+    error: error,
+  } = usePersonaSessionQuery();
 
   useEffect(() => {
     if (data) {
-      setCurrentPersona(data.currentPersona);
+      const p = data.currentPersona as Persona;
+      setCurrentPersona(p);
     }
   }, [data]);
 

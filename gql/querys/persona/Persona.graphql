@@ -1,0 +1,9 @@
+query PersonaSession {
+  currentPersona {
+    id
+    nombres
+    a_paterno
+    a_materno
+    carreraId
+  }
+}

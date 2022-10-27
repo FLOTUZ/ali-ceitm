@@ -13,7 +13,8 @@
     "prisma:reset": "prisma migrate reset -f",
     "prisma:studio": "prisma studio",
     "prisma:deploy": "prisma migrate deploy",
-    "prisma:push": "prisma db push"
+    "prisma:push": "prisma db push",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@apollo/client": "^3.7.0",
@@ -44,6 +45,10 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.13.7",
+    "@graphql-codegen/typescript": "^2.8.0",
+    "@graphql-codegen/typescript-operations": "^2.5.5",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.5",
     "@types/bcrypt": "^5.0.0",
     "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^18.8.3",
@@ -54,6 +59,8 @@
     "eslint-plugin-unused-imports": "2.0.0",
     "prisma": "4.4.0",
     "ts-node": "^10.9.1",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "@graphql-codegen/introspection": "2.2.1",
+    "@graphql-codegen/client-preset": "1.1.1"
   }
 }
