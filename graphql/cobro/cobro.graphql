@@ -27,13 +27,14 @@ type Cobro {
 type Query {
   allCobros(pagination: Pagination): [Cobro]
   cobroById(id: Int!): Cobro
+  cobrosRealizados: [Cobro]
   generateCobroCode: Cobro
 }
 
 type Mutation {
   updateCobro(id: Int!, data: CreateCobroInput): Cobro
   deleteCobro(id: Int!): Boolean
-  
+
   realizeCobro(codigo: String!): Cobro
   forceCobro(id: Int!): Cobro
 }
