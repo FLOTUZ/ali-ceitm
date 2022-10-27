@@ -238,6 +238,13 @@ async function main() {
   });
 
   // ============= USUARIO CAJERO ======================= //
+
+  const cafeteria = await prisma.cafeteria.create({
+    data: {
+      nombre: "Principal",
+      campus: "CAMPUS 1",
+    },
+  });
   const caja = await prisma.user.create({
     data: {
       email: "caja1@morelia.tecnm.mx",
@@ -260,6 +267,7 @@ async function main() {
       email_institucional: "18120217@morelia.tecnm.mx",
       campus: 1,
       userId: caja.id,
+      cafeteriaId: cafeteria.id,
     },
   });
 }

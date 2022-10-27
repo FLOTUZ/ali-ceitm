@@ -1,0 +1,10 @@
+query CobrosCajero {
+  cobrosRegistradosPorCajero {
+    id
+    becarioId
+    concepto
+    codigo_cobro
+    fecha_cobro
+    updatedAt
+  }
+}

@@ -3,32 +3,62 @@ import Usuario from "../../assets/usuario.svg";
 import LoaderComponent from "@/common/loader.component";
 import ErrorComponent from "@/common/error.component";
 
-import { VStack, Heading, Text } from "@chakra-ui/react";
+import {
+  VStack,
+  Heading,
+  Text,
+  CircularProgress,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Persona } from "@prisma/client";
-import { usePersonaSessionQuery } from "gql/generated/graphql";
+import { Cobro, Persona } from "@prisma/client";
+import {
+  useCobrosCajeroQuery,
+  usePersonaSessionQuery,
+} from "gql/generated/graphql";
+import moment from "moment";
 
 const CobrosCajeroComponent = () => {
   const [currentPersona, setCurrentPersona] = useState<Persona | null>();
+  const [cobrosList, setCobrosList] = useState<Cobro[]>([]);
   const {
-    data: data,
-    loading: loading,
-    error: error,
+    data: dataPersona,
+    loading: loadingPersona,
+    error: errorPersona,
   } = usePersonaSessionQuery();
 
-  useEffect(() => {
-    if (data) {
-      const p = data.currentPersona as Persona;
-      setCurrentPersona(p);
-    }
-  }, [data]);
+  const {
+    data: dataCobros,
+    loading: loadingCobros,
+    error: errorCobros,
+  } = useCobrosCajeroQuery({});
 
-  if (loading) {
+  useEffect(() => {
+    if (dataPersona) {
+      setCurrentPersona(dataPersona.currentPersona as Persona);
+    }
+
+    if (dataCobros) {
+      setCobrosList(dataCobros.cobrosRegistradosPorCajero as Cobro[]);
+    }
+  }, [dataPersona, dataCobros]);
+
+  if (loadingPersona || loadingCobros) {
     <LoaderComponent />;
   }
 
-  if (error) {
-    <ErrorComponent message={error?.message!} />;
+  if (errorPersona) {
+    <ErrorComponent message={errorPersona?.message!} />;
+  }
+
+  if (errorCobros) {
+    <ErrorComponent message={errorCobros?.message!} />;
   }
 
   return (
@@ -42,6 +72,37 @@ const CobrosCajeroComponent = () => {
           {currentPersona?.nombres} {currentPersona?.a_paterno}{" "}
           {currentPersona?.a_materno}
         </Text>
+
+        {loadingCobros ? (
+          <CircularProgress />
+        ) : (
+          <TableContainer>
+            <Table variant="unstyled">
+              <Thead>
+                <Tr>
+                  <Th>ID COBRO</Th>
+                  <Th>ID BECARIO</Th>
+                  <Th>CODIGO</Th>
+                  <Th>GENERADO</Th>
+                  <Th>COBRADO EN CAJA</Th>
+                </Tr>
+              </Thead>
+              <Tbody textAlign={"center"}>
+                {cobrosList?.map((value, index) => (
+                  <Tr key={index}>
+                    <Td>{value.id}</Td>
+                    <Td>{value.becarioId}</Td>
+                    <Td>{value.codigo_cobro}</Td>
+                    <Td>
+                      {moment(value.fecha_cobro).startOf("hour").fromNow()}
+                    </Td>
+                    <Td>{moment(value.updatedAt).format("LLLL")}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        )}
       </VStack>
     </VStack>
   );

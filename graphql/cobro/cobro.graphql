@@ -29,6 +29,7 @@ type Query {
   cobroById(id: Int!): Cobro
   cobrosRealizados: [Cobro]
   cobrosNoRealizados: [Cobro]
+  cobrosRegistradosPorCajero: [Cobro]
   generateCobroCode: Cobro
 }
 

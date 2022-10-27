@@ -438,6 +438,7 @@ export type Query = {
   cobroById?: Maybe<Cobro>;
   cobrosNoRealizados?: Maybe<Array<Maybe<Cobro>>>;
   cobrosRealizados?: Maybe<Array<Maybe<Cobro>>>;
+  cobrosRegistradosPorCajero?: Maybe<Array<Maybe<Cobro>>>;
   currentPersona?: Maybe<Persona>;
   currentRole?: Maybe<Role>;
   currentUser?: Maybe<User>;
@@ -608,6 +609,11 @@ export type CobrosBecarioQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CobrosBecarioQuery = { __typename?: 'Query', currentPersona?: { __typename?: 'Persona', id?: number | null, nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, carreraId?: number | null } | null, cobrosRealizados?: Array<{ __typename?: 'Cobro', id?: number | null, codigo_cobro?: string | null, forma_cobro?: string | null, was_forced?: boolean | null, fecha_cobro?: any | null, cafeteriaId?: number | null, createdAt?: any | null } | null> | null, cobrosNoRealizados?: Array<{ __typename?: 'Cobro', id?: number | null, codigo_cobro?: string | null, forma_cobro?: string | null, was_forced?: boolean | null, fecha_cobro?: any | null, cafeteriaId?: number | null, createdAt?: any | null } | null> | null };
+
+export type CobrosCajeroQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type CobrosCajeroQuery = { __typename?: 'Query', cobrosRegistradosPorCajero?: Array<{ __typename?: 'Cobro', id?: number | null, becarioId?: number | null, concepto?: string | null, codigo_cobro?: string | null, fecha_cobro?: any | null, updatedAt?: any | null } | null> | null };
 
 export type PersonaSessionQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -823,6 +829,45 @@ export function useCobrosBecarioLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type CobrosBecarioQueryHookResult = ReturnType<typeof useCobrosBecarioQuery>;
 export type CobrosBecarioLazyQueryHookResult = ReturnType<typeof useCobrosBecarioLazyQuery>;
 export type CobrosBecarioQueryResult = Apollo.QueryResult<CobrosBecarioQuery, CobrosBecarioQueryVariables>;
+export const CobrosCajeroDocument = gql`
+    query CobrosCajero {
+  cobrosRegistradosPorCajero {
+    id
+    becarioId
+    concepto
+    codigo_cobro
+    fecha_cobro
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useCobrosCajeroQuery__
+ *
+ * To run a query within a React component, call `useCobrosCajeroQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCobrosCajeroQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCobrosCajeroQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCobrosCajeroQuery(baseOptions?: Apollo.QueryHookOptions<CobrosCajeroQuery, CobrosCajeroQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CobrosCajeroQuery, CobrosCajeroQueryVariables>(CobrosCajeroDocument, options);
+      }
+export function useCobrosCajeroLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CobrosCajeroQuery, CobrosCajeroQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CobrosCajeroQuery, CobrosCajeroQueryVariables>(CobrosCajeroDocument, options);
+        }
+export type CobrosCajeroQueryHookResult = ReturnType<typeof useCobrosCajeroQuery>;
+export type CobrosCajeroLazyQueryHookResult = ReturnType<typeof useCobrosCajeroLazyQuery>;
+export type CobrosCajeroQueryResult = Apollo.QueryResult<CobrosCajeroQuery, CobrosCajeroQueryVariables>;
 export const PersonaSessionDocument = gql`
     query PersonaSession {
   currentPersona {

@@ -83,6 +83,24 @@ export const CobroResolver = {
       });
     },
 
+    cobrosRegistradosPorCajero: async (
+      _: any,
+      __: any,
+      { prisma, idUser }: IGraphqlContext
+    ) => {
+      const persona = await prisma.persona.findUnique({
+        where: {
+          userId: idUser!,
+        },
+      });
+
+      return await prisma.cobro.findMany({
+        where: {
+          cafeteriaId: persona?.cafeteriaId,
+        },
+      });
+    },
+
     generateCobroCode: async (
       _: any,
       __: any,
