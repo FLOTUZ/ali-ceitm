@@ -21,6 +21,22 @@ export const RoleResolver = {
         },
       });
     },
+    currentRole: async (
+      _: any,
+      __: any,
+      { prisma, idUser }: IGraphqlContext
+    ) => {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: idUser!,
+        },
+      });
+      return await prisma.role.findUnique({
+        where: {
+          id: user?.roleId!,
+        },
+      });
+    },
   },
   Mutation: {
     createRole: async (

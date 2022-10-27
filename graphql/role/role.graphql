@@ -14,6 +14,7 @@ type Role {
 type Query {
   allRoles: [Role]
   roleById(id: Int!): Role
+  currentRole: Role
 }
 
 type Mutation {

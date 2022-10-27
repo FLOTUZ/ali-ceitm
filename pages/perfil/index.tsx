@@ -1,182 +1,29 @@
-import Link from "next/link";
-import Image from "next/image";
-
-import Usuario from "../../assets/usuario.svg";
-
-import {
-  Center,
-  Container,
-  Heading,
-  VStack,
-  Text,
-  CircularProgress,
-  Box,
-  SimpleGrid,
-  Table,
-  TableCaption,
-  TableContainer,
-  Tbody,
-  Td,
-  Tfoot,
-  Th,
-  Thead,
-  Tr,
-} from "@chakra-ui/react";
-import { useQuery, gql } from "@apollo/client";
-import LoaderComponent from "@/common/loader.component";
+import { useContext } from "react";
+import { AuthContext } from "providers/auth.provider";
+import { Button, Heading } from "@chakra-ui/react";
 import ErrorComponent from "@/common/error.component";
-import { useEffect, useState } from "react";
-import { Cobro, Persona } from "@prisma/client";
-import moment from "moment";
-
-const GET_COBROS_BECARIO = gql`
-  query GET_COBROS {
-    currentPersona {
-      id
-      nombres
-      a_paterno
-      a_materno
-      carreraId
-    }
-
-    cobrosRealizados {
-      id
-      codigo_cobro
-      forma_cobro
-      was_forced
-      fecha_cobro
-      cafeteriaId
-      createdAt
-    }
-
-    cobrosNoRealizados {
-      id
-      codigo_cobro
-      forma_cobro
-      was_forced
-      fecha_cobro
-      cafeteriaId
-      createdAt
-    }
-  }
-`;
+import CobrosBecarioComponent from "@/views/cobros-becario.component";
+import CobrosCajeroComponent from "@/views/cobros-cajero.component";
 
 function Perfil() {
-  const [currentPersona, setCurrentPersona] = useState<Persona>();
-  const [cobrosRealizadosList, setCobrosRealizadosList] = useState<Cobro[]>();
-  const [cobrosNORealizadosList, setCobrosNORealizadosList] =
-    useState<Cobro[]>();
+  const { role, logout } = useContext(AuthContext);
 
-  const {
-    data: data,
-    loading: loading,
-    error: error,
-  } = useQuery(GET_COBROS_BECARIO);
-
-
-  useEffect(() => {
-    if (data) {
-      setCobrosRealizadosList(data.cobrosRealizados);
-      setCobrosNORealizadosList(data.cobrosNoRealizados);
-      setCurrentPersona(data.currentPersona);
-    }
-  }, [cobrosRealizadosList, data]);
-
-  if (loading) {
-    <LoaderComponent />;
+  if (role?.rol_name == "CAJERO") {
+    return <CobrosCajeroComponent/>;
   }
 
-  if (error) {
-    <ErrorComponent message={error?.message!} />;
+  if (role?.rol_name == "BECARIO") {
+    return <CobrosBecarioComponent/>;
+  }
+
+  if (role?.rol_name == "ADMIN") {
+    return <Heading>ADMIN</Heading>;
   }
 
   return (
-    <VStack h="100vh" color={"white"} bgColor={"black"} padding="3rem">
-      <Heading as={"h1"}>Perfil</Heading>
-
-      <VStack h={"100%"} w="100%">
-        <Image src={Usuario} alt="Perfil" height={150} width={150} />
-
-        <Text textAlign={"center"} w="100%">
-          {currentPersona?.nombres} {currentPersona?.a_paterno}{" "}
-          {currentPersona?.a_materno}
-        </Text>
-
-        <Heading as={"h3"}>Cobros efectuados</Heading>
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <>
-            <TableContainer>
-              <Table variant="unstyled">
-                <Thead>
-                  <Tr>
-                    <Th>ID</Th>
-                    <Th>CODIGO</Th>
-                    <Th>FORMA COBRO</Th>
-                    <Th>FORZADO</Th>
-                    <Th>FECHA COBRO</Th>
-                  </Tr>
-                </Thead>
-                <Tbody textAlign={"center"}>
-                  {cobrosRealizadosList?.map((value, index) => (
-                    <Tr key={index}>
-                      <Td>{value.id}</Td>
-                      <Td>{value.codigo_cobro}</Td>
-                      <Td>{value.forma_cobro}</Td>
-                      <Td>{value.was_forced ? "SI" : "NO"}</Td>
-                      <Td>
-                        {moment(value.fecha_cobro).startOf("hour").fromNow()}
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </>
-        )}
-
-        {/* COBROS NO RELIZADOS POR BECARIO */}
-
-        <Heading as={"h3"}>Cobros NO efectuados</Heading>
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <>
-            <TableContainer>
-              <Table variant="unstyled">
-                <Thead>
-                  <Tr>
-                    <Th>ID</Th>
-                    <Th>CODIGO</Th>
-                    <Th>FORMA COBRO</Th>
-                    <Th>FORZADO</Th>
-                    <Th>GENERADO</Th>
-                  </Tr>
-                </Thead>
-                <Tbody textAlign={"center"}>
-                  {cobrosNORealizadosList?.map((value, index) => (
-                    <Tr key={index}>
-                      <Td>{value.id}</Td>
-                      <Td>{value.codigo_cobro}</Td>
-                      <Td>
-                        {value.forma_cobro == null
-                          ? "AUN NO COBRADO"
-                          : value.forma_cobro}
-                      </Td>
-                      <Td>{value.was_forced ? "SI" : "NO"}</Td>
-                      <Td>
-                        {moment(value.createdAt).startOf("hour").fromNow()}
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-            </TableContainer>
-          </>
-        )}
-      </VStack>
-    </VStack>
+    <ErrorComponent message="NO AUTENTICADO">
+      <Button onClick={logout}>Login</Button>
+    </ErrorComponent>
   );
 }
 
