@@ -1,89 +1,68 @@
 import QRCode from "react-qr-code";
-import { useEffect, useState } from "react";
-import { Box, Center, Heading, VStack } from "@chakra-ui/react";
-import { gql, useQuery } from "@apollo/client";
 import ErrorComponent from "@/common/error.component";
 import LoaderComponent from "@/common/loader.component";
+import { useEffect, useState } from "react";
+import { Box, Center, Heading, VStack } from "@chakra-ui/react";
 import { Carrera, Persona } from "@prisma/client";
-
-const GENERATE_CODE = gql`
-  query CREATE_COBRO_CODE {
-    generateCobroCode {
-      id
-      codigo_cobro
-      concepto
-    }
-  }
-`;
-
-const GET_CURRENT_PERSONA = gql`
-  query GET_CURRENT_PERSONA {
-    currentPersona {
-      id
-      nombres
-      a_paterno
-      a_materno
-      carreraId
-    }
-  }
-`;
-
-const GET_CARRERA_BY_ID = gql`
-  query GET_CARRERA_BY_ID($id: Int!) {
-    carreraById(id: $id) {
-      id
-      nombre
-    }
-  }
-`;
+import {
+  useCarreraByIdLazyQuery,
+  useGenerateCobroCodeQuery,
+  usePersonaSessionQuery,
+} from "gql/generated/graphql";
 
 function CobroQr() {
   const [qrValue, setQrValue] = useState("");
   const [pesonaValue, setPesonaValue] = useState<Persona | null>();
   const [carreraValue, setCarreraValue] = useState<Carrera | null>();
 
-  const { data, loading, error } = useQuery(GENERATE_CODE);
+  const {
+    data: dataQR,
+    loading: loadingQR,
+    error: qrError,
+  } = useGenerateCobroCodeQuery();
+
   const {
     data: dataPersona,
     loading: loadingPersona,
     error: personaError,
-  } = useQuery(GET_CURRENT_PERSONA);
+  } = usePersonaSessionQuery();
 
-  const {
-    data: dataCarrera,
-    loading: loadingCarrera,
-    error: carreraError,
-  } = useQuery(GET_CARRERA_BY_ID, {
-    variables: {
-      id: pesonaValue?.carreraId,
-    },
-  });
+  const [
+    getCarrera,
+    { data: dataCarrera, loading: loadingCarrera, error: carreraError },
+  ] = useCarreraByIdLazyQuery();
 
   useEffect(() => {
-    if (data) {
-      setQrValue(data.generateCobroCode.codigo_cobro);
+    if (dataQR) {
+      setQrValue(dataQR.generateCobroCode!.codigo_cobro as string);
     }
 
     if (dataPersona) {
-      setPesonaValue(dataPersona.currentPersona);
+      setPesonaValue(dataPersona.currentPersona! as Persona);
     }
-  }, [data, dataPersona]);
+
+    if (dataCarrera) {
+      setCarreraValue(dataCarrera.carreraById! as Carrera);
+    }
+  }, [dataQR, dataCarrera, dataPersona]);
 
   useEffect(() => {
-    if (dataCarrera) {
-      setCarreraValue(dataCarrera.carreraById);
+    if (pesonaValue) {
+      getCarrera({
+        variables: { id: pesonaValue!.carreraId },
+      });
     }
-  }, [dataCarrera]);
+  }, [getCarrera, pesonaValue]);
 
-  if (loading || loadingPersona || loadingCarrera) {
+  if (loadingQR || loadingPersona || loadingCarrera) {
     return <LoaderComponent />;
   }
 
-  if (error) {
+  if (qrError) {
     return (
       <ErrorComponent
-        errorCode={error["graphQLErrors"][0]["extensions"]["code"]}
-        message={error.message}
+        errorCode={qrError["graphQLErrors"][0]["extensions"]["code"]}
+        message={qrError.message}
       />
     );
   }

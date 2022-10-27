@@ -1,0 +1,13 @@
+query CurrentUser {
+  currentUser {
+    id
+    email
+    roleId
+    is_active
+  }
+
+  currentRole {
+    id
+    rol_name
+  }
+}

@@ -6,16 +6,11 @@ import { Button, Center, Container, Heading, useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 import { healthAction, loginAction } from "./auth.actions";
-import { AuthContext } from "providers/auth.provider";
-import { useContext } from "react";
 
 function LoginForm() {
   const toast = useToast();
-  const { user, logout, refetchUser } = useContext(AuthContext);
 
-  
   const router = useRouter();
-
 
   const { handleChange, handleSubmit, errors, touched } = useFormik({
     initialValues: {

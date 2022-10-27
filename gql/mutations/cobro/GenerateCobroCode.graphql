@@ -1,0 +1,7 @@
+query GenerateCobroCode {
+  generateCobroCode {
+    id
+    codigo_cobro
+    concepto
+  }
+}

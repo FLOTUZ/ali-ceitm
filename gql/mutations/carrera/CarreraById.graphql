@@ -1,0 +1,6 @@
+query CarreraById($id: Int!) {
+  carreraById(id: $id) {
+    id
+    nombre
+  }
+}

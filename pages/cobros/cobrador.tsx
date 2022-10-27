@@ -14,29 +14,16 @@ import {
 } from "@chakra-ui/react";
 import { Cobro } from "@prisma/client";
 import { QrScanner } from "@yudiel/react-qr-scanner";
-import { gql } from "apollo-server-core";
+import { useRealizarCobroMutation } from "gql/generated/graphql";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-
-const REALIZAR_COBRO = gql`
-  mutation realizarCobro($codigo: String!) {
-    realizeCobro(codigo: $codigo) {
-      concepto
-      codigo_cobro
-      fecha_cobro
-    }
-  }
-`;
 
 function Cobrador() {
   const toast = useToast();
   const [qrData, setQrData] = useState("");
   const [showScanner, setShowScanner] = useState(false);
 
-  const [realizarCobro, { data, loading, error }] = useMutation(
-    REALIZAR_COBRO,
-    { errorPolicy: "all" }
-  );
+  const [realizarCobro, { data, loading, error }] = useRealizarCobroMutation();
 
   const router = useRouter();
 

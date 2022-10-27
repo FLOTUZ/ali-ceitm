@@ -1,3 +1,7 @@
+import Image from "next/image";
+import Link from "next/link";
+import moment from "moment";
+
 import Desayuno from "../assets/desayuno.svg";
 import Comida from "../assets/comida.svg";
 import Cafeteria from "../assets/cafeteria.svg";
@@ -9,11 +13,10 @@ import Qr from "../assets/qrcode.svg";
 import Logout from "../assets/logout.png";
 import Usuario from "../assets/usuario.svg";
 
-import Image from "next/image";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import moment from "moment";
-
+import ErrorComponent from "@/common/error.component";
+import LoaderComponent from "@/common/loader.component";
+import { AuthContext } from "providers/auth.provider";
+import { useAllSettingsQuery } from "gql/generated/graphql";
 import {
   Button,
   Center,
@@ -24,20 +27,6 @@ import {
 } from "@chakra-ui/react";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Settings } from "@prisma/client";
-import { gql, useQuery } from "@apollo/client";
-import ErrorComponent from "@/common/error.component";
-import LoaderComponent from "@/common/loader.component";
-import { AuthContext } from "providers/auth.provider";
-
-const GET_SETTINGS = gql`
-  query GetSettings {
-    allSettings {
-      id
-      nombre
-      valor
-    }
-  }
-`;
 
 function Index() {
   const [time, setTime] = useState<string>("--:--:--");
@@ -49,14 +38,12 @@ function Index() {
   const [isCobrador, setIsCobrador] = useState<boolean>(false);
   const { user, logout, refetchUser } = useContext(AuthContext);
 
-
   const {
     data: settingsData,
     loading: loadingSettings,
     error: errorSettings,
     refetch: refetchSettings,
-  } = useQuery(GET_SETTINGS);
-
+  } = useAllSettingsQuery();
 
   //======================== STATE ========================
 
@@ -68,11 +55,14 @@ function Index() {
     }
   }, [user?.roleId]);
 
+  if (settingsData) {
+  }
+
   const settingsState = useCallback(() => {
     if (errorSettings) {
       return;
     }
-    const settings = settingsData.allSettings as Settings[];
+    const settings = settingsData?.allSettings as Settings[];
 
     //Get setting item by name
     const alimento = settings.find((setting) => setting.nombre === "alimento");

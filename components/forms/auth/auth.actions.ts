@@ -1,16 +1,6 @@
-import { gql } from "@apollo/client";
 import { PersonaDTO } from "graphql/persona/persona.dto";
 import { UserDto } from "graphql/user/user.dto";
 import { axiosClient } from "services/axios-client.service";
-
-export const GET_CARRERAS = gql`
-  query GetCarreras {
-    allCarreras {
-      id
-      nombre
-    }
-  }
-`;
 
 export const createUsuario = async (user: UserDto, persona: PersonaDTO) => {
   return await axiosClient().post("/auth/signup", { user, persona });

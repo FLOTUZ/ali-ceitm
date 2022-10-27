@@ -1,0 +1,7 @@
+mutation RealizarCobro($codigo: String!) {
+  realizeCobro(codigo: $codigo) {
+    concepto
+    codigo_cobro
+    fecha_cobro
+  }
+}

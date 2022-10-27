@@ -1,0 +1,29 @@
+query CobrosBecario {
+  currentPersona {
+    id
+    nombres
+    a_paterno
+    a_materno
+    carreraId
+  }
+
+  cobrosRealizados {
+    id
+    codigo_cobro
+    forma_cobro
+    was_forced
+    fecha_cobro
+    cafeteriaId
+    createdAt
+  }
+
+  cobrosNoRealizados {
+    id
+    codigo_cobro
+    forma_cobro
+    was_forced
+    fecha_cobro
+    cafeteriaId
+    createdAt
+  }
+}

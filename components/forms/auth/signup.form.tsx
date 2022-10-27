@@ -1,3 +1,7 @@
+import SelectComponent from "../select.component";
+import TextFieldComponent from "../text.field";
+import Head from "next/head";
+
 import {
   Button,
   Center,
@@ -6,28 +10,23 @@ import {
   Heading,
   useToast,
 } from "@chakra-ui/react";
-import Head from "next/head";
 import { useFormik } from "formik";
-
-import SelectComponent from "../select.component";
-import TextFieldComponent from "../text.field";
 import { SignupSchema } from "./auth.validators";
-
 import { useQuery } from "@apollo/client";
 import { Carrera } from "@prisma/client";
 import { useEffect, useState } from "react";
-
-import { createUsuario, GET_CARRERAS } from "./auth.actions";
+import { createUsuario } from "./auth.actions";
 import { useRouter } from "next/router";
 import { UserDto } from "graphql/user/user.dto";
 import { PersonaDTO } from "graphql/persona/persona.dto";
+import { useGetAllCarrerasQuery } from "gql/generated/graphql";
 
 function SingupForm() {
   const {
     loading: loadingCarreras,
     error: errorCarreras,
     data: dataCarreras,
-  } = useQuery(GET_CARRERAS);
+  } = useGetAllCarrerasQuery();
 
   const toast = useToast();
   const router = useRouter();
@@ -64,7 +63,6 @@ function SingupForm() {
         const response = await createUsuario(user, persona);
 
         if (response.status === 201) {
-          
           toast({
             title: "Usuario creado",
             description: "Se ha creado el usuario correctamente",
@@ -91,7 +89,7 @@ function SingupForm() {
 
   useEffect(() => {
     if (dataCarreras) {
-      setCarrerasList(dataCarreras.allCarreras);
+      setCarrerasList(dataCarreras.allCarreras as Carrera[]);
     }
   }, [dataCarreras]);
 

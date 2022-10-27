@@ -18,40 +18,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { Persona, Cobro } from "@prisma/client";
-import { gql, useQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
-
-const GET_COBROS_BECARIO = gql`
-  query GET_COBROS {
-    currentPersona {
-      id
-      nombres
-      a_paterno
-      a_materno
-      carreraId
-    }
-
-    cobrosRealizados {
-      id
-      codigo_cobro
-      forma_cobro
-      was_forced
-      fecha_cobro
-      cafeteriaId
-      createdAt
-    }
-
-    cobrosNoRealizados {
-      id
-      codigo_cobro
-      forma_cobro
-      was_forced
-      fecha_cobro
-      cafeteriaId
-      createdAt
-    }
-  }
-`;
+import { useCobrosBecarioQuery } from "gql/generated/graphql";
 
 const CobrosBecarioComponent = () => {
   const [currentPersona, setCurrentPersona] = useState<Persona>();
@@ -63,13 +31,13 @@ const CobrosBecarioComponent = () => {
     data: data,
     loading: loading,
     error: error,
-  } = useQuery(GET_COBROS_BECARIO);
+  } = useCobrosBecarioQuery();
 
   useEffect(() => {
     if (data) {
-      setCobrosRealizadosList(data.cobrosRealizados);
-      setCobrosNORealizadosList(data.cobrosNoRealizados);
-      setCurrentPersona(data.currentPersona);
+      setCobrosRealizadosList(data.cobrosRealizados as Cobro[]);
+      setCobrosNORealizadosList(data.cobrosNoRealizados as Cobro[]);
+      setCurrentPersona(data.currentPersona as Persona);
     }
   }, [data]);
 
