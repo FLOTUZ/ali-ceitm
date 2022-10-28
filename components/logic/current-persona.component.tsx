@@ -34,7 +34,7 @@ const CurrentPersonaComponent = () => {
 
   return (
     <>
-      <VStack h={"100%"} w="100%">
+      <VStack w="100%">
         <Avatar
           size="2xl"
           bg="red.500"

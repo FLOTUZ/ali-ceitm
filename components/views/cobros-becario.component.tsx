@@ -1,6 +1,4 @@
-import Image from "next/image";
 import moment from "moment";
-import Usuario from "../../assets/usuario.svg";
 
 import ErrorComponent from "@/common/error.component";
 import LoaderComponent from "@/common/loader.component";
@@ -15,14 +13,13 @@ import {
   Th,
   Tbody,
   Td,
-  Text,
 } from "@chakra-ui/react";
-import { Persona, Cobro } from "@prisma/client";
+import { Cobro } from "@prisma/client";
 import { useState, useEffect } from "react";
 import { useCobrosBecarioQuery } from "gql/generated/graphql";
+import CurrentPersonaComponent from "components/logic/current-persona.component";
 
 const CobrosBecarioComponent = () => {
-  const [currentPersona, setCurrentPersona] = useState<Persona>();
   const [cobrosRealizadosList, setCobrosRealizadosList] = useState<Cobro[]>();
   const [cobrosNORealizadosList, setCobrosNORealizadosList] =
     useState<Cobro[]>();
@@ -37,7 +34,6 @@ const CobrosBecarioComponent = () => {
     if (data) {
       setCobrosRealizadosList(data.cobrosRealizados as Cobro[]);
       setCobrosNORealizadosList(data.cobrosNoRealizados as Cobro[]);
-      setCurrentPersona(data.currentPersona as Persona);
     }
   }, [data]);
 
@@ -51,15 +47,10 @@ const CobrosBecarioComponent = () => {
 
   return (
     <VStack h="100vh" color={"white"} bgColor={"black"} padding="3rem">
-      <Heading as={"h1"}>Perfil</Heading>
+      <Heading as={"h1"} w={"100%"}>Perfil</Heading>
 
       <VStack h={"100%"} w="100%">
-        <Image src={Usuario} alt="Perfil" height={150} width={150} />
-
-        <Text textAlign={"center"} w="100%">
-          {currentPersona?.nombres} {currentPersona?.a_paterno}{" "}
-          {currentPersona?.a_materno}
-        </Text>
+        <CurrentPersonaComponent />
 
         <Heading as={"h3"}>Cobros efectuados</Heading>
         {loading ? (

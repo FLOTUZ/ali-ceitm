@@ -1,12 +1,8 @@
-import Image from "next/image";
-import Usuario from "../../assets/usuario.svg";
-import LoaderComponent from "@/common/loader.component";
 import ErrorComponent from "@/common/error.component";
 
 import {
   VStack,
   Heading,
-  Text,
   CircularProgress,
   Table,
   TableContainer,
@@ -17,21 +13,13 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Cobro, Persona } from "@prisma/client";
-import {
-  useCobrosCajeroQuery,
-  usePersonaSessionQuery,
-} from "gql/generated/graphql";
+import { Cobro } from "@prisma/client";
+import { useCobrosCajeroQuery } from "gql/generated/graphql";
 import moment from "moment";
+import CurrentPersonaComponent from "components/logic/current-persona.component";
 
 const CobrosCajeroComponent = () => {
-  const [currentPersona, setCurrentPersona] = useState<Persona | null>();
   const [cobrosList, setCobrosList] = useState<Cobro[]>([]);
-  const {
-    data: dataPersona,
-    loading: loadingPersona,
-    error: errorPersona,
-  } = usePersonaSessionQuery();
 
   const {
     data: dataCobros,
@@ -40,22 +28,10 @@ const CobrosCajeroComponent = () => {
   } = useCobrosCajeroQuery({});
 
   useEffect(() => {
-    if (dataPersona) {
-      setCurrentPersona(dataPersona.currentPersona as Persona);
-    }
-
     if (dataCobros) {
       setCobrosList(dataCobros.cobrosRegistradosPorCajero as Cobro[]);
     }
-  }, [dataPersona, dataCobros]);
-
-  if (loadingPersona || loadingCobros) {
-    <LoaderComponent />;
-  }
-
-  if (errorPersona) {
-    <ErrorComponent message={errorPersona?.message!} />;
-  }
+  }, [dataCobros]);
 
   if (errorCobros) {
     <ErrorComponent message={errorCobros?.message!} />;
@@ -66,12 +42,7 @@ const CobrosCajeroComponent = () => {
       <Heading as={"h1"}>Perfil</Heading>
 
       <VStack h={"100%"} w="100%">
-        <Image src={Usuario} alt="Perfil" height={150} width={150} />
-
-        <Text textAlign={"center"} w="100%">
-          {currentPersona?.nombres} {currentPersona?.a_paterno}{" "}
-          {currentPersona?.a_materno}
-        </Text>
+        <CurrentPersonaComponent />
 
         {loadingCobros ? (
           <CircularProgress />
