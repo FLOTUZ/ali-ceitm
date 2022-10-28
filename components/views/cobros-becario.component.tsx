@@ -18,6 +18,7 @@ import { Cobro } from "@prisma/client";
 import { useState, useEffect } from "react";
 import { useCobrosBecarioQuery } from "gql/generated/graphql";
 import CurrentPersonaComponent from "components/logic/current-persona.component";
+import DatatableComponent from "@/common/datatable.component";
 
 const CobrosBecarioComponent = () => {
   const [cobrosRealizadosList, setCobrosRealizadosList] = useState<Cobro[]>();
@@ -47,7 +48,9 @@ const CobrosBecarioComponent = () => {
 
   return (
     <VStack h="100vh" color={"white"} bgColor={"black"} padding="3rem">
-      <Heading as={"h1"} w={"100%"}>Perfil</Heading>
+      <Heading as={"h1"} w={"100%"}>
+        Perfil
+      </Heading>
 
       <VStack h={"100%"} w="100%">
         <CurrentPersonaComponent />
@@ -89,6 +92,7 @@ const CobrosBecarioComponent = () => {
         {/* COBROS NO RELIZADOS POR BECARIO */}
 
         <Heading as={"h3"}>Cobros NO efectuados</Heading>
+
         {loading ? (
           <CircularProgress />
         ) : (
