@@ -11,13 +11,33 @@ export const routes = [
   },
   {
     title: "Historial Cobros",
-    path: "/admin/historial",
+    path: "/admin/cobros",
     roles: ["CONCEJAL", "ADMIN"],
   },
   {
     title: "Exportar",
     path: "/admin/exportar",
     roles: ["CONCEJAL", "ADMIN"],
+  },
+  {
+    title: "Becas",
+    path: "/admin/becas",
+    roles: ["ADMIN"],
+  },
+  {
+    title: "Carreras",
+    path: "/admin/carreras",
+    roles: ["ADMIN"],
+  },
+  {
+    title: "Cafeterias",
+    path: "/admin/cafeterias",
+    roles: ["ADMIN"],
+  },
+  {
+    title: "Usuarios",
+    path: "/admin/usuarios",
+    roles: ["ADMIN"],
   },
   {
     title: "Configuraciones",
