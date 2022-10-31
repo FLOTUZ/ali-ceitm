@@ -31,6 +31,7 @@ const AuthProvider = ({ children }: IAuthProvider) => {
 
   const logout = () => {
     localStorage.removeItem("access-token");
+    setUser(null);
     router.push("/auth/login");
   };
 
