@@ -1,5 +1,3 @@
-import jwt from "jsonwebtoken";
-import path from "path";
 import { ApolloServer } from "apollo-server-micro";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 

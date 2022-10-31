@@ -9,7 +9,7 @@ export const initInterceptors = () => {
 };
 export const axiosClient = () => {
   return axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API,
+    baseURL: process.env.NEXT_PUBLIC_REST_API,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + localStorage.getItem("access-token"),

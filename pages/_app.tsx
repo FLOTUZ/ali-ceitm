@@ -16,7 +16,7 @@ import AuthProvider from "context/auth.provider";
 initInterceptors();
 
 const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_API + "/graphql",
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_API + "/graphql",
 });
 
 const authLink = setContext((_, { headers }) => {
