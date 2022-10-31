@@ -1,10 +1,9 @@
+import Link from "next/link";
 import { useContext } from "react";
 import {
   Box,
   Center,
   Drawer,
-  Link,
-  useDisclosure,
   Text,
   DrawerBody,
   DrawerContent,
@@ -35,7 +34,6 @@ const DrawerComponent = ({ onClose, isOpen, title }: DrawerComponentProps) => {
               <Link
                 key={index}
                 href={route.path}
-                as="li"
                 style={{
                   listStyle: "none",
                 }}
