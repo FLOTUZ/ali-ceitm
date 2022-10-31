@@ -22,9 +22,25 @@ export const BecarioSchema = gql`
     updatedAt: DateTime
   }
 
+  type BecarioWithRelations {
+    id: Int
+    en_lista_espera: Boolean
+    puede_cobrar: Boolean
+    personaId: Int
+    turno: String
+    semana_cobro: String
+    becaId: Int
+    createdAt: DateTime
+    updatedAt: DateTime
+    persona: Persona
+    beca: Beca
+  }
+
   type Query {
     allBecarios(pagination: Pagination): [Becario]
+    allBecariosWithRelations(pagination: Pagination): [BecarioWithRelations]
     becarioById(id: Int!): Becario
+    becarioByIdWithRelations(id: Int!): BecarioWithRelations
   }
 
   type Mutation {

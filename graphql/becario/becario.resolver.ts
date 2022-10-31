@@ -14,6 +14,21 @@ export const BecarioResolver = {
         ...pagination,
       });
     },
+
+    allBecariosWithRelations: async (
+      _: any,
+      { pagination }: Args,
+      { prisma }: IGraphqlContext
+    ) => {
+      return await prisma.becario.findMany({
+        ...pagination,
+        include: {
+          persona: true,
+          beca: true,
+        },
+      });
+    },
+
     becarioById: async (
       _: any,
       { id }: Becario,
@@ -22,6 +37,21 @@ export const BecarioResolver = {
       return await prisma.becario.findUnique({
         where: {
           id,
+        },
+      });
+    },
+    becarioByIdWithRelations: async (
+      _: any,
+      { id }: Becario,
+      { prisma }: IGraphqlContext
+    ) => {
+      return await prisma.becario.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          persona: true,
+          beca: true,
         },
       });
     },
