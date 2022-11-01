@@ -2,13 +2,15 @@ import { ApolloServer } from "apollo-server-micro";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import { loadSchemaSync } from "@graphql-tools/load";
-import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 import { prisma } from "services/prisma.service";
 import { PrismaClient } from "@prisma/client";
 
+import { loadFilesSync } from "@graphql-tools/load-files";
+import { mergeTypeDefs } from "@graphql-tools/merge";
+
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
+import path from "path";
 
 import {
   UserResolver,
@@ -37,9 +39,10 @@ export interface IPayload {
   exp: number;
 }
 
-const typeDefs = loadSchemaSync("./**/*.graphql", {
-  loaders: [new GraphQLFileLoader()],
+const typesArray = loadFilesSync(path.join("./**"), {
+  extensions: ["graphql"],
 });
+const typeDefs = mergeTypeDefs(typesArray);
 
 const context = ({
   req,
@@ -84,6 +87,7 @@ const schema = makeExecutableSchema({
 export const apolloServer = new ApolloServer({
   schema,
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+  introspection: process.env.NODE_ENV !== "production",
   context: context,
 });
 
