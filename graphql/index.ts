@@ -1,16 +1,15 @@
+import jwt from "jsonwebtoken";
+import path from "path";
 import { ApolloServer } from "apollo-server-micro";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { prisma } from "services/prisma.service";
-import { PrismaClient } from "@prisma/client";
 
-import { loadFilesSync } from "@graphql-tools/load-files";
 import { mergeTypeDefs } from "@graphql-tools/merge";
 
 import { NextApiRequest, NextApiResponse } from "next";
-import jwt from "jsonwebtoken";
-import path from "path";
+import { IPayload, valiteAndRefreshToken } from "./context";
 
 import {
   UserResolver,
@@ -25,24 +24,21 @@ import {
   CarreraResolver,
   SettingsResolver,
 } from "./resolvers";
-
-export interface IGraphqlContext {
-  prisma: PrismaClient;
-  idUser: number | null;
-  role: string | null;
-  res: NextApiResponse | null;
-}
-
-export interface IPayload {
-  id: number;
-  role: string;
-  exp: number;
-}
-
-const typesArray = loadFilesSync(path.join("./**"), {
-  extensions: ["graphql"],
-});
-const typeDefs = mergeTypeDefs(typesArray);
+import {
+  BecaSchema,
+  BecarioSchema,
+  CafeteriaSchema,
+  CarreraSchema,
+  CobroSchema,
+  InputSchema,
+  ScalarsSchema,
+  ImagenSchema,
+  PersonaSchema,
+  ProblemaSchema,
+  RoleSchema,
+  SettingsSchema,
+  UserSchema,
+} from "./schemas";
 
 const context = ({
   req,
@@ -66,6 +62,22 @@ const context = ({
     role: payload.role,
   };
 };
+
+const typeDefs = mergeTypeDefs([
+  BecaSchema,
+  BecarioSchema,
+  CafeteriaSchema,
+  CarreraSchema,
+  CobroSchema,
+  InputSchema,
+  ScalarsSchema,
+  ImagenSchema,
+  PersonaSchema,
+  ProblemaSchema,
+  RoleSchema,
+  SettingsSchema,
+  UserSchema,
+]);
 
 const schema = makeExecutableSchema({
   typeDefs,
@@ -92,31 +104,3 @@ export const apolloServer = new ApolloServer({
 });
 
 export const startServer = apolloServer.start();
-
-//refresh token
-function valiteAndRefreshToken(req: NextApiRequest, res: NextApiResponse) {
-  const token = req.headers;
-  // Get token withoit the bearer
-  const cleanToken = token.authorization?.split(" ")[1];
-
-  try {
-    const payload = jwt.verify(
-      cleanToken!,
-      process.env.JWT_SECRET!
-    ) as IPayload;
-
-    const newToken = jwt.sign(
-      {
-        id: payload.id,
-        role: payload.role,
-        exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
-      },
-      process.env.JWT_SECRET!
-    );
-    res.setHeader("authorization", `Bearer ${newToken}`);
-
-    return payload;
-  } catch (error) {
-    return null;
-  }
-}

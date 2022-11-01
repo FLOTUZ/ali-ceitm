@@ -1,3 +1,6 @@
+import { gql } from "apollo-server-core";
+
+export const RoleSchema = gql`
 input CreateRoleInput {
   rol_name: String!
   is_deleted: Boolean!
@@ -21,4 +24,4 @@ type Mutation {
   createRole(data: CreateRoleInput!): Role
   updateRole(id: Int!, data: CreateRoleInput!): Role
   deleteRole(id: Int!): Role
-}
+} `;
