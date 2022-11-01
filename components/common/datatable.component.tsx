@@ -5,9 +5,14 @@ import DataTable, { TableColumn } from "react-data-table-component";
 interface DatatableComponentProps {
   title?: string;
   data: any[] | undefined;
+  onRowClicked: (row: any) => void;
 }
 
-const DatatableComponent = ({ title, data }: DatatableComponentProps) => {
+const DatatableComponent = ({
+  title,
+  data,
+  onRowClicked,
+}: DatatableComponentProps) => {
   const [columdDT, setColumnsDT] = useState<TableColumn<Cobro>[]>([]);
   const columnsOfData = useCallback(() => {
     if (data && data.length > 0) {
@@ -41,6 +46,9 @@ const DatatableComponent = ({ title, data }: DatatableComponentProps) => {
       columns={columdDT}
       data={data!}
       fixedHeader={true}
+      onRowClicked={(row) => {
+        onRowClicked(row);
+      }}
       dense
       highlightOnHover
     />

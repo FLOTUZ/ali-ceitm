@@ -1,0 +1,18 @@
+query becarioByIdWithRelations($id: Int!) {
+  becarioByIdWithRelations(id: $id) {
+    id
+    persona {
+      nombres
+      a_paterno
+      a_materno
+      n_control
+      campus
+    }
+    en_lista_espera
+    puede_cobrar
+    turno
+    semana_cobro
+    createdAt
+    updatedAt
+  }
+}

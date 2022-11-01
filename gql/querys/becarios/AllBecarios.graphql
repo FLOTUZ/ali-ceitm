@@ -1,0 +1,20 @@
+query GetAllBecarios {
+  allBecariosWithRelations {
+    id
+    persona {
+      id
+      nombres
+      a_paterno
+      a_materno
+      n_control
+      telefono
+      whatsapp
+    }
+    en_lista_espera
+    puede_cobrar
+    turno
+    semana_cobro
+    createdAt
+    updatedAt
+  }
+}

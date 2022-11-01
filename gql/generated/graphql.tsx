@@ -41,6 +41,21 @@ export type Becario = {
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
+export type BecarioWithRelations = {
+  __typename?: 'BecarioWithRelations';
+  beca?: Maybe<Beca>;
+  becaId?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  en_lista_espera?: Maybe<Scalars['Boolean']>;
+  id?: Maybe<Scalars['Int']>;
+  persona?: Maybe<Persona>;
+  personaId?: Maybe<Scalars['Int']>;
+  puede_cobrar?: Maybe<Scalars['Boolean']>;
+  semana_cobro?: Maybe<Scalars['String']>;
+  turno?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
 export type Cafeteria = {
   __typename?: 'Cafeteria';
   campus?: Maybe<Scalars['String']>;
@@ -421,6 +436,7 @@ export type Problema = {
 export type Query = {
   __typename?: 'Query';
   allBecarios?: Maybe<Array<Maybe<Becario>>>;
+  allBecariosWithRelations?: Maybe<Array<Maybe<BecarioWithRelations>>>;
   allBecas?: Maybe<Array<Maybe<Beca>>>;
   allCafeterias?: Maybe<Array<Maybe<Cafeteria>>>;
   allCarreras?: Maybe<Array<Maybe<Carrera>>>;
@@ -433,6 +449,7 @@ export type Query = {
   allUsers?: Maybe<Array<Maybe<User>>>;
   becaById?: Maybe<Beca>;
   becarioById?: Maybe<Becario>;
+  becarioByIdWithRelations?: Maybe<BecarioWithRelations>;
   cafeteriaById?: Maybe<Cafeteria>;
   carreraById?: Maybe<Carrera>;
   cobroById?: Maybe<Cobro>;
@@ -454,6 +471,11 @@ export type Query = {
 
 
 export type QueryAllBecariosArgs = {
+  pagination?: InputMaybe<Pagination>;
+};
+
+
+export type QueryAllBecariosWithRelationsArgs = {
   pagination?: InputMaybe<Pagination>;
 };
 
@@ -499,6 +521,11 @@ export type QueryBecaByIdArgs = {
 
 
 export type QueryBecarioByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryBecarioByIdWithRelationsArgs = {
   id: Scalars['Int'];
 };
 
@@ -581,18 +608,6 @@ export type User = {
   updatedAt: Scalars['DateTime'];
 };
 
-export type CarreraByIdQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type CarreraByIdQuery = { __typename?: 'Query', carreraById?: { __typename?: 'Carrera', id?: number | null, nombre?: string | null } | null };
-
-export type GenerateCobroCodeQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GenerateCobroCodeQuery = { __typename?: 'Query', generateCobroCode?: { __typename?: 'Cobro', id?: number | null, codigo_cobro?: string | null, concepto?: string | null } | null };
-
 export type RealizarCobroMutationVariables = Exact<{
   codigo: Scalars['String'];
 }>;
@@ -600,10 +615,29 @@ export type RealizarCobroMutationVariables = Exact<{
 
 export type RealizarCobroMutation = { __typename?: 'Mutation', realizeCobro?: { __typename?: 'Cobro', concepto?: string | null, codigo_cobro?: string | null, fecha_cobro?: any | null } | null };
 
+export type GetAllBecariosQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllBecariosQuery = { __typename?: 'Query', allBecariosWithRelations?: Array<{ __typename?: 'BecarioWithRelations', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, semana_cobro?: string | null, createdAt?: any | null, updatedAt?: any | null, persona?: { __typename?: 'Persona', id?: number | null, nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, telefono?: string | null, whatsapp?: string | null } | null } | null> | null };
+
+export type BecarioByIdWithRelationsQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type BecarioByIdWithRelationsQuery = { __typename?: 'Query', becarioByIdWithRelations?: { __typename?: 'BecarioWithRelations', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, semana_cobro?: string | null, createdAt?: any | null, updatedAt?: any | null, persona?: { __typename?: 'Persona', nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, campus?: number | null } | null } | null };
+
 export type GetAllCarrerasQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAllCarrerasQuery = { __typename?: 'Query', allCarreras?: Array<{ __typename?: 'Carrera', id?: number | null, nombre?: string | null } | null> | null };
+
+export type CarreraByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type CarreraByIdQuery = { __typename?: 'Query', carreraById?: { __typename?: 'Carrera', id?: number | null, nombre?: string | null } | null };
 
 export type CobrosBecarioQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -614,6 +648,11 @@ export type CobrosCajeroQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type CobrosCajeroQuery = { __typename?: 'Query', cobrosRegistradosPorCajero?: Array<{ __typename?: 'Cobro', id?: number | null, becarioId?: number | null, concepto?: string | null, codigo_cobro?: string | null, fecha_cobro?: any | null, updatedAt?: any | null } | null> | null };
+
+export type GenerateCobroCodeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GenerateCobroCodeQuery = { __typename?: 'Query', generateCobroCode?: { __typename?: 'Cobro', id?: number | null, codigo_cobro?: string | null, concepto?: string | null } | null };
 
 export type PersonaSessionQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -631,6 +670,173 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, email: string, roleId?: number | null, is_active: boolean } | null, currentRole?: { __typename?: 'Role', id?: number | null, rol_name?: string | null } | null };
 
 
+export const RealizarCobroDocument = gql`
+    mutation RealizarCobro($codigo: String!) {
+  realizeCobro(codigo: $codigo) {
+    concepto
+    codigo_cobro
+    fecha_cobro
+  }
+}
+    `;
+export type RealizarCobroMutationFn = Apollo.MutationFunction<RealizarCobroMutation, RealizarCobroMutationVariables>;
+
+/**
+ * __useRealizarCobroMutation__
+ *
+ * To run a mutation, you first call `useRealizarCobroMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRealizarCobroMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [realizarCobroMutation, { data, loading, error }] = useRealizarCobroMutation({
+ *   variables: {
+ *      codigo: // value for 'codigo'
+ *   },
+ * });
+ */
+export function useRealizarCobroMutation(baseOptions?: Apollo.MutationHookOptions<RealizarCobroMutation, RealizarCobroMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RealizarCobroMutation, RealizarCobroMutationVariables>(RealizarCobroDocument, options);
+      }
+export type RealizarCobroMutationHookResult = ReturnType<typeof useRealizarCobroMutation>;
+export type RealizarCobroMutationResult = Apollo.MutationResult<RealizarCobroMutation>;
+export type RealizarCobroMutationOptions = Apollo.BaseMutationOptions<RealizarCobroMutation, RealizarCobroMutationVariables>;
+export const GetAllBecariosDocument = gql`
+    query GetAllBecarios {
+  allBecariosWithRelations {
+    id
+    persona {
+      id
+      nombres
+      a_paterno
+      a_materno
+      n_control
+      telefono
+      whatsapp
+    }
+    en_lista_espera
+    puede_cobrar
+    turno
+    semana_cobro
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetAllBecariosQuery__
+ *
+ * To run a query within a React component, call `useGetAllBecariosQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllBecariosQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllBecariosQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllBecariosQuery(baseOptions?: Apollo.QueryHookOptions<GetAllBecariosQuery, GetAllBecariosQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllBecariosQuery, GetAllBecariosQueryVariables>(GetAllBecariosDocument, options);
+      }
+export function useGetAllBecariosLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllBecariosQuery, GetAllBecariosQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllBecariosQuery, GetAllBecariosQueryVariables>(GetAllBecariosDocument, options);
+        }
+export type GetAllBecariosQueryHookResult = ReturnType<typeof useGetAllBecariosQuery>;
+export type GetAllBecariosLazyQueryHookResult = ReturnType<typeof useGetAllBecariosLazyQuery>;
+export type GetAllBecariosQueryResult = Apollo.QueryResult<GetAllBecariosQuery, GetAllBecariosQueryVariables>;
+export const BecarioByIdWithRelationsDocument = gql`
+    query becarioByIdWithRelations($id: Int!) {
+  becarioByIdWithRelations(id: $id) {
+    id
+    persona {
+      nombres
+      a_paterno
+      a_materno
+      n_control
+      campus
+    }
+    en_lista_espera
+    puede_cobrar
+    turno
+    semana_cobro
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useBecarioByIdWithRelationsQuery__
+ *
+ * To run a query within a React component, call `useBecarioByIdWithRelationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBecarioByIdWithRelationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBecarioByIdWithRelationsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useBecarioByIdWithRelationsQuery(baseOptions: Apollo.QueryHookOptions<BecarioByIdWithRelationsQuery, BecarioByIdWithRelationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BecarioByIdWithRelationsQuery, BecarioByIdWithRelationsQueryVariables>(BecarioByIdWithRelationsDocument, options);
+      }
+export function useBecarioByIdWithRelationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BecarioByIdWithRelationsQuery, BecarioByIdWithRelationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BecarioByIdWithRelationsQuery, BecarioByIdWithRelationsQueryVariables>(BecarioByIdWithRelationsDocument, options);
+        }
+export type BecarioByIdWithRelationsQueryHookResult = ReturnType<typeof useBecarioByIdWithRelationsQuery>;
+export type BecarioByIdWithRelationsLazyQueryHookResult = ReturnType<typeof useBecarioByIdWithRelationsLazyQuery>;
+export type BecarioByIdWithRelationsQueryResult = Apollo.QueryResult<BecarioByIdWithRelationsQuery, BecarioByIdWithRelationsQueryVariables>;
+export const GetAllCarrerasDocument = gql`
+    query GetAllCarreras {
+  allCarreras {
+    id
+    nombre
+  }
+}
+    `;
+
+/**
+ * __useGetAllCarrerasQuery__
+ *
+ * To run a query within a React component, call `useGetAllCarrerasQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllCarrerasQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllCarrerasQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllCarrerasQuery(baseOptions?: Apollo.QueryHookOptions<GetAllCarrerasQuery, GetAllCarrerasQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllCarrerasQuery, GetAllCarrerasQueryVariables>(GetAllCarrerasDocument, options);
+      }
+export function useGetAllCarrerasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllCarrerasQuery, GetAllCarrerasQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllCarrerasQuery, GetAllCarrerasQueryVariables>(GetAllCarrerasDocument, options);
+        }
+export type GetAllCarrerasQueryHookResult = ReturnType<typeof useGetAllCarrerasQuery>;
+export type GetAllCarrerasLazyQueryHookResult = ReturnType<typeof useGetAllCarrerasLazyQuery>;
+export type GetAllCarrerasQueryResult = Apollo.QueryResult<GetAllCarrerasQuery, GetAllCarrerasQueryVariables>;
 export const CarreraByIdDocument = gql`
     query CarreraById($id: Int!) {
   carreraById(id: $id) {
@@ -667,112 +873,6 @@ export function useCarreraByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type CarreraByIdQueryHookResult = ReturnType<typeof useCarreraByIdQuery>;
 export type CarreraByIdLazyQueryHookResult = ReturnType<typeof useCarreraByIdLazyQuery>;
 export type CarreraByIdQueryResult = Apollo.QueryResult<CarreraByIdQuery, CarreraByIdQueryVariables>;
-export const GenerateCobroCodeDocument = gql`
-    query GenerateCobroCode {
-  generateCobroCode {
-    id
-    codigo_cobro
-    concepto
-  }
-}
-    `;
-
-/**
- * __useGenerateCobroCodeQuery__
- *
- * To run a query within a React component, call `useGenerateCobroCodeQuery` and pass it any options that fit your needs.
- * When your component renders, `useGenerateCobroCodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGenerateCobroCodeQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGenerateCobroCodeQuery(baseOptions?: Apollo.QueryHookOptions<GenerateCobroCodeQuery, GenerateCobroCodeQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GenerateCobroCodeQuery, GenerateCobroCodeQueryVariables>(GenerateCobroCodeDocument, options);
-      }
-export function useGenerateCobroCodeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GenerateCobroCodeQuery, GenerateCobroCodeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GenerateCobroCodeQuery, GenerateCobroCodeQueryVariables>(GenerateCobroCodeDocument, options);
-        }
-export type GenerateCobroCodeQueryHookResult = ReturnType<typeof useGenerateCobroCodeQuery>;
-export type GenerateCobroCodeLazyQueryHookResult = ReturnType<typeof useGenerateCobroCodeLazyQuery>;
-export type GenerateCobroCodeQueryResult = Apollo.QueryResult<GenerateCobroCodeQuery, GenerateCobroCodeQueryVariables>;
-export const RealizarCobroDocument = gql`
-    mutation RealizarCobro($codigo: String!) {
-  realizeCobro(codigo: $codigo) {
-    concepto
-    codigo_cobro
-    fecha_cobro
-  }
-}
-    `;
-export type RealizarCobroMutationFn = Apollo.MutationFunction<RealizarCobroMutation, RealizarCobroMutationVariables>;
-
-/**
- * __useRealizarCobroMutation__
- *
- * To run a mutation, you first call `useRealizarCobroMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useRealizarCobroMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [realizarCobroMutation, { data, loading, error }] = useRealizarCobroMutation({
- *   variables: {
- *      codigo: // value for 'codigo'
- *   },
- * });
- */
-export function useRealizarCobroMutation(baseOptions?: Apollo.MutationHookOptions<RealizarCobroMutation, RealizarCobroMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RealizarCobroMutation, RealizarCobroMutationVariables>(RealizarCobroDocument, options);
-      }
-export type RealizarCobroMutationHookResult = ReturnType<typeof useRealizarCobroMutation>;
-export type RealizarCobroMutationResult = Apollo.MutationResult<RealizarCobroMutation>;
-export type RealizarCobroMutationOptions = Apollo.BaseMutationOptions<RealizarCobroMutation, RealizarCobroMutationVariables>;
-export const GetAllCarrerasDocument = gql`
-    query GetAllCarreras {
-  allCarreras {
-    id
-    nombre
-  }
-}
-    `;
-
-/**
- * __useGetAllCarrerasQuery__
- *
- * To run a query within a React component, call `useGetAllCarrerasQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllCarrerasQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAllCarrerasQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAllCarrerasQuery(baseOptions?: Apollo.QueryHookOptions<GetAllCarrerasQuery, GetAllCarrerasQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAllCarrerasQuery, GetAllCarrerasQueryVariables>(GetAllCarrerasDocument, options);
-      }
-export function useGetAllCarrerasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllCarrerasQuery, GetAllCarrerasQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAllCarrerasQuery, GetAllCarrerasQueryVariables>(GetAllCarrerasDocument, options);
-        }
-export type GetAllCarrerasQueryHookResult = ReturnType<typeof useGetAllCarrerasQuery>;
-export type GetAllCarrerasLazyQueryHookResult = ReturnType<typeof useGetAllCarrerasLazyQuery>;
-export type GetAllCarrerasQueryResult = Apollo.QueryResult<GetAllCarrerasQuery, GetAllCarrerasQueryVariables>;
 export const CobrosBecarioDocument = gql`
     query CobrosBecario {
   currentPersona {
@@ -868,6 +968,42 @@ export function useCobrosCajeroLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type CobrosCajeroQueryHookResult = ReturnType<typeof useCobrosCajeroQuery>;
 export type CobrosCajeroLazyQueryHookResult = ReturnType<typeof useCobrosCajeroLazyQuery>;
 export type CobrosCajeroQueryResult = Apollo.QueryResult<CobrosCajeroQuery, CobrosCajeroQueryVariables>;
+export const GenerateCobroCodeDocument = gql`
+    query GenerateCobroCode {
+  generateCobroCode {
+    id
+    codigo_cobro
+    concepto
+  }
+}
+    `;
+
+/**
+ * __useGenerateCobroCodeQuery__
+ *
+ * To run a query within a React component, call `useGenerateCobroCodeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGenerateCobroCodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGenerateCobroCodeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGenerateCobroCodeQuery(baseOptions?: Apollo.QueryHookOptions<GenerateCobroCodeQuery, GenerateCobroCodeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GenerateCobroCodeQuery, GenerateCobroCodeQueryVariables>(GenerateCobroCodeDocument, options);
+      }
+export function useGenerateCobroCodeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GenerateCobroCodeQuery, GenerateCobroCodeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GenerateCobroCodeQuery, GenerateCobroCodeQueryVariables>(GenerateCobroCodeDocument, options);
+        }
+export type GenerateCobroCodeQueryHookResult = ReturnType<typeof useGenerateCobroCodeQuery>;
+export type GenerateCobroCodeLazyQueryHookResult = ReturnType<typeof useGenerateCobroCodeLazyQuery>;
+export type GenerateCobroCodeQueryResult = Apollo.QueryResult<GenerateCobroCodeQuery, GenerateCobroCodeQueryVariables>;
 export const PersonaSessionDocument = gql`
     query PersonaSession {
   currentPersona {
