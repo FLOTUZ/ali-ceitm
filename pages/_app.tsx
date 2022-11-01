@@ -11,7 +11,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import AuthProvider from "providers/auth.provider";
+import AuthProvider from "context/auth.provider";
 
 initInterceptors();
 

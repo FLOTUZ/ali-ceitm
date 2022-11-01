@@ -15,7 +15,7 @@ import Usuario from "../assets/usuario.svg";
 
 import ErrorComponent from "@/common/error.component";
 import LoaderComponent from "@/common/loader.component";
-import { AuthContext } from "providers/auth.provider";
+import { AuthContext } from "context/auth.provider";
 import { useAllSettingsQuery } from "gql/generated/graphql";
 import {
   Button,

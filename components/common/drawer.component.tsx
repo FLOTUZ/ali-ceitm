@@ -12,7 +12,7 @@ import {
   DrawerOverlay,
 } from "@chakra-ui/react";
 
-import { AuthContext } from "providers/auth.provider";
+import { AuthContext } from "context/auth.provider";
 import { routes } from "configs/routes";
 
 interface DrawerComponentProps {

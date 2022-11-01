@@ -30,10 +30,10 @@ const AuthProvider = ({ children }: IAuthProvider) => {
 
   const { data, loading, refetch: refetchUser } = useCurrentUserQuery();
 
-  const logout = useCallback(() => {
+  const logout = () => {
     localStorage.removeItem("access-token");
     router.push("/auth/login");
-  }, [router]);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("access-token");
