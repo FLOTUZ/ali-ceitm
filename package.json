@@ -15,7 +15,7 @@
     "prisma:studio": "prisma studio",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:push": "prisma db push",
-    "codegen": "graphql-codegen --config codegen.ts"
+    "graphql:codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {
     "@apollo/client": "^3.7.0",

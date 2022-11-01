@@ -1,4 +1,4 @@
-import { ApolloServer, AuthenticationError } from "apollo-server-micro";
+import { ApolloServer } from "apollo-server-micro";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 
 import { makeExecutableSchema } from "@graphql-tools/schema";
