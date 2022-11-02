@@ -38,9 +38,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ApolloProvider client={client}>
       <ChakraProvider>
-        {/* <AuthProvider> */}
+        <AuthProvider>
           <Component {...pageProps} />
-        {/* </AuthProvider> */}
+        </AuthProvider>
       </ChakraProvider>
     </ApolloProvider>
   );

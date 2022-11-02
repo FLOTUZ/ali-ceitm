@@ -1,9 +1,8 @@
 import LoaderComponent from "@/common/loader.component";
-import { gql, useQuery } from "@apollo/client";
 import { Role, User } from "@prisma/client";
 import { useCurrentUserQuery } from "gql/generated/graphql";
 import { useRouter } from "next/router";
-import { createContext, useCallback, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 interface IAuthContext {
   user: User | null;
