@@ -1,7 +1,7 @@
 import { Becario } from "@prisma/client";
 
 import { Args, BecarioDTO } from "@models";
-import { IGraphqlContext } from "graphql";
+import { IGraphqlContext } from "../context";
 
 export const BecarioResolver = {
   Query: {

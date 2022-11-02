@@ -1,7 +1,7 @@
 import { Carrera } from "@prisma/client";
 
 import { Args, CarreraDto } from "@models";
-import { IGraphqlContext } from "graphql";
+import { IGraphqlContext } from "../context";
 
 export const CarreraResolver = {
   Query: {

@@ -1,7 +1,7 @@
 import { Settings } from "@prisma/client";
 
 import { Args, SettingsDTO } from "@models";
-import { IGraphqlContext } from "graphql";
+import { IGraphqlContext } from "../context";
 
 export const SettingsResolver = {
   Query: {

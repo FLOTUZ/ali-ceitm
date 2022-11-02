@@ -1,7 +1,7 @@
 import { Cafeteria } from "@prisma/client";
 
 import { Args, CafeteriaDTO } from "@models";
-import { IGraphqlContext } from "graphql";
+import { IGraphqlContext } from "../context";
 
 export const CafeteriaResolver = {
   Query: {
