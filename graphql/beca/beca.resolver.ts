@@ -1,7 +1,7 @@
 import { Beca } from "@prisma/client";
 
 import { Args, BecaDTO } from "@models";
-import { IGraphqlContext } from "graphql";
+import { IGraphqlContext } from "../context";
 
 export const BecaResolver = {
   Query: {

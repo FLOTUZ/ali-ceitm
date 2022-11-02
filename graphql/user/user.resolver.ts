@@ -1,5 +1,5 @@
 import { User } from "@prisma/client";
-import { IGraphqlContext } from "graphql";
+import { IGraphqlContext } from "../context";
 import { Args } from "graphql/models";
 import { UserDto } from "./user.dto";
 

@@ -1,7 +1,7 @@
 import { Imagen } from "@prisma/client";
 
 import { Args, ImagenDTO } from "@models";
-import { IGraphqlContext } from "graphql";
+import { IGraphqlContext } from "../context";
 
 export const ImagenResolver = {
   Query: {

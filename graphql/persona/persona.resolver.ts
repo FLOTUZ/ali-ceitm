@@ -1,7 +1,7 @@
 import { Persona } from "@prisma/client";
 
 import { Args, PersonaDTO } from "@models";
-import { IGraphqlContext } from "graphql";
+import { IGraphqlContext } from "../context";
 
 export const PersonaResolver = {
   Query: {

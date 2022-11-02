@@ -1,7 +1,7 @@
 import { Problema } from "@prisma/client";
 
 import { Args, ProblemaDTO } from "@models";
-import { IGraphqlContext } from "graphql";
+import { IGraphqlContext } from "../context";
 
 export const ProblemaResolver = {
   Query: {

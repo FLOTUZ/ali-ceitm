@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthContext } from "providers/auth.provider";
+import { AuthContext } from "context/auth.provider";
 import { Button } from "@chakra-ui/react";
 import ErrorComponent from "@/common/error.component";
 import CobrosBecarioComponent from "@/views/cobros-becario.component";
