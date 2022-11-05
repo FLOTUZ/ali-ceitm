@@ -87,9 +87,9 @@ function CobroQr() {
 
   return (
     <>
-      <Center h={"100vh"} bgColor="black">
+      <Center h={"100vh"}>
         <VStack>
-          <Heading as="h4" color={"white"}>
+          <Heading as="h4">
             {qrValue}
           </Heading>
           <div style={{ background: "white", padding: "16px" }}>

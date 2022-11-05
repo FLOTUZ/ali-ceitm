@@ -21,8 +21,7 @@ const TextFieldComponent = (props: ITextFieldProps) => {
           name={props.name}
           value={props.value}
           onChange={props.handleChange}
-          bgColor={props.errors && props.touched ? "red.100" : "gray.100"}
-          _focus={{ bgColor: "gray.100" }}
+          bgColor={props.errors && props.touched ? "red.100" : undefined}
         />
       </FormControl>
       {props.touched && props.errors ? (

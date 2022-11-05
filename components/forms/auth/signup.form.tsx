@@ -12,7 +12,6 @@ import {
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
 import { SignupSchema } from "./auth.validators";
-import { useQuery } from "@apollo/client";
 import { Carrera } from "@prisma/client";
 import { useEffect, useState } from "react";
 import { createUsuario } from "./auth.actions";
@@ -232,8 +231,6 @@ function SingupForm() {
             type="submit"
             w={"100%"}
             height={"3rem"}
-            bgColor="black"
-            color={"white"}
             _hover={{ bgColor: "blueviolet" }}
           >
             {isSubmitting ? "Loading..." : "Registrar"}

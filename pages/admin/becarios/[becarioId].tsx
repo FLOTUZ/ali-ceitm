@@ -143,7 +143,6 @@ const BecarioId = () => {
             placeholder="Beca del becario"
             size="lg"
             defaultValue={becario?.beca?.id!}
-            bgColor={"black"}
           >
             {becasList.map((beca: Beca) => {
               return (

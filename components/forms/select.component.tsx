@@ -19,7 +19,7 @@ const SelectComponent = (props: ISelectProps) => {
         name={props.name}
         placeholder={props.placeholder}
         onChange={(e) => props.handleChange(e)}
-        bgColor={props.touched && props.errors ? "red.100" : "white"}
+        bgColor={props.touched && props.errors ? "red.100" : undefined}
       >
         {props.children?.map((child) => {
           return child;
