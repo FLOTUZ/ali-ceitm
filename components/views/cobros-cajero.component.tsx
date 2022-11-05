@@ -38,7 +38,7 @@ const CobrosCajeroComponent = () => {
   }
 
   return (
-    <VStack h="100vh" color={"white"} bgColor={"black"} padding="3rem">
+    <VStack h="100vh" padding="3rem">
       <Heading as={"h1"}>Perfil</Heading>
 
       <VStack h={"100%"} w="100%">

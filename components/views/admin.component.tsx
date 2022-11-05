@@ -21,7 +21,7 @@ const AdminComponent = () => {
           <FiMenu size={40} />
         </ButtonIconComponent>
 
-        <Heading as={"h1"} color="white">
+        <Heading as={"h1"}>
           Perfil
         </Heading>
         <CurrentPersonaComponent />

@@ -47,7 +47,7 @@ const CobrosBecarioComponent = () => {
   }
 
   return (
-    <VStack h="100vh" color={"white"} bgColor={"black"} padding="3rem">
+    <VStack h="100vh" padding="3rem">
       <Heading as={"h1"} w={"100%"}>
         Perfil
       </Heading>
