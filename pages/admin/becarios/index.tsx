@@ -9,12 +9,20 @@ import {
 } from "gql/generated/graphql";
 import {
   Box,
+  Button,
+  Container,
   DrawerHeader,
   Heading,
+  HStack,
   Modal,
   ModalBody,
+  ModalCloseButton,
   ModalContent,
+  ModalFooter,
+  ModalHeader,
   ModalOverlay,
+  SimpleGrid,
+  Spacer,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -23,6 +31,8 @@ import { FiMenu } from "react-icons/fi";
 import { useState } from "react";
 import { Persona } from "@prisma/client";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import NuevoBecarioForm from "./new";
 
 function Becarios() {
   const toast = useToast();
@@ -86,28 +96,26 @@ function Becarios() {
           isOpen={isOpen}
           onClose={onClose}
         />
-        <Heading as={"h1"} color="white">
+
+        <Heading as={"h1"} color="white" mb={"2rem"}>
           Becarios
         </Heading>
+
+        <Button colorScheme={"blue"} onClick={onOpenModal}>
+          Agregar becario
+        </Button>
 
         <Box mt={8} w={"100%"}>
           <DatatableComponent
             data={becariosList}
             onRowClicked={(row) => {
-              router.push(`/admin/becarios/${row.id}`)
+              router.push(`/admin/becarios/${row.id}`);
             }}
           />
         </Box>
       </DefaultLayout>
 
-      <Modal isOpen={isOpenModal} onClose={onCloseModal} >
-      <ModalOverlay />
-      <ModalContent>
-        <DrawerHeader borderBottomWidth="1px">Becario</DrawerHeader>
-        <ModalBody>
-        </ModalBody>
-      </ModalContent>
-      </Modal>
+      <NuevoBecarioForm isOpenModal={isOpenModal} onCloseModal={onCloseModal} />
     </>
   );
 }

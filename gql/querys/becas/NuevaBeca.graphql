@@ -1,0 +1,12 @@
+query NuevaBeca {
+  allBecas {
+    id
+    nombre
+  }
+  allPersonas {
+    id
+    nombres
+    a_paterno
+    a_materno
+  }
+}

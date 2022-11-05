@@ -1,0 +1,27 @@
+mutation NuevoBecario(
+  $becaId: Int!
+  $personaId: Int!
+  $turno: String!
+  $semana_cobro: String!
+  $en_lista_espera: Boolean!
+  $puede_cobrar: Boolean!
+) {
+  createBecario(
+    data: {
+      becaId: $becaId
+      personaId: $personaId
+      turno: $turno
+      semana_cobro: $semana_cobro
+      en_lista_espera: $en_lista_espera
+      puede_cobrar: $puede_cobrar
+    }
+  ) {
+    id
+    becaId
+    personaId
+    turno
+    semana_cobro
+    puede_cobrar
+    en_lista_espera
+  }
+}

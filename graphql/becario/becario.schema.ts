@@ -7,7 +7,7 @@ export const BecarioSchema = gql`
     semana_cobro: String!
     en_lista_espera: Boolean!
     puede_cobrar: Boolean!
-    becaId: Boolean!
+    becaId: Int!
   }
 
   type Becario {

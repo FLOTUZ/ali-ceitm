@@ -97,7 +97,7 @@ export type CreateBecaInput = {
 };
 
 export type CreateBecatioInput = {
-  becaId: Scalars['Boolean'];
+  becaId: Scalars['Int'];
   en_lista_espera: Scalars['Boolean'];
   personaId: Scalars['Int'];
   puede_cobrar: Scalars['Boolean'];
@@ -608,6 +608,18 @@ export type User = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type NuevoBecarioMutationVariables = Exact<{
+  becaId: Scalars['Int'];
+  personaId: Scalars['Int'];
+  turno: Scalars['String'];
+  semana_cobro: Scalars['String'];
+  en_lista_espera: Scalars['Boolean'];
+  puede_cobrar: Scalars['Boolean'];
+}>;
+
+
+export type NuevoBecarioMutation = { __typename?: 'Mutation', createBecario?: { __typename?: 'Becario', id?: number | null, becaId?: number | null, personaId?: number | null, turno?: string | null, semana_cobro?: string | null, puede_cobrar?: boolean | null, en_lista_espera?: boolean | null } | null };
+
 export type RealizarCobroMutationVariables = Exact<{
   codigo: Scalars['String'];
 }>;
@@ -626,6 +638,11 @@ export type BecarioByIdWithRelationsQueryVariables = Exact<{
 
 
 export type BecarioByIdWithRelationsQuery = { __typename?: 'Query', becarioByIdWithRelations?: { __typename?: 'BecarioWithRelations', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, semana_cobro?: string | null, createdAt?: any | null, updatedAt?: any | null, persona?: { __typename?: 'Persona', nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, campus?: number | null } | null } | null };
+
+export type NuevaBecaQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type NuevaBecaQuery = { __typename?: 'Query', allBecas?: Array<{ __typename?: 'Beca', id?: number | null, nombre?: string | null } | null> | null, allPersonas?: Array<{ __typename?: 'Persona', id?: number | null, nombres?: string | null, a_paterno?: string | null, a_materno?: string | null } | null> | null };
 
 export type GetAllCarrerasQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -670,6 +687,52 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, email: string, roleId?: number | null, is_active: boolean } | null, currentRole?: { __typename?: 'Role', id?: number | null, rol_name?: string | null } | null };
 
 
+export const NuevoBecarioDocument = gql`
+    mutation NuevoBecario($becaId: Int!, $personaId: Int!, $turno: String!, $semana_cobro: String!, $en_lista_espera: Boolean!, $puede_cobrar: Boolean!) {
+  createBecario(
+    data: {becaId: $becaId, personaId: $personaId, turno: $turno, semana_cobro: $semana_cobro, en_lista_espera: $en_lista_espera, puede_cobrar: $puede_cobrar}
+  ) {
+    id
+    becaId
+    personaId
+    turno
+    semana_cobro
+    puede_cobrar
+    en_lista_espera
+  }
+}
+    `;
+export type NuevoBecarioMutationFn = Apollo.MutationFunction<NuevoBecarioMutation, NuevoBecarioMutationVariables>;
+
+/**
+ * __useNuevoBecarioMutation__
+ *
+ * To run a mutation, you first call `useNuevoBecarioMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNuevoBecarioMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [nuevoBecarioMutation, { data, loading, error }] = useNuevoBecarioMutation({
+ *   variables: {
+ *      becaId: // value for 'becaId'
+ *      personaId: // value for 'personaId'
+ *      turno: // value for 'turno'
+ *      semana_cobro: // value for 'semana_cobro'
+ *      en_lista_espera: // value for 'en_lista_espera'
+ *      puede_cobrar: // value for 'puede_cobrar'
+ *   },
+ * });
+ */
+export function useNuevoBecarioMutation(baseOptions?: Apollo.MutationHookOptions<NuevoBecarioMutation, NuevoBecarioMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<NuevoBecarioMutation, NuevoBecarioMutationVariables>(NuevoBecarioDocument, options);
+      }
+export type NuevoBecarioMutationHookResult = ReturnType<typeof useNuevoBecarioMutation>;
+export type NuevoBecarioMutationResult = Apollo.MutationResult<NuevoBecarioMutation>;
+export type NuevoBecarioMutationOptions = Apollo.BaseMutationOptions<NuevoBecarioMutation, NuevoBecarioMutationVariables>;
 export const RealizarCobroDocument = gql`
     mutation RealizarCobro($codigo: String!) {
   realizeCobro(codigo: $codigo) {
@@ -802,6 +865,47 @@ export function useBecarioByIdWithRelationsLazyQuery(baseOptions?: Apollo.LazyQu
 export type BecarioByIdWithRelationsQueryHookResult = ReturnType<typeof useBecarioByIdWithRelationsQuery>;
 export type BecarioByIdWithRelationsLazyQueryHookResult = ReturnType<typeof useBecarioByIdWithRelationsLazyQuery>;
 export type BecarioByIdWithRelationsQueryResult = Apollo.QueryResult<BecarioByIdWithRelationsQuery, BecarioByIdWithRelationsQueryVariables>;
+export const NuevaBecaDocument = gql`
+    query NuevaBeca {
+  allBecas {
+    id
+    nombre
+  }
+  allPersonas {
+    id
+    nombres
+    a_paterno
+    a_materno
+  }
+}
+    `;
+
+/**
+ * __useNuevaBecaQuery__
+ *
+ * To run a query within a React component, call `useNuevaBecaQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNuevaBecaQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNuevaBecaQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useNuevaBecaQuery(baseOptions?: Apollo.QueryHookOptions<NuevaBecaQuery, NuevaBecaQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NuevaBecaQuery, NuevaBecaQueryVariables>(NuevaBecaDocument, options);
+      }
+export function useNuevaBecaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NuevaBecaQuery, NuevaBecaQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NuevaBecaQuery, NuevaBecaQueryVariables>(NuevaBecaDocument, options);
+        }
+export type NuevaBecaQueryHookResult = ReturnType<typeof useNuevaBecaQuery>;
+export type NuevaBecaLazyQueryHookResult = ReturnType<typeof useNuevaBecaLazyQuery>;
+export type NuevaBecaQueryResult = Apollo.QueryResult<NuevaBecaQuery, NuevaBecaQueryVariables>;
 export const GetAllCarrerasDocument = gql`
     query GetAllCarreras {
   allCarreras {
