@@ -42,7 +42,7 @@ const CurrentPersonaComponent = () => {
           src=""
         />
 
-        <Text textAlign={"center"} w="100%" color={"white"}>
+        <Text textAlign={"center"} w="100%">
           {currentPersona?.nombres} {currentPersona?.a_paterno}{" "}
           {currentPersona?.a_materno}
         </Text>

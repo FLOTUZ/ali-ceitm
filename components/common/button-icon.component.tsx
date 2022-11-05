@@ -13,7 +13,6 @@ const ButtonIconComponent = ({
   return (
     <Box textAlign={"end"}>
       <IconButton
-        bgColor={"black"}
         color="white"
         onClick={onClick}
         aria-label={arialabel}

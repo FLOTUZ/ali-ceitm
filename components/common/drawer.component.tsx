@@ -43,8 +43,6 @@ const DrawerComponent = ({ onClose, isOpen, title }: DrawerComponentProps) => {
                     mt={"0.5rem"}
                     w={"100%"}
                     h={"3rem"}
-                    bgColor={"black"}
-                    color={"white"}
                     textAlign="center"
                     borderRadius="lg"
                     _hover={{

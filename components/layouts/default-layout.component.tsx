@@ -6,7 +6,7 @@ interface DefaultLayoutProps {
 
 const DefaultLayout = ({ children }: DefaultLayoutProps) => {
   return (
-    <Box p={8} m={0} h={"100vh"} bgColor="black">
+    <Box p={8} m={0} h={"100vh"}>
       {children}
     </Box>
   );
