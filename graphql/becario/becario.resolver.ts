@@ -68,12 +68,12 @@ export const BecarioResolver = {
     },
     updateBecario: async (
       _: any,
-      { id, ...data }: Becario,
+      { id, data }: { id: number; data: Becario },
       { prisma }: IGraphqlContext
     ) => {
       const response = await prisma.becario.update({
         where: { id },
-        data,
+        data: data,
       });
       return response;
     },

@@ -5,7 +5,7 @@ import DataTable, { TableColumn } from "react-data-table-component";
 interface DatatableComponentProps {
   title?: string;
   data: any[] | undefined;
-  onRowClicked: (row: any) => void;
+  onRowClicked?: (row: any) => void;
 }
 
 const DatatableComponent = ({
@@ -47,7 +47,9 @@ const DatatableComponent = ({
       data={data!}
       fixedHeader={true}
       onRowClicked={(row) => {
-        onRowClicked(row);
+        if (onRowClicked) {
+          onRowClicked(row);
+        }
       }}
       dense
       highlightOnHover

@@ -2,11 +2,18 @@ query becarioByIdWithRelations($id: Int!) {
   becarioByIdWithRelations(id: $id) {
     id
     persona {
+      id
       nombres
       a_paterno
       a_materno
       n_control
       campus
+      telefono
+      whatsapp
+    }
+    beca {
+      id
+      nombre
     }
     en_lista_espera
     puede_cobrar

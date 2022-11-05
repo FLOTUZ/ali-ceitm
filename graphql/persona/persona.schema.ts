@@ -16,6 +16,21 @@ export const PersonaSchema = gql`
     cafeteriaId: Int
   }
 
+  input UpdatePersonaInput {
+    nombres: String
+    n_control: String
+    telefono: String
+    whatsapp: String
+    email_institucional: String
+    campus: Int
+    a_paterno: String
+    a_materno: String
+    userId: Int
+    carreraId: Int
+    imagenesId: Int
+    cafeteriaId: Int
+  }
+
   type Persona {
     id: Int
     nombres: String
@@ -42,7 +57,7 @@ export const PersonaSchema = gql`
 
   type Mutation {
     createPersona(data: CreatePersonaInput!): Persona
-    updatePersona(id: Int!, data: CreatePersonaInput!): Persona
+    updatePersona(id: Int!, data: UpdatePersonaInput!): Persona
     deletePersona(id: Int!): Persona
   }
 `;

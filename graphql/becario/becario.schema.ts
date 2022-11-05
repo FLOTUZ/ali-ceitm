@@ -10,6 +10,15 @@ export const BecarioSchema = gql`
     becaId: Int!
   }
 
+  input UpdateBecarioInput{
+    personaId: Int
+    turno: String
+    semana_cobro: String
+    en_lista_espera: Boolean
+    puede_cobrar: Boolean
+    becaId: Int
+  }
+
   type Becario {
     id: Int
     en_lista_espera: Boolean
@@ -45,7 +54,7 @@ export const BecarioSchema = gql`
 
   type Mutation {
     createBecario(data: CreateBecatioInput!): Becario
-    updateBecario(id: Int!, data: CreateBecatioInput!): Becario
+    updateBecario(id: Int!, data: UpdateBecarioInput!): BecarioWithRelations
     deleteBecario(id: Int!): Becario
   }
 `;

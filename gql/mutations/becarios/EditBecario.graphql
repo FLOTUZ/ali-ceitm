@@ -1,0 +1,58 @@
+mutation EditBecario(
+  #BECARIO
+  $idBecario: Int!
+  $turno: String
+  $becaId: Int
+  $semana_cobro: String
+  $en_lista_espera: Boolean
+  $puede_cobrar: Boolean
+  #PERSONA
+  $idPersona: Int!
+  $nombres: String
+  $a_paterno: String
+  $a_materno: String
+  $n_control: String
+  $telefono: String
+  $whatsapp: String
+) {
+  updateBecario(
+    id: $idBecario
+    data: {
+      turno: $turno
+      becaId: $becaId
+      semana_cobro: $semana_cobro
+      en_lista_espera: $en_lista_espera
+      puede_cobrar: $puede_cobrar
+    }
+  ) {
+    id
+    personaId
+    en_lista_espera
+    puede_cobrar
+    turno
+    becaId
+    beca {
+      id
+      nombre
+    }
+  }
+
+  updatePersona(
+    id: $idPersona
+    data: {
+      nombres: $nombres
+      a_paterno: $a_paterno
+      a_materno: $a_materno
+      n_control: $n_control
+      telefono: $telefono
+      whatsapp: $whatsapp
+    }
+  ) {
+    nombres
+    a_paterno
+    a_materno
+    n_control
+    telefono
+    whatsapp
+  }
+}

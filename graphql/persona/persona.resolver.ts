@@ -50,12 +50,12 @@ export const PersonaResolver = {
     },
     updatePersona: async (
       _: any,
-      { id, ...data }: Persona,
+      { id, data }: { id: number; data: Persona },
       { prisma }: IGraphqlContext
     ) => {
       const response = await prisma.persona.update({
         where: { id },
-        data,
+        data: data,
       });
       return response;
     },

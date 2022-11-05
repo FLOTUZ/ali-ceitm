@@ -207,7 +207,7 @@ export type Mutation = {
   forceCobro?: Maybe<Cobro>;
   realizeCobro?: Maybe<Cobro>;
   updateBeca?: Maybe<Beca>;
-  updateBecario?: Maybe<Becario>;
+  updateBecario?: Maybe<BecarioWithRelations>;
   updateCafeteria?: Maybe<Cafeteria>;
   updateCarrera?: Maybe<Carrera>;
   updateCobro?: Maybe<Cobro>;
@@ -342,7 +342,7 @@ export type MutationUpdateBecaArgs = {
 
 
 export type MutationUpdateBecarioArgs = {
-  data: CreateBecatioInput;
+  data: UpdateBecarioInput;
   id: Scalars['Int'];
 };
 
@@ -372,7 +372,7 @@ export type MutationUpdateImagenArgs = {
 
 
 export type MutationUpdatePersonaArgs = {
-  data: CreatePersonaInput;
+  data: UpdatePersonaInput;
   id: Scalars['Int'];
 };
 
@@ -597,6 +597,30 @@ export type Settings = {
   valor?: Maybe<Scalars['String']>;
 };
 
+export type UpdateBecarioInput = {
+  becaId?: InputMaybe<Scalars['Int']>;
+  en_lista_espera?: InputMaybe<Scalars['Boolean']>;
+  personaId?: InputMaybe<Scalars['Int']>;
+  puede_cobrar?: InputMaybe<Scalars['Boolean']>;
+  semana_cobro?: InputMaybe<Scalars['String']>;
+  turno?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdatePersonaInput = {
+  a_materno?: InputMaybe<Scalars['String']>;
+  a_paterno?: InputMaybe<Scalars['String']>;
+  cafeteriaId?: InputMaybe<Scalars['Int']>;
+  campus?: InputMaybe<Scalars['Int']>;
+  carreraId?: InputMaybe<Scalars['Int']>;
+  email_institucional?: InputMaybe<Scalars['String']>;
+  imagenesId?: InputMaybe<Scalars['Int']>;
+  n_control?: InputMaybe<Scalars['String']>;
+  nombres?: InputMaybe<Scalars['String']>;
+  telefono?: InputMaybe<Scalars['String']>;
+  userId?: InputMaybe<Scalars['Int']>;
+  whatsapp?: InputMaybe<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
@@ -607,6 +631,25 @@ export type User = {
   roleId?: Maybe<Scalars['Int']>;
   updatedAt: Scalars['DateTime'];
 };
+
+export type EditBecarioMutationVariables = Exact<{
+  idBecario: Scalars['Int'];
+  turno?: InputMaybe<Scalars['String']>;
+  becaId?: InputMaybe<Scalars['Int']>;
+  semana_cobro?: InputMaybe<Scalars['String']>;
+  en_lista_espera?: InputMaybe<Scalars['Boolean']>;
+  puede_cobrar?: InputMaybe<Scalars['Boolean']>;
+  idPersona: Scalars['Int'];
+  nombres?: InputMaybe<Scalars['String']>;
+  a_paterno?: InputMaybe<Scalars['String']>;
+  a_materno?: InputMaybe<Scalars['String']>;
+  n_control?: InputMaybe<Scalars['String']>;
+  telefono?: InputMaybe<Scalars['String']>;
+  whatsapp?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type EditBecarioMutation = { __typename?: 'Mutation', updateBecario?: { __typename?: 'BecarioWithRelations', id?: number | null, personaId?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, becaId?: number | null, beca?: { __typename?: 'Beca', id?: number | null, nombre?: string | null } | null } | null, updatePersona?: { __typename?: 'Persona', nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, telefono?: string | null, whatsapp?: string | null } | null };
 
 export type NuevoBecarioMutationVariables = Exact<{
   becaId: Scalars['Int'];
@@ -637,7 +680,7 @@ export type BecarioByIdWithRelationsQueryVariables = Exact<{
 }>;
 
 
-export type BecarioByIdWithRelationsQuery = { __typename?: 'Query', becarioByIdWithRelations?: { __typename?: 'BecarioWithRelations', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, semana_cobro?: string | null, createdAt?: any | null, updatedAt?: any | null, persona?: { __typename?: 'Persona', nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, campus?: number | null } | null } | null };
+export type BecarioByIdWithRelationsQuery = { __typename?: 'Query', becarioByIdWithRelations?: { __typename?: 'BecarioWithRelations', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, semana_cobro?: string | null, createdAt?: any | null, updatedAt?: any | null, persona?: { __typename?: 'Persona', id?: number | null, nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, campus?: number | null, telefono?: string | null, whatsapp?: string | null } | null, beca?: { __typename?: 'Beca', id?: number | null, nombre?: string | null } | null } | null };
 
 export type NuevaBecaQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -687,6 +730,74 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, email: string, roleId?: number | null, is_active: boolean } | null, currentRole?: { __typename?: 'Role', id?: number | null, rol_name?: string | null } | null };
 
 
+export const EditBecarioDocument = gql`
+    mutation EditBecario($idBecario: Int!, $turno: String, $becaId: Int, $semana_cobro: String, $en_lista_espera: Boolean, $puede_cobrar: Boolean, $idPersona: Int!, $nombres: String, $a_paterno: String, $a_materno: String, $n_control: String, $telefono: String, $whatsapp: String) {
+  updateBecario(
+    id: $idBecario
+    data: {turno: $turno, becaId: $becaId, semana_cobro: $semana_cobro, en_lista_espera: $en_lista_espera, puede_cobrar: $puede_cobrar}
+  ) {
+    id
+    personaId
+    en_lista_espera
+    puede_cobrar
+    turno
+    becaId
+    beca {
+      id
+      nombre
+    }
+  }
+  updatePersona(
+    id: $idPersona
+    data: {nombres: $nombres, a_paterno: $a_paterno, a_materno: $a_materno, n_control: $n_control, telefono: $telefono, whatsapp: $whatsapp}
+  ) {
+    nombres
+    a_paterno
+    a_materno
+    n_control
+    telefono
+    whatsapp
+  }
+}
+    `;
+export type EditBecarioMutationFn = Apollo.MutationFunction<EditBecarioMutation, EditBecarioMutationVariables>;
+
+/**
+ * __useEditBecarioMutation__
+ *
+ * To run a mutation, you first call `useEditBecarioMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditBecarioMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editBecarioMutation, { data, loading, error }] = useEditBecarioMutation({
+ *   variables: {
+ *      idBecario: // value for 'idBecario'
+ *      turno: // value for 'turno'
+ *      becaId: // value for 'becaId'
+ *      semana_cobro: // value for 'semana_cobro'
+ *      en_lista_espera: // value for 'en_lista_espera'
+ *      puede_cobrar: // value for 'puede_cobrar'
+ *      idPersona: // value for 'idPersona'
+ *      nombres: // value for 'nombres'
+ *      a_paterno: // value for 'a_paterno'
+ *      a_materno: // value for 'a_materno'
+ *      n_control: // value for 'n_control'
+ *      telefono: // value for 'telefono'
+ *      whatsapp: // value for 'whatsapp'
+ *   },
+ * });
+ */
+export function useEditBecarioMutation(baseOptions?: Apollo.MutationHookOptions<EditBecarioMutation, EditBecarioMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditBecarioMutation, EditBecarioMutationVariables>(EditBecarioDocument, options);
+      }
+export type EditBecarioMutationHookResult = ReturnType<typeof useEditBecarioMutation>;
+export type EditBecarioMutationResult = Apollo.MutationResult<EditBecarioMutation>;
+export type EditBecarioMutationOptions = Apollo.BaseMutationOptions<EditBecarioMutation, EditBecarioMutationVariables>;
 export const NuevoBecarioDocument = gql`
     mutation NuevoBecario($becaId: Int!, $personaId: Int!, $turno: String!, $semana_cobro: String!, $en_lista_espera: Boolean!, $puede_cobrar: Boolean!) {
   createBecario(
@@ -822,11 +933,18 @@ export const BecarioByIdWithRelationsDocument = gql`
   becarioByIdWithRelations(id: $id) {
     id
     persona {
+      id
       nombres
       a_paterno
       a_materno
       n_control
       campus
+      telefono
+      whatsapp
+    }
+    beca {
+      id
+      nombre
     }
     en_lista_espera
     puede_cobrar
