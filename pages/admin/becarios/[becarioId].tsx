@@ -124,16 +124,13 @@ const BecarioId = () => {
   }
 
   return (
-    <DefaultLayout>
+    <DefaultLayout heading="Editar Becario" >
       <Head>
         <title>
           Becario | {becario?.persona?.nombres!} {becario?.persona?.a_paterno!}{" "}
           {becario?.persona?.a_materno!}
         </title>
       </Head>
-      <Heading as={"h1"} size="2xl" color={"white"}>
-        Editar Becario
-      </Heading>
 
       <Container color={"white"} mt={5}>
         <form onSubmit={formBecario.handleSubmit}>

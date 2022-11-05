@@ -1,6 +1,4 @@
-import ButtonIconComponent from "@/common/button-icon.component";
 import DatatableComponent from "@/common/datatable.component";
-import DrawerComponent from "@/common/drawer.component";
 import LoaderComponent from "@/common/loader.component";
 import DefaultLayout from "@/layouts/default-layout.component";
 import {
@@ -10,34 +8,18 @@ import {
 import {
   Box,
   Button,
-  Container,
-  DrawerHeader,
-  Heading,
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  SimpleGrid,
-  Spacer,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { FiMenu } from "react-icons/fi";
 
 import { useState } from "react";
 import { Persona } from "@prisma/client";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import NuevoBecarioForm from "./new";
 
 function Becarios() {
   const toast = useToast();
   const router = useRouter();
-  const { isOpen, onClose, onOpen } = useDisclosure();
   const {
     isOpen: isOpenModal,
     onClose: onCloseModal,
@@ -87,19 +69,7 @@ function Becarios() {
 
   return (
     <>
-      <DefaultLayout>
-        <ButtonIconComponent arialabel="open-drawer" onClick={onOpen}>
-          <FiMenu size={40} />
-        </ButtonIconComponent>
-        <DrawerComponent
-          title={"Administrador"}
-          isOpen={isOpen}
-          onClose={onClose}
-        />
-
-        <Heading as={"h1"} color="white" mb={"2rem"}>
-          Becarios
-        </Heading>
+      <DefaultLayout heading="Becarios" drawerTitle="Administrador">
 
         <Button colorScheme={"blue"} onClick={onOpenModal}>
           Agregar becario

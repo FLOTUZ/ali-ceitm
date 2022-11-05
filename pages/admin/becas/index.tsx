@@ -1,7 +1,7 @@
-import { Heading } from "@chakra-ui/react";
+import DefaultLayout from "@/layouts/default-layout.component";
 
 function Becas() {
-  return <Heading>Becas</Heading>;
+  return <DefaultLayout drawerTitle="Admin" heading="Becas"></DefaultLayout>;
 }
 
 export default Becas;
