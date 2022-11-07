@@ -1,7 +1,14 @@
 import DatatableComponent from "@/common/datatable.component";
 import DefaultLayout from "@/layouts/default-layout.component";
 import router from "next/router";
-import { Badge, Box, SimpleGrid, Spacer } from "@chakra-ui/react";
+import {
+  Badge,
+  Box,
+  Button,
+  HStack,
+  SimpleGrid,
+  Spacer,
+} from "@chakra-ui/react";
 import { useAllBecasQuery } from "gql/generated/graphql";
 import { useState } from "react";
 import LoaderComponent from "@/common/loader.component";
@@ -9,6 +16,7 @@ import ErrorComponent from "@/common/error.component";
 import ButtonIconComponent from "@/common/button-icon.component";
 import { FiGrid, FiList } from "react-icons/fi";
 import { Beca } from "@prisma/client";
+import { AddIcon } from "@chakra-ui/icons";
 
 function Becas() {
   const [becasList, setBecasList] = useState<Beca[]>([]);
@@ -27,14 +35,24 @@ function Becas() {
 
   return (
     <DefaultLayout drawerTitle="Admin" heading="Becas">
-      <ButtonIconComponent
-        arialabel={"toggle"}
-        onClick={() => {
-          settoggleView(!toggleView);
-        }}
-      >
-        {toggleView ? <FiGrid /> : <FiList />}
-      </ButtonIconComponent>
+      <HStack>
+        <Button
+          colorScheme={"blue"}
+          onClick={() => router.push("/admin/becas/new")}
+        >
+          Nueva Beca
+          <AddIcon ml={5} />
+        </Button>
+        <Spacer />
+        <ButtonIconComponent
+          arialabel={"toggle"}
+          onClick={() => {
+            settoggleView(!toggleView);
+          }}
+        >
+          {toggleView ? <FiGrid /> : <FiList />}
+        </ButtonIconComponent>
+      </HStack>
       {toggleView ? (
         <Box mt={8} w={"100%"}>
           <DatatableComponent

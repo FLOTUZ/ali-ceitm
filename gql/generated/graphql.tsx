@@ -635,6 +635,17 @@ export type User = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type NewBecaMutationVariables = Exact<{
+  nombre: Scalars['String'];
+  inicia: Scalars['DateTime'];
+  termina: Scalars['DateTime'];
+  descripcion: Scalars['String'];
+  is_active: Scalars['Boolean'];
+}>;
+
+
+export type NewBecaMutation = { __typename?: 'Mutation', createBeca?: { __typename?: 'Beca', id?: number | null, nombre?: string | null, inicia?: any | null, termina?: any | null, descripcion?: string | null, is_active?: boolean | null, createdAt?: any | null, updatedAt?: any | null } | null };
+
 export type UpdateBecaMutationVariables = Exact<{
   id: Scalars['Int'];
   nombre?: InputMaybe<Scalars['String']>;
@@ -757,6 +768,52 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, email: string, roleId?: number | null, is_active: boolean } | null, currentRole?: { __typename?: 'Role', id?: number | null, rol_name?: string | null } | null };
 
 
+export const NewBecaDocument = gql`
+    mutation NewBeca($nombre: String!, $inicia: DateTime!, $termina: DateTime!, $descripcion: String!, $is_active: Boolean!) {
+  createBeca(
+    data: {nombre: $nombre, inicia: $inicia, termina: $termina, descripcion: $descripcion, is_active: $is_active}
+  ) {
+    id
+    nombre
+    inicia
+    termina
+    descripcion
+    is_active
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type NewBecaMutationFn = Apollo.MutationFunction<NewBecaMutation, NewBecaMutationVariables>;
+
+/**
+ * __useNewBecaMutation__
+ *
+ * To run a mutation, you first call `useNewBecaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewBecaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [newBecaMutation, { data, loading, error }] = useNewBecaMutation({
+ *   variables: {
+ *      nombre: // value for 'nombre'
+ *      inicia: // value for 'inicia'
+ *      termina: // value for 'termina'
+ *      descripcion: // value for 'descripcion'
+ *      is_active: // value for 'is_active'
+ *   },
+ * });
+ */
+export function useNewBecaMutation(baseOptions?: Apollo.MutationHookOptions<NewBecaMutation, NewBecaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<NewBecaMutation, NewBecaMutationVariables>(NewBecaDocument, options);
+      }
+export type NewBecaMutationHookResult = ReturnType<typeof useNewBecaMutation>;
+export type NewBecaMutationResult = Apollo.MutationResult<NewBecaMutation>;
+export type NewBecaMutationOptions = Apollo.BaseMutationOptions<NewBecaMutation, NewBecaMutationVariables>;
 export const UpdateBecaDocument = gql`
     mutation UpdateBeca($id: Int!, $nombre: String, $inicia: DateTime, $termina: DateTime, $descripcion: String, $is_active: Boolean) {
   updateBeca(
