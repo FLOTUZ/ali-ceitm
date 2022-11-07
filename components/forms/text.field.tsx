@@ -6,6 +6,7 @@ interface ITextFieldProps {
   type: InputHTMLAttributes<HTMLInputElement>["type"];
   label: string;
   value?: string;
+  defaultValue?: string;
   errors?: string;
   touched?: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -20,6 +21,7 @@ const TextFieldComponent = (props: ITextFieldProps) => {
           type={props.type}
           name={props.name}
           value={props.value}
+          defaultValue={props.defaultValue}
           onChange={props.handleChange}
           bgColor={props.errors && props.touched ? "red.100" : undefined}
         />

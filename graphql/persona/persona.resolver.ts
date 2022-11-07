@@ -37,6 +37,24 @@ export const PersonaResolver = {
         },
       });
     },
+    personasByBeca: async (
+      _: any,
+      { id }: Persona,
+      { prisma }: IGraphqlContext
+    ) => {
+      return await prisma.persona.findMany({
+        where: {
+          becarios: {
+            some: {
+              becaId: id,
+            },
+          },
+        },
+        include: {
+          becarios: true,
+        },
+      });
+    },
   },
   Mutation: {
     createPersona: async (

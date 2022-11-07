@@ -29,32 +29,21 @@ export const BecarioSchema = gql`
     becaId: Int
     createdAt: DateTime
     updatedAt: DateTime
-  }
-
-  type BecarioWithRelations {
-    id: Int
-    en_lista_espera: Boolean
-    puede_cobrar: Boolean
-    personaId: Int
-    turno: String
-    semana_cobro: String
-    becaId: Int
-    createdAt: DateTime
-    updatedAt: DateTime
     persona: Persona
     beca: Beca
   }
 
+ 
   type Query {
     allBecarios(pagination: Pagination): [Becario]
-    allBecariosWithRelations(pagination: Pagination): [BecarioWithRelations]
+    allBecariosWithRelations(pagination: Pagination): [Becario]
     becarioById(id: Int!): Becario
-    becarioByIdWithRelations(id: Int!): BecarioWithRelations
+    becarioByIdWithRelations(id: Int!): Becario
   }
 
   type Mutation {
     createBecario(data: CreateBecatioInput!): Becario
-    updateBecario(id: Int!, data: UpdateBecarioInput!): BecarioWithRelations
+    updateBecario(id: Int!, data: UpdateBecarioInput!): Becario
     deleteBecario(id: Int!): Becario
   }
 `;

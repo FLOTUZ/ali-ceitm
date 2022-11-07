@@ -47,12 +47,14 @@ export const PersonaSchema = gql`
     cafeteriaId: Int
     createdAt: DateTime
     updatedAt: DateTime
+    becarios: [Becario]
   }
 
   type Query {
     allPersonas(pagination: Pagination): [Persona]
     personaById(id: Int!): Persona
     currentPersona: Persona
+    personasByBeca(id: Int!): [Persona]
   }
 
   type Mutation {

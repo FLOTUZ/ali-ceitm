@@ -23,7 +23,6 @@ import {
   Container,
   IconButton,
   SimpleGrid,
-  Switch,
   Text,
   useColorMode,
   VStack,

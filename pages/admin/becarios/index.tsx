@@ -1,16 +1,8 @@
 import DatatableComponent from "@/common/datatable.component";
 import LoaderComponent from "@/common/loader.component";
 import DefaultLayout from "@/layouts/default-layout.component";
-import {
-  BecarioWithRelations,
-  useGetAllBecariosQuery,
-} from "gql/generated/graphql";
-import {
-  Box,
-  Button,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
+import { Becario, useGetAllBecariosQuery } from "gql/generated/graphql";
+import { Box, Button, useDisclosure, useToast } from "@chakra-ui/react";
 
 import { useState } from "react";
 import { Persona } from "@prisma/client";
@@ -32,7 +24,7 @@ function Becarios() {
     onCompleted: (data) => {
       if (data.allBecariosWithRelations != null) {
         const becarios = data.allBecariosWithRelations.map(
-          (becario: BecarioWithRelations | null) => {
+          (becario: Becario | null) => {
             const persona = becario?.persona as Persona;
             return {
               id: becario?.id,
@@ -70,7 +62,6 @@ function Becarios() {
   return (
     <>
       <DefaultLayout heading="Becarios" drawerTitle="Administrador">
-
         <Button colorScheme={"blue"} onClick={onOpenModal}>
           Agregar becario
         </Button>
