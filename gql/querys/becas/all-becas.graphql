@@ -1,0 +1,12 @@
+query AllBecas {
+  allBecas {
+    id
+    nombre
+    inicia
+    termina
+    descripcion
+    is_active
+    createdAt
+    updatedAt
+  }
+}

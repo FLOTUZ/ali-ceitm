@@ -21,14 +21,19 @@ import {
   Button,
   Center,
   Container,
+  IconButton,
   SimpleGrid,
   Text,
+  useColorMode,
   VStack,
 } from "@chakra-ui/react";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Settings } from "@prisma/client";
+import { MoonIcon } from "@chakra-ui/icons";
+import { FiSun } from "react-icons/fi";
 
 function Index() {
+  const { colorMode, toggleColorMode } = useColorMode();
   const [time, setTime] = useState<string>("--:--:--");
   const [currentDate, setCurrentDate] = useState<string>("");
   const [isBreakfastHour, setIsBreakfastHour] = useState<boolean>(false);
@@ -123,126 +128,129 @@ function Index() {
   }
 
   return (
-    <SimpleGrid columns={[2, 3, 3]} bgColor="black">
-      <Container h={150} w={150} p={19} bgColor={"black"} color="white">
-        <Center h={"100%"}>
-          <VStack>
-            <Image src={Reloj} alt="Hora actual en el sistema" />
-            <Text>{time}</Text>
-          </VStack>
-        </Center>
-      </Container>
+    <>
+      <IconButton
+        aria-label="theme"
+        onClick={toggleColorMode}
+        icon={colorMode === "light" ? <MoonIcon /> : <FiSun />}
+      />
 
-      <Container h={150} w={150} p={19} bgColor={"black"} color="white">
-        <Center h={"100%"}>
-          <VStack>
-            <Image src={CalendarioDiario} alt="Fecha" />
-            <Text>{currentDate}</Text>
-          </VStack>
-        </Center>
-      </Container>
-
-      {isBreakfastHour ? (
-        <Container h={150} w={150} p={19} bgColor={"black"} color="white">
+      <SimpleGrid columns={[2, 3, 3]} p={3}>
+        <Container h={150} w={150} p={19}>
           <Center h={"100%"}>
             <VStack>
-              <Image src={Desayuno} alt="Desayuno" />
-              <Text>Desayuno</Text>
+              <Image src={Reloj} alt="Hora actual en el sistema" />
+              <Text>{time}</Text>
             </VStack>
           </Center>
         </Container>
-      ) : (
-        <Container h={150} w={150} p={19} bgColor={"black"} color="white">
+
+        <Container h={150} w={150} p={19}>
           <Center h={"100%"}>
             <VStack>
-              <Image src={Comida} alt="Comida" />
-              <Text>Comida</Text>
+              <Image src={CalendarioDiario} alt="Fecha" />
+              <Text>{currentDate}</Text>
             </VStack>
           </Center>
         </Container>
-      )}
 
-      <Container h={150} w={150} p={19} bgColor={"black"} color="white">
-        <Center h={"100%"}>
-          <VStack>
-            <Image src={CalendarioSemanal} alt="Es semana par o non" />
-            {isPairWeek ? <Text>PAR</Text> : <Text>NON</Text>}
-          </VStack>
-        </Center>
-      </Container>
-
-      <Container h={150} w={150} p={19} bgColor={"black"} color="white">
-        <Center h={"100%"}>
-          <VStack>
-            <Image src={Cafeteria} alt="Cafeteria" />
-            <Text>{place}</Text>
-          </VStack>
-        </Center>
-      </Container>
-
-      <Link href={"/perfil"}>
-        <a>
-          <Container h={150} w={150} p={19} bgColor={"black"} color="white">
+        {isBreakfastHour ? (
+          <Container h={150} w={150} p={19}>
             <Center h={"100%"}>
               <VStack>
-                <Image src={Usuario} alt="Perfil" />
-                <Text>{"Ver perfil"}</Text>
+                <Image src={Desayuno} alt="Desayuno" />
+                <Text>Desayuno</Text>
               </VStack>
             </Center>
           </Container>
-        </a>
-      </Link>
-
-      {isCobrador ? (
-        <Link href={"/cobros/cobrador"}>
-          <a>
-            <Container h={150} w={150} p={19} bgColor={"black"} color="white">
-              <Center h={"100%"}>
-                <VStack>
-                  <Image src={QrSCanner} alt="Escanner QR" />
-                  <Text>{"Cobrar beca"}</Text>
-                </VStack>
-              </Center>
-            </Container>
-          </a>
-        </Link>
-      ) : (
-        <Link href={"/cobros/qr"}>
-          <a>
-            <Container h={150} w={150} p={19} bgColor={"black"} color="white">
-              <Center h={"100%"}>
-                <VStack>
-                  <Image src={Qr} alt="Generar QR" />
-                  <Text>{"Generar QR"}</Text>
-                </VStack>
-              </Center>
-            </Container>
-          </a>
-        </Link>
-      )}
-
-      <Center h={"100%"}>
-        <Button
-          h={150}
-          w={150}
-          bgColor="transparent"
-          onClick={logout}
-          _hover={{ bgColor: "black" }}
-        >
-          <Container
-            p={19}
-            bgColor={"black"}
-            color="white"
-            _hover={{ bgColor: "grey" }}
-          >
-            <VStack>
-              <Image src={Logout} alt="Salir" />
-              <Text>{"Salir"}</Text>
-            </VStack>
+        ) : (
+          <Container h={150} w={150} p={19}>
+            <Center h={"100%"}>
+              <VStack>
+                <Image src={Comida} alt="Comida" />
+                <Text>Comida</Text>
+              </VStack>
+            </Center>
           </Container>
-        </Button>
-      </Center>
-    </SimpleGrid>
+        )}
+
+        <Container h={150} w={150} p={19}>
+          <Center h={"100%"}>
+            <VStack>
+              <Image src={CalendarioSemanal} alt="Es semana par o non" />
+              {isPairWeek ? <Text>PAR</Text> : <Text>NON</Text>}
+            </VStack>
+          </Center>
+        </Container>
+
+        <Container h={150} w={150} p={19}>
+          <Center h={"100%"}>
+            <VStack>
+              <Image src={Cafeteria} alt="Cafeteria" />
+              <Text>{place}</Text>
+            </VStack>
+          </Center>
+        </Container>
+
+        <Link href={"/perfil"}>
+          <a>
+            <Container h={150} w={150} p={19}>
+              <Center h={"100%"}>
+                <VStack>
+                  <Image src={Usuario} alt="Perfil" />
+                  <Text>{"Ver perfil"}</Text>
+                </VStack>
+              </Center>
+            </Container>
+          </a>
+        </Link>
+
+        {isCobrador ? (
+          <Link href={"/cobros/cobrador"}>
+            <a>
+              <Container h={150} w={150} p={19}>
+                <Center h={"100%"}>
+                  <VStack>
+                    <Image src={QrSCanner} alt="Escanner QR" />
+                    <Text>{"Cobrar beca"}</Text>
+                  </VStack>
+                </Center>
+              </Container>
+            </a>
+          </Link>
+        ) : (
+          <Link href={"/cobros/qr"}>
+            <a>
+              <Container h={150} w={150} p={19}>
+                <Center h={"100%"}>
+                  <VStack>
+                    <Image src={Qr} alt="Generar QR" />
+                    <Text>{"Generar QR"}</Text>
+                  </VStack>
+                </Center>
+              </Container>
+            </a>
+          </Link>
+        )}
+
+        <Center h={"100%"}>
+          <Button
+            h={150}
+            w={150}
+            bgColor="transparent"
+            onClick={logout}
+            _hover={{ bgColor: "black" }}
+          >
+            <Container p={19}>
+              <VStack>
+                <Image src={Logout} alt="Salir" />
+                <Text>{"Salir"}</Text>
+              </VStack>
+            </Container>
+          </Button>
+        </Center>
+      </SimpleGrid>
+    </>
   );
 }
 

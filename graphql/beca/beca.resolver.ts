@@ -19,6 +19,14 @@ export const BecaResolver = {
         where: {
           id,
         },
+        include: {
+          becarios: {
+            include: {
+              beca: true,
+              persona: true,
+            },
+          },
+        },
       });
     },
   },
@@ -34,7 +42,7 @@ export const BecaResolver = {
     },
     updateBeca: async (
       _: any,
-      { id, ...data }: Beca,
+      { id, data }: { id: number; data: Beca },
       { prisma }: IGraphqlContext
     ) => {
       const response = await prisma.beca.update({

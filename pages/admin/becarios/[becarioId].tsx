@@ -8,7 +8,6 @@ import {
   Button,
   Container,
   FormLabel,
-  Heading,
   Input,
   Select,
   SimpleGrid,
@@ -17,19 +16,19 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
-import { Beca, Becario, Persona } from "@prisma/client";
 import {
-  BecarioWithRelations,
   useBecarioByIdWithRelationsQuery,
   useEditBecarioMutation,
   useNuevaBecaQuery,
+  Becario,
+  Beca
 } from "gql/generated/graphql";
 
 const BecarioId = () => {
   const router = useRouter();
   const toast = useToast();
   const [becasList, setBecasList] = useState<Beca[]>([]);
-  const [becario, setBecario] = useState<BecarioWithRelations | null>();
+  const [becario, setBecario] = useState<Becario | null>();
 
   const { becarioId } = router.query;
 
@@ -45,7 +44,7 @@ const BecarioId = () => {
     },
 
     onCompleted(data) {
-      setBecario(data.becarioByIdWithRelations);
+      setBecario(data.becarioByIdWithRelations as Becario);
     },
   });
 
@@ -124,16 +123,13 @@ const BecarioId = () => {
   }
 
   return (
-    <DefaultLayout>
+    <DefaultLayout heading="Editar Becario">
       <Head>
         <title>
           Becario | {becario?.persona?.nombres!} {becario?.persona?.a_paterno!}{" "}
           {becario?.persona?.a_materno!}
         </title>
       </Head>
-      <Heading as={"h1"} size="2xl" color={"white"}>
-        Editar Becario
-      </Heading>
 
       <Container color={"white"} mt={5}>
         <form onSubmit={formBecario.handleSubmit}>
@@ -143,7 +139,6 @@ const BecarioId = () => {
             placeholder="Beca del becario"
             size="lg"
             defaultValue={becario?.beca?.id!}
-            bgColor={"black"}
           >
             {becasList.map((beca: Beca) => {
               return (

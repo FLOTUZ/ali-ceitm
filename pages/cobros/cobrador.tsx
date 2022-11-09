@@ -14,7 +14,7 @@ function Cobrador() {
   const [showScanner, setShowScanner] = useState(false);
 
   return (
-    <Center h="100%" mt={"2rem"} p="1rem" color={"white"} bgColor={"black"}>
+    <Center h="100%" mt={"2rem"} p="1rem">
       <VStack h={500} width={500}>
         <HStack>
           <Text> QR </Text>

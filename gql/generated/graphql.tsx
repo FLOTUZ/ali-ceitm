@@ -18,6 +18,7 @@ export type Scalars = {
 
 export type Beca = {
   __typename?: 'Beca';
+  becarios?: Maybe<Array<Maybe<Becario>>>;
   createdAt?: Maybe<Scalars['DateTime']>;
   descripcion?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
@@ -30,19 +31,6 @@ export type Beca = {
 
 export type Becario = {
   __typename?: 'Becario';
-  becaId?: Maybe<Scalars['Int']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  en_lista_espera?: Maybe<Scalars['Boolean']>;
-  id?: Maybe<Scalars['Int']>;
-  personaId?: Maybe<Scalars['Int']>;
-  puede_cobrar?: Maybe<Scalars['Boolean']>;
-  semana_cobro?: Maybe<Scalars['String']>;
-  turno?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-};
-
-export type BecarioWithRelations = {
-  __typename?: 'BecarioWithRelations';
   beca?: Maybe<Beca>;
   becaId?: Maybe<Scalars['Int']>;
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -207,7 +195,7 @@ export type Mutation = {
   forceCobro?: Maybe<Cobro>;
   realizeCobro?: Maybe<Cobro>;
   updateBeca?: Maybe<Beca>;
-  updateBecario?: Maybe<BecarioWithRelations>;
+  updateBecario?: Maybe<Becario>;
   updateCafeteria?: Maybe<Cafeteria>;
   updateCarrera?: Maybe<Carrera>;
   updateCobro?: Maybe<Cobro>;
@@ -336,7 +324,7 @@ export type MutationRealizeCobroArgs = {
 
 
 export type MutationUpdateBecaArgs = {
-  data: CreateBecaInput;
+  data: UpdateBecaInput;
   id: Scalars['Int'];
 };
 
@@ -409,6 +397,7 @@ export type Persona = {
   __typename?: 'Persona';
   a_materno?: Maybe<Scalars['String']>;
   a_paterno?: Maybe<Scalars['String']>;
+  becarios?: Maybe<Array<Maybe<Becario>>>;
   cafeteriaId?: Maybe<Scalars['Int']>;
   campus?: Maybe<Scalars['Int']>;
   carreraId?: Maybe<Scalars['Int']>;
@@ -436,7 +425,7 @@ export type Problema = {
 export type Query = {
   __typename?: 'Query';
   allBecarios?: Maybe<Array<Maybe<Becario>>>;
-  allBecariosWithRelations?: Maybe<Array<Maybe<BecarioWithRelations>>>;
+  allBecariosWithRelations?: Maybe<Array<Maybe<Becario>>>;
   allBecas?: Maybe<Array<Maybe<Beca>>>;
   allCafeterias?: Maybe<Array<Maybe<Cafeteria>>>;
   allCarreras?: Maybe<Array<Maybe<Carrera>>>;
@@ -449,7 +438,7 @@ export type Query = {
   allUsers?: Maybe<Array<Maybe<User>>>;
   becaById?: Maybe<Beca>;
   becarioById?: Maybe<Becario>;
-  becarioByIdWithRelations?: Maybe<BecarioWithRelations>;
+  becarioByIdWithRelations?: Maybe<Becario>;
   cafeteriaById?: Maybe<Cafeteria>;
   carreraById?: Maybe<Carrera>;
   cobroById?: Maybe<Cobro>;
@@ -462,6 +451,7 @@ export type Query = {
   generateCobroCode?: Maybe<Cobro>;
   imagenById?: Maybe<Imagen>;
   personaById?: Maybe<Persona>;
+  personasByBeca?: Maybe<Array<Maybe<Persona>>>;
   problemaById?: Maybe<Problema>;
   roleById?: Maybe<Role>;
   settingById?: Maybe<Settings>;
@@ -555,6 +545,11 @@ export type QueryPersonaByIdArgs = {
 };
 
 
+export type QueryPersonasByBecaArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type QueryProblemaByIdArgs = {
   id: Scalars['Int'];
 };
@@ -597,6 +592,14 @@ export type Settings = {
   valor?: Maybe<Scalars['String']>;
 };
 
+export type UpdateBecaInput = {
+  descripcion?: InputMaybe<Scalars['String']>;
+  inicia?: InputMaybe<Scalars['DateTime']>;
+  is_active?: InputMaybe<Scalars['Boolean']>;
+  nombre?: InputMaybe<Scalars['String']>;
+  termina?: InputMaybe<Scalars['DateTime']>;
+};
+
 export type UpdateBecarioInput = {
   becaId?: InputMaybe<Scalars['Int']>;
   en_lista_espera?: InputMaybe<Scalars['Boolean']>;
@@ -632,6 +635,29 @@ export type User = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type NewBecaMutationVariables = Exact<{
+  nombre: Scalars['String'];
+  inicia: Scalars['DateTime'];
+  termina: Scalars['DateTime'];
+  descripcion: Scalars['String'];
+  is_active: Scalars['Boolean'];
+}>;
+
+
+export type NewBecaMutation = { __typename?: 'Mutation', createBeca?: { __typename?: 'Beca', id?: number | null, nombre?: string | null, inicia?: any | null, termina?: any | null, descripcion?: string | null, is_active?: boolean | null, createdAt?: any | null, updatedAt?: any | null } | null };
+
+export type UpdateBecaMutationVariables = Exact<{
+  id: Scalars['Int'];
+  nombre?: InputMaybe<Scalars['String']>;
+  inicia?: InputMaybe<Scalars['DateTime']>;
+  termina?: InputMaybe<Scalars['DateTime']>;
+  descripcion?: InputMaybe<Scalars['String']>;
+  is_active?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+
+export type UpdateBecaMutation = { __typename?: 'Mutation', updateBeca?: { __typename?: 'Beca', id?: number | null, nombre?: string | null, inicia?: any | null, termina?: any | null, descripcion?: string | null, is_active?: boolean | null, updatedAt?: any | null, createdAt?: any | null } | null };
+
 export type EditBecarioMutationVariables = Exact<{
   idBecario: Scalars['Int'];
   turno?: InputMaybe<Scalars['String']>;
@@ -649,7 +675,7 @@ export type EditBecarioMutationVariables = Exact<{
 }>;
 
 
-export type EditBecarioMutation = { __typename?: 'Mutation', updateBecario?: { __typename?: 'BecarioWithRelations', id?: number | null, personaId?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, becaId?: number | null, beca?: { __typename?: 'Beca', id?: number | null, nombre?: string | null } | null } | null, updatePersona?: { __typename?: 'Persona', nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, telefono?: string | null, whatsapp?: string | null } | null };
+export type EditBecarioMutation = { __typename?: 'Mutation', updateBecario?: { __typename?: 'Becario', id?: number | null, personaId?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, becaId?: number | null, beca?: { __typename?: 'Beca', id?: number | null, nombre?: string | null } | null } | null, updatePersona?: { __typename?: 'Persona', nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, telefono?: string | null, whatsapp?: string | null } | null };
 
 export type NuevoBecarioMutationVariables = Exact<{
   becaId: Scalars['Int'];
@@ -673,19 +699,31 @@ export type RealizarCobroMutation = { __typename?: 'Mutation', realizeCobro?: { 
 export type GetAllBecariosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllBecariosQuery = { __typename?: 'Query', allBecariosWithRelations?: Array<{ __typename?: 'BecarioWithRelations', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, semana_cobro?: string | null, createdAt?: any | null, updatedAt?: any | null, persona?: { __typename?: 'Persona', id?: number | null, nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, telefono?: string | null, whatsapp?: string | null } | null } | null> | null };
+export type GetAllBecariosQuery = { __typename?: 'Query', allBecariosWithRelations?: Array<{ __typename?: 'Becario', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, semana_cobro?: string | null, createdAt?: any | null, updatedAt?: any | null, persona?: { __typename?: 'Persona', id?: number | null, nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, telefono?: string | null, whatsapp?: string | null } | null } | null> | null };
 
 export type BecarioByIdWithRelationsQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type BecarioByIdWithRelationsQuery = { __typename?: 'Query', becarioByIdWithRelations?: { __typename?: 'BecarioWithRelations', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, semana_cobro?: string | null, createdAt?: any | null, updatedAt?: any | null, persona?: { __typename?: 'Persona', id?: number | null, nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, campus?: number | null, telefono?: string | null, whatsapp?: string | null } | null, beca?: { __typename?: 'Beca', id?: number | null, nombre?: string | null } | null } | null };
+export type BecarioByIdWithRelationsQuery = { __typename?: 'Query', becarioByIdWithRelations?: { __typename?: 'Becario', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, semana_cobro?: string | null, createdAt?: any | null, updatedAt?: any | null, persona?: { __typename?: 'Persona', id?: number | null, nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, n_control?: string | null, campus?: number | null, telefono?: string | null, whatsapp?: string | null } | null, beca?: { __typename?: 'Beca', id?: number | null, nombre?: string | null } | null } | null };
 
 export type NuevaBecaQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type NuevaBecaQuery = { __typename?: 'Query', allBecas?: Array<{ __typename?: 'Beca', id?: number | null, nombre?: string | null } | null> | null, allPersonas?: Array<{ __typename?: 'Persona', id?: number | null, nombres?: string | null, a_paterno?: string | null, a_materno?: string | null } | null> | null };
+
+export type AllBecasQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AllBecasQuery = { __typename?: 'Query', allBecas?: Array<{ __typename?: 'Beca', id?: number | null, nombre?: string | null, inicia?: any | null, termina?: any | null, descripcion?: string | null, is_active?: boolean | null, createdAt?: any | null, updatedAt?: any | null } | null> | null };
+
+export type BecaByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type BecaByIdQuery = { __typename?: 'Query', becaById?: { __typename?: 'Beca', id?: number | null, nombre?: string | null, inicia?: any | null, termina?: any | null, descripcion?: string | null, is_active?: boolean | null, createdAt?: any | null, updatedAt?: any | null } | null, personasByBeca?: Array<{ __typename?: 'Persona', id?: number | null, nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, becarios?: Array<{ __typename?: 'Becario', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, semana_cobro?: string | null } | null> | null } | null> | null };
 
 export type GetAllCarrerasQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -730,6 +768,100 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: number, email: string, roleId?: number | null, is_active: boolean } | null, currentRole?: { __typename?: 'Role', id?: number | null, rol_name?: string | null } | null };
 
 
+export const NewBecaDocument = gql`
+    mutation NewBeca($nombre: String!, $inicia: DateTime!, $termina: DateTime!, $descripcion: String!, $is_active: Boolean!) {
+  createBeca(
+    data: {nombre: $nombre, inicia: $inicia, termina: $termina, descripcion: $descripcion, is_active: $is_active}
+  ) {
+    id
+    nombre
+    inicia
+    termina
+    descripcion
+    is_active
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type NewBecaMutationFn = Apollo.MutationFunction<NewBecaMutation, NewBecaMutationVariables>;
+
+/**
+ * __useNewBecaMutation__
+ *
+ * To run a mutation, you first call `useNewBecaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useNewBecaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [newBecaMutation, { data, loading, error }] = useNewBecaMutation({
+ *   variables: {
+ *      nombre: // value for 'nombre'
+ *      inicia: // value for 'inicia'
+ *      termina: // value for 'termina'
+ *      descripcion: // value for 'descripcion'
+ *      is_active: // value for 'is_active'
+ *   },
+ * });
+ */
+export function useNewBecaMutation(baseOptions?: Apollo.MutationHookOptions<NewBecaMutation, NewBecaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<NewBecaMutation, NewBecaMutationVariables>(NewBecaDocument, options);
+      }
+export type NewBecaMutationHookResult = ReturnType<typeof useNewBecaMutation>;
+export type NewBecaMutationResult = Apollo.MutationResult<NewBecaMutation>;
+export type NewBecaMutationOptions = Apollo.BaseMutationOptions<NewBecaMutation, NewBecaMutationVariables>;
+export const UpdateBecaDocument = gql`
+    mutation UpdateBeca($id: Int!, $nombre: String, $inicia: DateTime, $termina: DateTime, $descripcion: String, $is_active: Boolean) {
+  updateBeca(
+    id: $id
+    data: {nombre: $nombre, inicia: $inicia, termina: $termina, descripcion: $descripcion, is_active: $is_active}
+  ) {
+    id
+    nombre
+    inicia
+    termina
+    descripcion
+    is_active
+    updatedAt
+    createdAt
+  }
+}
+    `;
+export type UpdateBecaMutationFn = Apollo.MutationFunction<UpdateBecaMutation, UpdateBecaMutationVariables>;
+
+/**
+ * __useUpdateBecaMutation__
+ *
+ * To run a mutation, you first call `useUpdateBecaMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateBecaMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateBecaMutation, { data, loading, error }] = useUpdateBecaMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      nombre: // value for 'nombre'
+ *      inicia: // value for 'inicia'
+ *      termina: // value for 'termina'
+ *      descripcion: // value for 'descripcion'
+ *      is_active: // value for 'is_active'
+ *   },
+ * });
+ */
+export function useUpdateBecaMutation(baseOptions?: Apollo.MutationHookOptions<UpdateBecaMutation, UpdateBecaMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateBecaMutation, UpdateBecaMutationVariables>(UpdateBecaDocument, options);
+      }
+export type UpdateBecaMutationHookResult = ReturnType<typeof useUpdateBecaMutation>;
+export type UpdateBecaMutationResult = Apollo.MutationResult<UpdateBecaMutation>;
+export type UpdateBecaMutationOptions = Apollo.BaseMutationOptions<UpdateBecaMutation, UpdateBecaMutationVariables>;
 export const EditBecarioDocument = gql`
     mutation EditBecario($idBecario: Int!, $turno: String, $becaId: Int, $semana_cobro: String, $en_lista_espera: Boolean, $puede_cobrar: Boolean, $idPersona: Int!, $nombres: String, $a_paterno: String, $a_materno: String, $n_control: String, $telefono: String, $whatsapp: String) {
   updateBecario(
@@ -1024,6 +1156,102 @@ export function useNuevaBecaLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type NuevaBecaQueryHookResult = ReturnType<typeof useNuevaBecaQuery>;
 export type NuevaBecaLazyQueryHookResult = ReturnType<typeof useNuevaBecaLazyQuery>;
 export type NuevaBecaQueryResult = Apollo.QueryResult<NuevaBecaQuery, NuevaBecaQueryVariables>;
+export const AllBecasDocument = gql`
+    query AllBecas {
+  allBecas {
+    id
+    nombre
+    inicia
+    termina
+    descripcion
+    is_active
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useAllBecasQuery__
+ *
+ * To run a query within a React component, call `useAllBecasQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllBecasQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllBecasQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAllBecasQuery(baseOptions?: Apollo.QueryHookOptions<AllBecasQuery, AllBecasQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AllBecasQuery, AllBecasQueryVariables>(AllBecasDocument, options);
+      }
+export function useAllBecasLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AllBecasQuery, AllBecasQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AllBecasQuery, AllBecasQueryVariables>(AllBecasDocument, options);
+        }
+export type AllBecasQueryHookResult = ReturnType<typeof useAllBecasQuery>;
+export type AllBecasLazyQueryHookResult = ReturnType<typeof useAllBecasLazyQuery>;
+export type AllBecasQueryResult = Apollo.QueryResult<AllBecasQuery, AllBecasQueryVariables>;
+export const BecaByIdDocument = gql`
+    query BecaById($id: Int!) {
+  becaById(id: $id) {
+    id
+    nombre
+    inicia
+    termina
+    descripcion
+    is_active
+    createdAt
+    updatedAt
+  }
+  personasByBeca(id: $id) {
+    id
+    nombres
+    a_paterno
+    a_materno
+    becarios {
+      id
+      en_lista_espera
+      puede_cobrar
+      turno
+      semana_cobro
+    }
+  }
+}
+    `;
+
+/**
+ * __useBecaByIdQuery__
+ *
+ * To run a query within a React component, call `useBecaByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBecaByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBecaByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useBecaByIdQuery(baseOptions: Apollo.QueryHookOptions<BecaByIdQuery, BecaByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BecaByIdQuery, BecaByIdQueryVariables>(BecaByIdDocument, options);
+      }
+export function useBecaByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BecaByIdQuery, BecaByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BecaByIdQuery, BecaByIdQueryVariables>(BecaByIdDocument, options);
+        }
+export type BecaByIdQueryHookResult = ReturnType<typeof useBecaByIdQuery>;
+export type BecaByIdLazyQueryHookResult = ReturnType<typeof useBecaByIdLazyQuery>;
+export type BecaByIdQueryResult = Apollo.QueryResult<BecaByIdQuery, BecaByIdQueryVariables>;
 export const GetAllCarrerasDocument = gql`
     query GetAllCarreras {
   allCarreras {

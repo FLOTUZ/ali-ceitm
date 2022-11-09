@@ -1,0 +1,28 @@
+mutation UpdateBeca(
+  $id: Int!
+  $nombre: String
+  $inicia: DateTime
+  $termina: DateTime
+  $descripcion: String
+  $is_active: Boolean
+) {
+  updateBeca(
+    id: $id
+    data: {
+      nombre: $nombre
+      inicia: $inicia
+      termina: $termina
+      descripcion: $descripcion
+      is_active: $is_active
+    }
+  ) {
+    id
+    nombre
+    inicia
+    termina
+    descripcion
+    is_active
+    updatedAt
+    createdAt
+  }
+}

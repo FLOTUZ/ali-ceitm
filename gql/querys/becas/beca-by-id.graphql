@@ -1,0 +1,25 @@
+query BecaById($id: Int!) {
+  becaById(id: $id) {
+    id
+    nombre
+    inicia
+    termina
+    descripcion
+    is_active
+    createdAt
+    updatedAt
+  }
+  personasByBeca(id: $id) {
+    id
+    nombres
+    a_paterno
+    a_materno
+    becarios {
+      id
+      en_lista_espera
+      puede_cobrar
+      turno
+      semana_cobro
+    }
+  }
+}

@@ -6,6 +6,8 @@ interface ITextFieldProps {
   type: InputHTMLAttributes<HTMLInputElement>["type"];
   label: string;
   value?: string;
+  isRequired?: boolean;
+  defaultValue?: string;
   errors?: string;
   touched?: boolean;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -15,14 +17,17 @@ const TextFieldComponent = (props: ITextFieldProps) => {
   return (
     <>
       <FormControl>
-        <FormLabel>{props.label}</FormLabel>
+        <FormLabel>
+          {props.label} {props.isRequired ? "(Requerido)" : "(Opcional)"}
+        </FormLabel>
         <Input
           type={props.type}
           name={props.name}
           value={props.value}
+          isRequired={props.isRequired}
+          defaultValue={props.defaultValue}
           onChange={props.handleChange}
-          bgColor={props.errors && props.touched ? "red.100" : "gray.100"}
-          _focus={{ bgColor: "gray.100" }}
+          bgColor={props.errors && props.touched ? "red.100" : undefined}
         />
       </FormControl>
       {props.touched && props.errors ? (

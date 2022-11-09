@@ -23,15 +23,7 @@ const ConcejalComponent = () => {
   }
 
   return (
-    <DefaultLayout>
-      <DrawerComponent title="Concejal" isOpen={isOpen} onClose={onClose} />
-      <ButtonIconComponent arialabel="open-drawer" onClick={onOpen}>
-        <FiMenu size={40} />
-      </ButtonIconComponent>
-
-      <Heading as={"h1"} color="white">
-        Perfil
-      </Heading>
+    <DefaultLayout heading="Perfil" drawerTitle="Concejal">
       <CurrentPersonaComponent />
       {errorCobros ? (
         <Heading as="h2" size="lg" color={"red"} textAlign="center">

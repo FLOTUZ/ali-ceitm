@@ -9,6 +9,14 @@ export const BecaSchema = gql`
     is_active: Boolean
   }
 
+  input UpdateBecaInput {
+    nombre: String
+    inicia: DateTime
+    termina: DateTime
+    descripcion: String
+    is_active: Boolean
+  }
+
   type Beca {
     id: Int
     nombre: String
@@ -18,6 +26,7 @@ export const BecaSchema = gql`
     is_active: Boolean
     createdAt: DateTime
     updatedAt: DateTime
+    becarios: [Becario]
   }
 
   type Query {
@@ -27,7 +36,7 @@ export const BecaSchema = gql`
 
   type Mutation {
     createBeca(data: CreateBecaInput!): Beca
-    updateBeca(id: Int!, data: CreateBecaInput!): Beca
+    updateBeca(id: Int!, data: UpdateBecaInput!): Beca
     deleteBeca(id: Int!): Beca
   }
 `;
