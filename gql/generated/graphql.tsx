@@ -171,6 +171,7 @@ export type Imagen = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  autoInscripcion?: Maybe<Becario>;
   createBeca?: Maybe<Beca>;
   createBecario?: Maybe<Becario>;
   createCafeteria?: Maybe<Cafeteria>;
@@ -205,6 +206,12 @@ export type Mutation = {
   updateRole?: Maybe<Role>;
   updateSetting?: Maybe<Settings>;
   updateUser?: Maybe<User>;
+};
+
+
+export type MutationAutoInscripcionArgs = {
+  becaId: Scalars['Int'];
+  turno: Scalars['Int'];
 };
 
 
@@ -658,6 +665,14 @@ export type UpdateBecaMutationVariables = Exact<{
 
 export type UpdateBecaMutation = { __typename?: 'Mutation', updateBeca?: { __typename?: 'Beca', id?: number | null, nombre?: string | null, inicia?: any | null, termina?: any | null, descripcion?: string | null, is_active?: boolean | null, updatedAt?: any | null, createdAt?: any | null } | null };
 
+export type AutoInscripcionMutationVariables = Exact<{
+  becaId: Scalars['Int'];
+  turno: Scalars['Int'];
+}>;
+
+
+export type AutoInscripcionMutation = { __typename?: 'Mutation', autoInscripcion?: { __typename?: 'Becario', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, personaId?: number | null, turno?: string | null, semana_cobro?: string | null, becaId?: number | null, createdAt?: any | null, updatedAt?: any | null } | null };
+
 export type EditBecarioMutationVariables = Exact<{
   idBecario: Scalars['Int'];
   turno?: InputMaybe<Scalars['String']>;
@@ -724,6 +739,13 @@ export type BecaByIdQueryVariables = Exact<{
 
 
 export type BecaByIdQuery = { __typename?: 'Query', becaById?: { __typename?: 'Beca', id?: number | null, nombre?: string | null, inicia?: any | null, termina?: any | null, descripcion?: string | null, is_active?: boolean | null, createdAt?: any | null, updatedAt?: any | null } | null, personasByBeca?: Array<{ __typename?: 'Persona', id?: number | null, nombres?: string | null, a_paterno?: string | null, a_materno?: string | null, becarios?: Array<{ __typename?: 'Becario', id?: number | null, en_lista_espera?: boolean | null, puede_cobrar?: boolean | null, turno?: string | null, semana_cobro?: string | null } | null> | null } | null> | null };
+
+export type OnlyBecaByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type OnlyBecaByIdQuery = { __typename?: 'Query', becaById?: { __typename?: 'Beca', id?: number | null, nombre?: string | null, inicia?: any | null, termina?: any | null, descripcion?: string | null, is_active?: boolean | null, createdAt?: any | null, updatedAt?: any | null } | null };
 
 export type GetAllCarrerasQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -862,6 +884,48 @@ export function useUpdateBecaMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateBecaMutationHookResult = ReturnType<typeof useUpdateBecaMutation>;
 export type UpdateBecaMutationResult = Apollo.MutationResult<UpdateBecaMutation>;
 export type UpdateBecaMutationOptions = Apollo.BaseMutationOptions<UpdateBecaMutation, UpdateBecaMutationVariables>;
+export const AutoInscripcionDocument = gql`
+    mutation AutoInscripcion($becaId: Int!, $turno: Int!) {
+  autoInscripcion(becaId: $becaId, turno: $turno) {
+    id
+    en_lista_espera
+    puede_cobrar
+    personaId
+    turno
+    semana_cobro
+    becaId
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type AutoInscripcionMutationFn = Apollo.MutationFunction<AutoInscripcionMutation, AutoInscripcionMutationVariables>;
+
+/**
+ * __useAutoInscripcionMutation__
+ *
+ * To run a mutation, you first call `useAutoInscripcionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAutoInscripcionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [autoInscripcionMutation, { data, loading, error }] = useAutoInscripcionMutation({
+ *   variables: {
+ *      becaId: // value for 'becaId'
+ *      turno: // value for 'turno'
+ *   },
+ * });
+ */
+export function useAutoInscripcionMutation(baseOptions?: Apollo.MutationHookOptions<AutoInscripcionMutation, AutoInscripcionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AutoInscripcionMutation, AutoInscripcionMutationVariables>(AutoInscripcionDocument, options);
+      }
+export type AutoInscripcionMutationHookResult = ReturnType<typeof useAutoInscripcionMutation>;
+export type AutoInscripcionMutationResult = Apollo.MutationResult<AutoInscripcionMutation>;
+export type AutoInscripcionMutationOptions = Apollo.BaseMutationOptions<AutoInscripcionMutation, AutoInscripcionMutationVariables>;
 export const EditBecarioDocument = gql`
     mutation EditBecario($idBecario: Int!, $turno: String, $becaId: Int, $semana_cobro: String, $en_lista_espera: Boolean, $puede_cobrar: Boolean, $idPersona: Int!, $nombres: String, $a_paterno: String, $a_materno: String, $n_control: String, $telefono: String, $whatsapp: String) {
   updateBecario(
@@ -1252,6 +1316,48 @@ export function useBecaByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<B
 export type BecaByIdQueryHookResult = ReturnType<typeof useBecaByIdQuery>;
 export type BecaByIdLazyQueryHookResult = ReturnType<typeof useBecaByIdLazyQuery>;
 export type BecaByIdQueryResult = Apollo.QueryResult<BecaByIdQuery, BecaByIdQueryVariables>;
+export const OnlyBecaByIdDocument = gql`
+    query OnlyBecaById($id: Int!) {
+  becaById(id: $id) {
+    id
+    nombre
+    inicia
+    termina
+    descripcion
+    is_active
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useOnlyBecaByIdQuery__
+ *
+ * To run a query within a React component, call `useOnlyBecaByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnlyBecaByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnlyBecaByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useOnlyBecaByIdQuery(baseOptions: Apollo.QueryHookOptions<OnlyBecaByIdQuery, OnlyBecaByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OnlyBecaByIdQuery, OnlyBecaByIdQueryVariables>(OnlyBecaByIdDocument, options);
+      }
+export function useOnlyBecaByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnlyBecaByIdQuery, OnlyBecaByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OnlyBecaByIdQuery, OnlyBecaByIdQueryVariables>(OnlyBecaByIdDocument, options);
+        }
+export type OnlyBecaByIdQueryHookResult = ReturnType<typeof useOnlyBecaByIdQuery>;
+export type OnlyBecaByIdLazyQueryHookResult = ReturnType<typeof useOnlyBecaByIdLazyQuery>;
+export type OnlyBecaByIdQueryResult = Apollo.QueryResult<OnlyBecaByIdQuery, OnlyBecaByIdQueryVariables>;
 export const GetAllCarrerasDocument = gql`
     query GetAllCarreras {
   allCarreras {

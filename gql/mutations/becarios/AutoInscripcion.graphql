@@ -1,0 +1,13 @@
+mutation AutoInscripcion($becaId: Int!, $turno: Int!) {
+  autoInscripcion(becaId: $becaId, turno: $turno) {
+    id
+    en_lista_espera
+    puede_cobrar
+    personaId
+    turno
+    semana_cobro
+    becaId
+    createdAt
+    updatedAt
+  }
+}

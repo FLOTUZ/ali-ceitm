@@ -144,6 +144,7 @@ async function main() {
       nombre: "ALI 2022",
       descripcion: "Becas alimenticias",
       inicia: "2022-10-22T05:46:33.322Z",
+      termina: "2022-11-07T05:46:33.322Z",
       is_active: true,
     },
   });

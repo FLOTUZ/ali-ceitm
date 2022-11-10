@@ -1,3 +1,6 @@
+//================ COMMON ===========================
+export * from "./common/common.utils";
+
 //================ BECA ===========================
 export * from "./beca/beca.resolver";
 

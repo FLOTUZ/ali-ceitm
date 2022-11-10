@@ -42,6 +42,7 @@ export const BecarioSchema = gql`
   }
 
   type Mutation {
+    autoInscripcion(becaId: Int!, turno: Int!): Becario
     createBecario(data: CreateBecatioInput!): Becario
     updateBecario(id: Int!, data: UpdateBecarioInput!): Becario
     deleteBecario(id: Int!): Becario

@@ -16,12 +16,14 @@ import { FiMenu, FiSun } from "react-icons/fi";
 
 interface DefaultLayoutProps {
   heading: string;
+  showMenu?: boolean;
   drawerTitle?: string;
   children?: React.ReactNode;
 }
 
 const DefaultLayout = ({
   heading,
+  showMenu = true,
   drawerTitle,
   children,
 }: DefaultLayoutProps) => {
@@ -47,9 +49,11 @@ const DefaultLayout = ({
           onClick={toggleColorMode}
           icon={colorMode === "light" ? <MoonIcon /> : <FiSun />}
         />
-        <ButtonIconComponent arialabel="open-drawer" onClick={onOpen}>
-          <FiMenu size={40} />
-        </ButtonIconComponent>
+        {showMenu == true ? (
+          <ButtonIconComponent arialabel="open-drawer" onClick={onOpen}>
+            <FiMenu size={40} />
+          </ButtonIconComponent>
+        ) : null}
       </HStack>
       <DrawerComponent
         title={drawerTitle ? drawerTitle : "Menu"}
