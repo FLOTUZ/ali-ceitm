@@ -12,6 +12,7 @@ import QrSCanner from "../assets/qr-scanner.png";
 import Qr from "../assets/qrcode.svg";
 import Logout from "../assets/logout.png";
 import Usuario from "../assets/usuario.svg";
+import Becado from "../assets/becado.png";
 
 import ErrorComponent from "@/common/error.component";
 import LoaderComponent from "@/common/loader.component";
@@ -191,20 +192,6 @@ function Index() {
             </VStack>
           </Center>
         </Container>
-
-        <Link href={"/perfil"}>
-          <a>
-            <Container h={150} w={150} p={19}>
-              <Center h={"100%"}>
-                <VStack>
-                  <Image src={Usuario} alt="Perfil" />
-                  <Text>{"Ver perfil"}</Text>
-                </VStack>
-              </Center>
-            </Container>
-          </a>
-        </Link>
-
         {isCobrador ? (
           <Link href={"/cobros/cobrador"}>
             <a>
@@ -232,6 +219,32 @@ function Index() {
             </a>
           </Link>
         )}
+
+        <Link href={"/convocatorias"}>
+          <a>
+            <Container h={150} w={150} p={19}>
+              <Center h={"100%"}>
+                <VStack>
+                  <Image src={Becado} alt="Perfil" />
+                  <Text>{"Convocatorias"}</Text>
+                </VStack>
+              </Center>
+            </Container>
+          </a>
+        </Link>
+
+        <Link href={"/perfil"}>
+          <a>
+            <Container h={150} w={150} p={19}>
+              <Center h={"100%"}>
+                <VStack>
+                  <Image src={Usuario} alt="Perfil" />
+                  <Text>{"Ver perfil"}</Text>
+                </VStack>
+              </Center>
+            </Container>
+          </a>
+        </Link>
 
         <Center h={"100%"}>
           <Button

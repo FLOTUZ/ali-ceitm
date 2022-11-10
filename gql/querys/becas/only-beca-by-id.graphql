@@ -1,0 +1,12 @@
+query OnlyBecaById($id: Int!) {
+  becaById(id: $id) {
+    id
+    nombre
+    inicia
+    termina
+    descripcion
+    is_active
+    createdAt
+    updatedAt
+  }
+}

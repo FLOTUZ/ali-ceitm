@@ -16,8 +16,8 @@ interface IErrorProps {
 const ErrorComponent = ({ errorCode, message, children }: IErrorProps) => {
   return (
     <>
-      <Center bgColor={"black"} h="100vh">
-        <Container color={"gray"} bgColor={"black"}>
+      <Center h="100vh">
+        <Container color={"gray"}>
           <SimpleGrid columns={[1, 2]}>
             <Heading as={"h3"}>{errorCode ? errorCode : "ERROR"}</Heading>
             <Text>{message}</Text>

@@ -2,6 +2,8 @@ import { Becario } from "@prisma/client";
 
 import { Args, BecarioDTO } from "@models";
 import { IGraphqlContext } from "../context";
+import { ForbiddenError } from "apollo-server-core";
+import { isUserAutenticated, isAdmin, isCajero } from "graphql/resolvers";
 
 export const BecarioResolver = {
   Query: {
@@ -57,6 +59,47 @@ export const BecarioResolver = {
     },
   },
   Mutation: {
+    autoInscripcion: async (
+      _: any,
+      { becaId, turno }: { becaId: number; turno: number },
+      { prisma, role, idUser }: IGraphqlContext
+    ) => {
+      isUserAutenticated(idUser!);
+
+      if (isAdmin(role!) || isCajero(role!)) {
+        throw new ForbiddenError("No eres un becario o concejal");
+      }
+
+      const persona = await prisma.persona.findUnique({
+        where: {
+          userId: idUser!,
+        },
+      });
+
+      const beca = await prisma.beca.findUnique({
+        where: {
+          id: becaId,
+        },
+        include: {
+          becarios: { where: { personaId: persona!.id } },
+        },
+      });
+      //If becario exists on beca
+      if (beca!.becarios.length > 0) {
+        throw new Error("Ya estas inscrito en esta beca");
+      }
+
+      return await prisma.becario.create({
+        data: {
+          personaId: persona?.id!,
+          becaId: becaId,
+          turno: turno === 1 ? "DESAYUNO" : "COMIDA",
+          semana_cobro: "NON",
+          en_lista_espera: true,
+          puede_cobrar: false,
+        },
+      });
+    },
     createBecario: async (
       _: any,
       { data }: { data: BecarioDTO },
