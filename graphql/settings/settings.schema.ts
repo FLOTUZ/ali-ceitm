@@ -2,15 +2,16 @@ import { gql } from "apollo-server-core";
 
 export const SettingsSchema = gql`
   input CreateSettingsInput {
-    nombre: String
-    valor: String
+    nombre: String!
+    valor: String!
   }
 
   type Settings {
     id: Int
-    nombre: String
-    valor: String
-    createdAt: DateTime
+    nombre: String!
+    tipo_dato: String
+    valor: String!
+    createdAt: DateTime!
     updatedAt: DateTime
   }
 
@@ -24,5 +25,6 @@ export const SettingsSchema = gql`
     createSetting(data: CreateSettingsInput): Settings
     updateSetting(id: Int, data: CreateSettingsInput): Settings
     deleteSetting(id: Int): Settings
+    updateManySettings(data: [CreateSettingsInput]!): [Settings]
   }
 `;

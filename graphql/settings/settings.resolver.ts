@@ -2,6 +2,8 @@ import { Settings } from "@prisma/client";
 
 import { Args, SettingsDTO } from "@models";
 import { IGraphqlContext } from "../context";
+import { isAdmin } from "graphql/resolvers";
+import { AuthenticationError } from "apollo-server-core";
 
 export const SettingsResolver = {
   Query: {
@@ -67,6 +69,27 @@ export const SettingsResolver = {
         where: { id },
       });
       return response;
+    },
+
+    updateManySettings: async (
+      _: any,
+      { data }: { data: SettingsDTO[] },
+      { prisma, role }: IGraphqlContext
+    ) => {
+      if (isAdmin(role!) === false) {
+        throw new AuthenticationError(
+          "No tienes permisos para realizar esta acción"
+        );
+      }
+      data.map(async (item) => {
+        await prisma.settings.update({
+          where: { nombre: item.nombre },
+          data: {
+            valor: item.valor,
+          },
+        });
+      });
+      return await prisma.settings.findMany();
     },
   },
 };

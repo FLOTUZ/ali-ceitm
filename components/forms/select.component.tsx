@@ -6,6 +6,7 @@ interface ISelectProps {
   placeholder: string;
   children?: React.ReactNode[];
   handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  defaultValue?: string;
   value?: string;
   errors?: string;
   touched?: boolean;
@@ -16,6 +17,7 @@ const SelectComponent = (props: ISelectProps) => {
     <FormControl>
       <FormLabel>{props.label}</FormLabel>
       <Select
+      defaultValue={props.defaultValue}
         name={props.name}
         placeholder={props.placeholder}
         onChange={(e) => props.handleChange(e)}

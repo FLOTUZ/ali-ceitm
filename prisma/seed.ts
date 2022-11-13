@@ -103,6 +103,7 @@ async function main() {
   await prisma.settings.create({
     data: {
       nombre: "alimento",
+      tipo_dato: "text",
       valor: isTimeOfBreakfast ? "DESAYUNO" : "COMIDA",
     },
   });
@@ -110,6 +111,7 @@ async function main() {
   await prisma.settings.create({
     data: {
       nombre: "lugar",
+      tipo_dato: "text",
       valor: "CAMPUS 1 - 1",
     },
   });
@@ -119,6 +121,7 @@ async function main() {
   await prisma.settings.create({
     data: {
       nombre: "semana",
+      tipo_dato: "select",
       valor: isPair ? "PAR" : "NON",
     },
   });
@@ -126,6 +129,7 @@ async function main() {
   await prisma.settings.create({
     data: {
       nombre: "strikes",
+      tipo_dato: "number",
       valor: "3",
     },
   });
@@ -133,6 +137,7 @@ async function main() {
   await prisma.settings.create({
     data: {
       nombre: "hora_cambio",
+      tipo_dato: "time",
       valor: "12:00:00",
     },
   });

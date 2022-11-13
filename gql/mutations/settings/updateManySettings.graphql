@@ -1,0 +1,10 @@
+mutation UpdateManySettings($settingsArray: [CreateSettingsInput]!) {
+  updateManySettings(data: $settingsArray) {
+    id
+    tipo_dato
+    nombre
+    valor
+    createdAt
+    updatedAt
+  }
+}

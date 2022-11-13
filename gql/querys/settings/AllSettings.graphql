@@ -2,6 +2,7 @@ query AllSettings {
   allSettings {
     id
     nombre
+    tipo_dato
     valor
   }
 }

@@ -61,9 +61,6 @@ function Index() {
     }
   }, [user?.roleId]);
 
-  if (settingsData) {
-  }
-
   const settingsState = useCallback(() => {
     if (errorSettings) {
       return;

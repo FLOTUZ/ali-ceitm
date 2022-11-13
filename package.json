@@ -14,7 +14,7 @@
     "prisma:reset": "prisma migrate reset -f",
     "prisma:studio": "prisma studio",
     "prisma:deploy": "prisma migrate deploy",
-    "prisma:push": "prisma db push",
+    "prisma:push": "prisma db push --accept-data-loss",
     "graphql:codegen": "graphql-codegen --config codegen.yml"
   },
   "dependencies": {

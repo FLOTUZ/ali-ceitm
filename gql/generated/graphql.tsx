@@ -148,8 +148,8 @@ export type CreateRoleInput = {
 };
 
 export type CreateSettingsInput = {
-  nombre?: InputMaybe<Scalars['String']>;
-  valor?: InputMaybe<Scalars['String']>;
+  nombre: Scalars['String'];
+  valor: Scalars['String'];
 };
 
 export type CreateUserInput = {
@@ -201,6 +201,7 @@ export type Mutation = {
   updateCarrera?: Maybe<Carrera>;
   updateCobro?: Maybe<Cobro>;
   updateImagen?: Maybe<Imagen>;
+  updateManySettings?: Maybe<Array<Maybe<Settings>>>;
   updatePersona?: Maybe<Persona>;
   updateProblema?: Maybe<Problema>;
   updateRole?: Maybe<Role>;
@@ -363,6 +364,11 @@ export type MutationUpdateCobroArgs = {
 export type MutationUpdateImagenArgs = {
   data: CreateImagenInput;
   id: Scalars['Int'];
+};
+
+
+export type MutationUpdateManySettingsArgs = {
+  data: Array<InputMaybe<CreateSettingsInput>>;
 };
 
 
@@ -592,11 +598,12 @@ export type Role = {
 
 export type Settings = {
   __typename?: 'Settings';
-  createdAt?: Maybe<Scalars['DateTime']>;
+  createdAt: Scalars['DateTime'];
   id?: Maybe<Scalars['Int']>;
-  nombre?: Maybe<Scalars['String']>;
+  nombre: Scalars['String'];
+  tipo_dato?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
-  valor?: Maybe<Scalars['String']>;
+  valor: Scalars['String'];
 };
 
 export type UpdateBecaInput = {
@@ -711,6 +718,13 @@ export type RealizarCobroMutationVariables = Exact<{
 
 export type RealizarCobroMutation = { __typename?: 'Mutation', realizeCobro?: { __typename?: 'Cobro', concepto?: string | null, codigo_cobro?: string | null, fecha_cobro?: any | null } | null };
 
+export type UpdateManySettingsMutationVariables = Exact<{
+  settingsArray: Array<InputMaybe<CreateSettingsInput>> | InputMaybe<CreateSettingsInput>;
+}>;
+
+
+export type UpdateManySettingsMutation = { __typename?: 'Mutation', updateManySettings?: Array<{ __typename?: 'Settings', id?: number | null, tipo_dato?: string | null, nombre: string, valor: string, createdAt: any, updatedAt?: any | null } | null> | null };
+
 export type GetAllBecariosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -782,7 +796,7 @@ export type PersonaSessionQuery = { __typename?: 'Query', currentPersona?: { __t
 export type AllSettingsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type AllSettingsQuery = { __typename?: 'Query', allSettings?: Array<{ __typename?: 'Settings', id?: number | null, nombre?: string | null, valor?: string | null } | null> | null };
+export type AllSettingsQuery = { __typename?: 'Query', allSettings?: Array<{ __typename?: 'Settings', id?: number | null, nombre: string, tipo_dato?: string | null, valor: string } | null> | null };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1075,6 +1089,44 @@ export function useRealizarCobroMutation(baseOptions?: Apollo.MutationHookOption
 export type RealizarCobroMutationHookResult = ReturnType<typeof useRealizarCobroMutation>;
 export type RealizarCobroMutationResult = Apollo.MutationResult<RealizarCobroMutation>;
 export type RealizarCobroMutationOptions = Apollo.BaseMutationOptions<RealizarCobroMutation, RealizarCobroMutationVariables>;
+export const UpdateManySettingsDocument = gql`
+    mutation UpdateManySettings($settingsArray: [CreateSettingsInput]!) {
+  updateManySettings(data: $settingsArray) {
+    id
+    tipo_dato
+    nombre
+    valor
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type UpdateManySettingsMutationFn = Apollo.MutationFunction<UpdateManySettingsMutation, UpdateManySettingsMutationVariables>;
+
+/**
+ * __useUpdateManySettingsMutation__
+ *
+ * To run a mutation, you first call `useUpdateManySettingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateManySettingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateManySettingsMutation, { data, loading, error }] = useUpdateManySettingsMutation({
+ *   variables: {
+ *      settingsArray: // value for 'settingsArray'
+ *   },
+ * });
+ */
+export function useUpdateManySettingsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateManySettingsMutation, UpdateManySettingsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateManySettingsMutation, UpdateManySettingsMutationVariables>(UpdateManySettingsDocument, options);
+      }
+export type UpdateManySettingsMutationHookResult = ReturnType<typeof useUpdateManySettingsMutation>;
+export type UpdateManySettingsMutationResult = Apollo.MutationResult<UpdateManySettingsMutation>;
+export type UpdateManySettingsMutationOptions = Apollo.BaseMutationOptions<UpdateManySettingsMutation, UpdateManySettingsMutationVariables>;
 export const GetAllBecariosDocument = gql`
     query GetAllBecarios {
   allBecariosWithRelations {
@@ -1603,6 +1655,7 @@ export const AllSettingsDocument = gql`
   allSettings {
     id
     nombre
+    tipo_dato
     valor
   }
 }
