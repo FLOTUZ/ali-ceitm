@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Settings } from "@prisma/client";
 
 import { Args, SettingsDTO } from "@models";
@@ -12,6 +13,41 @@ export const SettingsResolver = {
       { pagination }: Args,
       { prisma }: IGraphqlContext
     ) => {
+      const settings = await prisma.settings.findMany();
+
+      const semana = settings.find(
+        (setting) => setting.nombre === "semana"
+      )?.valor;
+
+      const alimento = settings.find(
+        (setting) => setting.nombre === "alimento"
+      )?.valor;
+
+      const horaCambio = settings.find(
+        (setting) => setting.nombre === "hora_cambio"
+      )?.valor;
+
+      const horaActual = moment().utc();
+      //Time string to moment
+      const horaCambioMoment = moment(horaCambio, "HH:mm").utc();
+
+      //Compare hora actual with hora cambio to get the current turn
+      const currentTurn = moment(horaActual).isAfter(horaCambioMoment)
+        ? "COMIDA"
+        : "DESAYUNO";
+
+      if (alimento !== currentTurn) {
+        //Update alimento to current turn
+        await prisma.settings.update({
+          where: {
+            nombre: "alimento",
+          },
+          data: {
+            valor: currentTurn,
+          },
+        });
+      }
+
       return await prisma.settings.findMany({
         ...pagination,
       });
