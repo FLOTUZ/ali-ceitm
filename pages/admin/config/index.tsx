@@ -8,6 +8,7 @@ import {
   Container,
   FormLabel,
   Input,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import { useFormik } from "formik";
@@ -22,7 +23,6 @@ import { useState, useEffect } from "react";
 
 function Config() {
   const toast = useToast();
-  const router = useRouter();
 
   const [settings, setSettings] = useState<Settings[]>([]);
 
@@ -40,7 +40,6 @@ function Config() {
           status: "success",
           duration: 5000,
         });
-        router.push("/");
       },
       onError(error) {
         console.log(error);
@@ -52,6 +51,7 @@ function Config() {
       alimento: undefined,
       lugar: undefined,
       semana: undefined,
+      num_semana: undefined,
       strikes: undefined,
       hora_cambio: undefined,
     },
@@ -62,7 +62,7 @@ function Config() {
         if (value) {
           data.push({
             nombre: key,
-            valor: value,
+            valor: String(value),
           });
         }
       });
@@ -128,6 +128,20 @@ function Config() {
               <option value="NON">NON</option>
               <option value="PAR">PAR</option>
             </SelectComponent>
+
+            <TextFieldComponent
+              name={"num_semana"}
+              type={"number"}
+              label={"Semana actual"}
+              defaultValue={
+                settings.find((setting) => setting.nombre === "num_semana")
+                  ?.valor
+              }
+              handleChange={formSettings.handleChange}
+            />
+            <Text mb={2}>
+              Nota: Resetar el numero de semanas manualmente al iniciar el año
+            </Text>
 
             <FormLabel>Strikes permitidos (Opcional)</FormLabel>
             <Input

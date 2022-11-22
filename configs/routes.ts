@@ -1,5 +1,10 @@
 export const routes = [
   {
+    title: "Cobrador",
+    path: "/",
+    roles: ["CONCEJAL", "ADMIN"],
+  },
+  {
     title: "Becarios",
     path: "/admin/becarios",
     roles: ["CONCEJAL", "ADMIN"],

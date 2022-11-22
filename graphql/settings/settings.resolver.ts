@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Settings } from "@prisma/client";
 
 import { Args, SettingsDTO } from "@models";
@@ -12,6 +13,85 @@ export const SettingsResolver = {
       { pagination }: Args,
       { prisma }: IGraphqlContext
     ) => {
+      const settings = await prisma.settings.findMany();
+
+      const aliment = settings.find(
+        (setting) => setting.nombre === "alimento"
+      )?.valor;
+
+      const changeHour = settings.find(
+        (setting) => setting.nombre === "hora_cambio"
+      )?.valor;
+
+      const currentTime = moment().utc();
+      //Time string to moment
+      const changeTimeMoment = moment(changeHour, "HH:mm").utc();
+
+      //Compare hora actual with hora cambio to get the current turn
+      const currentTurn = moment(currentTime).isAfter(changeTimeMoment)
+        ? "COMIDA"
+        : "DESAYUNO";
+
+      if (aliment !== currentTurn) {
+        //Update alimento to current turn
+        await prisma.settings.update({
+          where: {
+            nombre: "alimento",
+          },
+          data: {
+            valor: currentTurn,
+          },
+        });
+      }
+
+      // get week number on year
+      const currentWeekNumber = moment().week();
+
+      //get previusly week number saved on db
+      const previouslyWeekOnDb = settings.find(
+        (setting) => setting.nombre === "num_semana"
+      )?.valor;
+
+      // get turn of cover
+      const weekTurn = settings.find(
+        (setting) => setting.nombre === "semana"
+      )?.valor;
+
+      //Check if week number is different to the one saved on db
+      if (currentWeekNumber > Number(previouslyWeekOnDb)) {
+        //Update numSemana to current week
+        await prisma.settings.update({
+          where: {
+            nombre: "num_semana",
+          },
+          data: {
+            valor: currentWeekNumber.toString(),
+          },
+        });
+
+        if (weekTurn === "PAR") {
+          //Update turnoSemana to IMPAR
+          await prisma.settings.update({
+            where: {
+              nombre: "semana",
+            },
+            data: {
+              valor: "NON",
+            },
+          });
+        } else {
+          //Update turnoSemana to PAR
+          await prisma.settings.update({
+            where: {
+              nombre: "semana",
+            },
+            data: {
+              valor: "PAR",
+            },
+          });
+        }
+      }
+
       return await prisma.settings.findMany({
         ...pagination,
       });
