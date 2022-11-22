@@ -45,8 +45,8 @@ export const SettingsResolver = {
       }
 
       // get week number on year
-      const currenWeekNumber = moment().week();
-      
+      const currentWeekNumber = moment().week();
+
       //get previusly week number saved on db
       const previouslyWeekOnDb = settings.find(
         (setting) => setting.nombre === "num_semana"
@@ -58,14 +58,14 @@ export const SettingsResolver = {
       )?.valor;
 
       //Check if week number is different to the one saved on db
-      if (currenWeekNumber > Number(previouslyWeekOnDb)) {
+      if (currentWeekNumber > Number(previouslyWeekOnDb)) {
         //Update numSemana to current week
         await prisma.settings.update({
           where: {
             nombre: "num_semana",
           },
           data: {
-            valor: currenWeekNumber.toString(),
+            valor: currentWeekNumber.toString(),
           },
         });
 
