@@ -106,7 +106,7 @@ export const CobroResolver = {
       __: any,
       { prisma, idUser, role }: IGraphqlContext
     ) => {
-      if (role == null && idUser != null) {
+      if (role == null || idUser == null) {
         throw new AuthenticationError(
           "UNAUTORIZED el usuario no cuenta con un rol"
         );
@@ -374,6 +374,59 @@ export const CobroResolver = {
         // Generate forced cobro for the becario
         const cobro = await prisma.cobro.update({
           where: { id },
+          data: {
+            codigo_usado: true,
+            forma_cobro: `FORZADO POR ${role} ${persona?.nombres}`,
+            was_forced: true,
+            cafeteriaId: null,
+          },
+        });
+
+        // UNBLOCK BECARIO
+        await prisma.becario.update({
+          where: {
+            id: cobro.becarioId,
+          },
+          data: {
+            puede_cobrar: true,
+          },
+        });
+
+        return cobro;
+      } else {
+        throw new ForbiddenError(
+          "UNAUTHORIZED - No tienes permisos para forzar cobros"
+        );
+      }
+    },
+
+    forceCobroWithCode: async (
+      _: any,
+      { code }: { code: string },
+      { prisma, role, idUser }: IGraphqlContext
+    ) => {
+      //if the user is admin, concejal
+      if (role === "ADMIN" || role === "CONCEJAL") {
+        // Search the person by userId
+        const persona = await prisma.persona.findUnique({
+          where: {
+            userId: idUser!,
+          },
+        });
+
+        const codigo = await prisma.cobro.findUnique({
+          where: { codigo_cobro: code },
+        });
+
+        if (codigo == null) {
+          throw new ForbiddenError(
+            "NOT FOUND - No se encontro el codigo de cobro"
+          );
+        }
+
+        // Generate forced cobro for the becario
+        const cobro = await prisma.cobro.update({
+          where: { codigo_cobro: code },
           data: {
             codigo_usado: true,
             forma_cobro: `FORZADO POR ${role} ${persona?.nombres}`,

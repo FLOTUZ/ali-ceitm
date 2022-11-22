@@ -194,6 +194,7 @@ export type Mutation = {
   deleteSetting?: Maybe<Settings>;
   deleteUser?: Maybe<User>;
   forceCobro?: Maybe<Cobro>;
+  forceCobroWithCode?: Maybe<Cobro>;
   realizeCobro?: Maybe<Cobro>;
   updateBeca?: Maybe<Beca>;
   updateBecario?: Maybe<Becario>;
@@ -323,6 +324,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationForceCobroArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationForceCobroWithCodeArgs = {
+  code: Scalars['String'];
 };
 
 
@@ -718,6 +724,13 @@ export type RealizarCobroMutationVariables = Exact<{
 
 export type RealizarCobroMutation = { __typename?: 'Mutation', realizeCobro?: { __typename?: 'Cobro', concepto?: string | null, codigo_cobro?: string | null, fecha_cobro?: any | null } | null };
 
+export type ForzarCobroMutationVariables = Exact<{
+  codigo: Scalars['String'];
+}>;
+
+
+export type ForzarCobroMutation = { __typename?: 'Mutation', forceCobroWithCode?: { __typename?: 'Cobro', id?: number | null, becarioId?: number | null, concepto?: string | null, codigo_cobro?: string | null, forma_cobro?: string | null } | null };
+
 export type UpdateManySettingsMutationVariables = Exact<{
   settingsArray: Array<InputMaybe<CreateSettingsInput>> | InputMaybe<CreateSettingsInput>;
 }>;
@@ -1089,6 +1102,43 @@ export function useRealizarCobroMutation(baseOptions?: Apollo.MutationHookOption
 export type RealizarCobroMutationHookResult = ReturnType<typeof useRealizarCobroMutation>;
 export type RealizarCobroMutationResult = Apollo.MutationResult<RealizarCobroMutation>;
 export type RealizarCobroMutationOptions = Apollo.BaseMutationOptions<RealizarCobroMutation, RealizarCobroMutationVariables>;
+export const ForzarCobroDocument = gql`
+    mutation ForzarCobro($codigo: String!) {
+  forceCobroWithCode(code: $codigo) {
+    id
+    becarioId
+    concepto
+    codigo_cobro
+    forma_cobro
+  }
+}
+    `;
+export type ForzarCobroMutationFn = Apollo.MutationFunction<ForzarCobroMutation, ForzarCobroMutationVariables>;
+
+/**
+ * __useForzarCobroMutation__
+ *
+ * To run a mutation, you first call `useForzarCobroMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useForzarCobroMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [forzarCobroMutation, { data, loading, error }] = useForzarCobroMutation({
+ *   variables: {
+ *      codigo: // value for 'codigo'
+ *   },
+ * });
+ */
+export function useForzarCobroMutation(baseOptions?: Apollo.MutationHookOptions<ForzarCobroMutation, ForzarCobroMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ForzarCobroMutation, ForzarCobroMutationVariables>(ForzarCobroDocument, options);
+      }
+export type ForzarCobroMutationHookResult = ReturnType<typeof useForzarCobroMutation>;
+export type ForzarCobroMutationResult = Apollo.MutationResult<ForzarCobroMutation>;
+export type ForzarCobroMutationOptions = Apollo.BaseMutationOptions<ForzarCobroMutation, ForzarCobroMutationVariables>;
 export const UpdateManySettingsDocument = gql`
     mutation UpdateManySettings($settingsArray: [CreateSettingsInput]!) {
   updateManySettings(data: $settingsArray) {
