@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "context/auth.provider";
-import { Button } from "@chakra-ui/react";
+import { Button, Text } from "@chakra-ui/react";
 import ErrorComponent from "@/common/error.component";
 import CobrosBecarioComponent from "@/views/cobros-becario.component";
 import CobrosCajeroComponent from "@/views/cobros-cajero.component";
@@ -29,6 +29,7 @@ function Perfil() {
   return (
     <ErrorComponent message="NO AUTENTICADO">
       <Button onClick={logout}>Login</Button>
+      <Text>Si el error persiste, refresca la pagina</Text>
     </ErrorComponent>
   );
 }

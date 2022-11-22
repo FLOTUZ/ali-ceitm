@@ -34,7 +34,7 @@ function CobroQr() {
 
   useEffect(() => {
     if (dataQR) {
-      setQrValue(dataQR.generateCobroCode!.codigo_cobro as string);
+      setQrValue(dataQR.generateCobroCode?.codigo_cobro as string);
     }
 
     if (dataPersona) {
@@ -89,9 +89,7 @@ function CobroQr() {
     <>
       <Center h={"100vh"}>
         <VStack>
-          <Heading as="h4">
-            {qrValue}
-          </Heading>
+          <Heading as="h4">{qrValue}</Heading>
           <div style={{ background: "white", padding: "16px" }}>
             <QRCode
               size={256}
@@ -101,6 +99,7 @@ function CobroQr() {
               viewBox={`0 0 256 256`}
             />
           </div>
+
           <Box h={10} />
           {/* <Image
             src={Persona}

@@ -1,0 +1,9 @@
+mutation ForzarCobro($codigo: String!) {
+  forceCobroWithCode(code: $codigo) {
+    id
+    becarioId
+    concepto
+    codigo_cobro
+    forma_cobro
+  }
+}

@@ -39,5 +39,6 @@ export const CobroSchema = gql`
 
     realizeCobro(codigo: String!): Cobro
     forceCobro(id: Int!): Cobro
+    forceCobroWithCode(code: String!): Cobro
   }
 `;

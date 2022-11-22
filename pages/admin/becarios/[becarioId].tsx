@@ -214,6 +214,7 @@ const BecarioId = () => {
             size="lg"
             defaultValue={becario?.turno!}
             bgColor={"black"}
+            onChange={formBecario.handleChange}
           >
             <option style={{ backgroundColor: "black" }} value="DESAYUNO">
               DESAYUNO
@@ -225,11 +226,12 @@ const BecarioId = () => {
 
           <FormLabel htmlFor="semana">Semana de cobro</FormLabel>
           <Select
-            name="semana"
+            name="semana_cobro"
             placeholder="Seleccione semana de cobro"
             size="lg"
             defaultValue={becario?.semana_cobro!}
             bgColor={"black"}
+            onChange={formBecario.handleChange}
           >
             <option style={{ backgroundColor: "black" }} value="PAR">
               PAR
