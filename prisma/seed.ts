@@ -142,6 +142,14 @@ async function main() {
     },
   });
 
+  await prisma.settings.create({
+    data: {
+      nombre: "num_semana",
+      tipo_dato: "number",
+      valor: moment().week().toString(), //Current week number
+    },
+  });
+
   // ============== BECA ACTIVA ==================== //
 
   await prisma.beca.create({
