@@ -117,16 +117,38 @@ function SingupForm() {
         <TextFieldComponent
           name={"email"}
           type="text"
-          label="Email Personal (Requerido)"
+          label="Email Personal utilizado para el acceso al sistema"
+          isRequired={true}
           handleChange={handleChange}
           errors={errors.email}
           touched={touched.email}
         />
 
         <TextFieldComponent
+          name={"email_institucional"}
+          type="email"
+          label="Email Institucional"
+          isRequired={true}
+          handleChange={handleChange}
+          errors={errors.email_institucional}
+          touched={touched.email}
+        />
+
+        <TextFieldComponent
+          name={"n_control"}
+          type="text"
+          label="Numero de control"
+          isRequired={true}
+          handleChange={handleChange}
+          errors={errors.n_control}
+          touched={touched.n_control}
+        />
+
+        <TextFieldComponent
           name={"password"}
           type="password"
-          label="Contraseña (Requerido)"
+          label="Contraseña"
+          isRequired={true}
           handleChange={handleChange}
           errors={errors.password}
           touched={touched.password}
@@ -135,7 +157,8 @@ function SingupForm() {
         <TextFieldComponent
           name={"nombres"}
           type="text"
-          label="Nombre (s) (Requerido)"
+          label="Nombre (s)"
+          isRequired={true}
           handleChange={handleChange}
           errors={errors.nombres}
           touched={touched.nombres}
@@ -144,7 +167,8 @@ function SingupForm() {
         <TextFieldComponent
           name={"a_paterno"}
           type="text"
-          label="Apellido Paterno (Requerido)"
+          label="Apellido Paterno"
+          isRequired={true}
           handleChange={handleChange}
           errors={errors.a_paterno}
           touched={touched.a_paterno}
@@ -153,25 +177,18 @@ function SingupForm() {
         <TextFieldComponent
           name={"a_materno"}
           type="text"
-          label="Apellido Materno (Requerido)"
+          label="Apellido Materno"
+          isRequired={true}
           handleChange={handleChange}
           errors={errors.a_paterno}
           touched={touched.a_materno}
         />
 
         <TextFieldComponent
-          name={"n_control"}
-          type="text"
-          label="Numero de control (Requerido)"
-          handleChange={handleChange}
-          errors={errors.n_control}
-          touched={touched.n_control}
-        />
-
-        <TextFieldComponent
           name={"telefono"}
           type="tel"
-          label="Telefono (Requerido)"
+          label="Telefono"
+          isRequired={true}
           handleChange={handleChange}
           errors={errors.telefono}
           touched={touched.telefono}
@@ -180,19 +197,11 @@ function SingupForm() {
         <TextFieldComponent
           name={"whatsapp"}
           type="tel"
-          label="Whatsapp (Requerido)"
+          label="Whatsapp"
+          isRequired={true}
           handleChange={handleChange}
           errors={errors.whatsapp}
           touched={touched.whatsapp}
-        />
-
-        <TextFieldComponent
-          name={"email_institucional"}
-          type="email"
-          label="Email Institucional (Requerido)"
-          handleChange={handleChange}
-          errors={errors.email_institucional}
-          touched={touched.email}
         />
 
         <SelectComponent

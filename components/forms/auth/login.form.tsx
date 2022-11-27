@@ -86,6 +86,16 @@ function LoginForm() {
               Iniciar sesión
             </Button>
           </form>
+          <Button
+            mt={8}
+            w={"100%"}
+            h={"3rem"}
+            variant={"outline"}
+            colorScheme={"blue"}
+            onClick={() => router.push("/auth/signup")}
+          >
+            Registrarse
+          </Button>
         </Container>
       </Center>
     </>
