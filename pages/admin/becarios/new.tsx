@@ -151,6 +151,7 @@ const NuevoBecarioForm = ({
             >
               <option value="DESAYUNO">DESAYUNO</option>
               <option value="COMIDA">COMIDA</option>
+              <option value="COMIDA">COMPLETA</option>
             </SelectComponent>
 
             <Box height={4} />
@@ -163,6 +164,7 @@ const NuevoBecarioForm = ({
             >
               <option value="PAR">PAR</option>
               <option value="NON">NON</option>
+              <option value="PAR_Y_NON">PAR Y NON</option>
             </SelectComponent>
 
             <Box height={4} />

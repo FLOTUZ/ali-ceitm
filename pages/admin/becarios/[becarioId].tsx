@@ -21,7 +21,7 @@ import {
   useEditBecarioMutation,
   useNuevaBecaQuery,
   Becario,
-  Beca
+  Beca,
 } from "gql/generated/graphql";
 
 const BecarioId = () => {
@@ -131,7 +131,7 @@ const BecarioId = () => {
         </title>
       </Head>
 
-      <Container color={"white"} mt={5}>
+      <Container mt={5}>
         <form onSubmit={formBecario.handleSubmit}>
           <FormLabel htmlFor="becaId">Beca del becario</FormLabel>
           <Select
@@ -213,13 +213,12 @@ const BecarioId = () => {
             placeholder="Seleccione turno"
             size="lg"
             defaultValue={becario?.turno!}
-            bgColor={"black"}
             onChange={formBecario.handleChange}
           >
-            <option style={{ backgroundColor: "black" }} value="DESAYUNO">
+            <option value="DESAYUNO">
               DESAYUNO
             </option>
-            <option style={{ backgroundColor: "black" }} value="COMIDA">
+            <option value="COMIDA">
               COMIDA
             </option>
           </Select>
@@ -230,14 +229,16 @@ const BecarioId = () => {
             placeholder="Seleccione semana de cobro"
             size="lg"
             defaultValue={becario?.semana_cobro!}
-            bgColor={"black"}
             onChange={formBecario.handleChange}
           >
-            <option style={{ backgroundColor: "black" }} value="PAR">
+            <option value="PAR">
               PAR
             </option>
-            <option style={{ backgroundColor: "black" }} value="NON">
+            <option value="NON">
               NON
+            </option>
+            <option value="PAR_Y_NON">
+              PAR Y NON
             </option>
           </Select>
 
