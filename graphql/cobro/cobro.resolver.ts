@@ -168,12 +168,22 @@ export const CobroResolver = {
           },
         });
 
+        //Comprueba si le toca cobrar en la semana actual
         if (
-          becario?.turno != turno?.valor ||
-          becario?.semana_cobro != semanaCobro?.valor
+          semanaCobro?.valor != becario!.semana_cobro &&
+          becario?.semana_cobro != "PAR_Y_NON"
         ) {
           throw new ForbiddenError(
-            "NOT_YOUR_TURN - No es tu turno para cobrar"
+            `NOT_WEEK_TURN - No es turno para cobrar becas de semana ${
+              becario!.semana_cobro
+            }`
+          );
+        }
+
+        //Comprueba si le toca cobrar en el turno de comida actual
+        if (becario?.turno != turno?.valor) {
+          throw new ForbiddenError(
+            `NOT_BECARIO_TURN - No es turno para cobrar ${becario!.turno}`
           );
         }
 
